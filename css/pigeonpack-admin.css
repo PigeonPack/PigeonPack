@@ -1,0 +1,168 @@
+/* CSS Document */
+
+#icon-edit {
+	background-image: none;
+	background-position: 0;
+}
+
+.icon32-pigeonpack_settings {
+	background-image: url( '../images/settings-32x32.png' ) !important;
+}
+
+.icon32-pigeonpack_help {
+	background-image: url( '../images/help-32x32.png' ) !important;
+}
+
+#pigeonpack_administrator_options table {
+	width: 100%;
+	display: inline-block;
+}
+
+#pigeonpack_administrator_options table tr th {
+	width: 175px;
+}
+
+#pigeonpack_administrator_options table tr th {
+	vertical-align: top;
+}
+
+#pigeonpack_administrator_options table tr th, #pigeonpack_administrator_options table tr td {
+	padding-bottom: 10px;
+}
+
+#pigeonpack_administrator_options table tr th {
+	padding-top: 5px;
+}
+
+/* Pigeon Pack Tables */
+table.pigeonpack_table {
+	width: 100%;
+	display: inline-table;
+	overflow: auto;
+}
+
+table.pigeonpack_table tr th {
+	width: 250px;
+}
+
+table.pigeonpack_table tr th, table.pigeonpack_table tr td {
+	vertical-align: top;
+	text-align: left;
+	padding: 5px;
+	margin: 0px;
+	line-height: 2em;
+}
+
+table.pigeonpack_table div {
+	display: inline-table;
+}
+
+/* Pigeon Pack Campaign Pages */
+.icon32-posts-pigeonpack_campaign {
+	background-image: url( '../images/campaigns-32x32.png' ) !important;
+}
+
+/* Pigeon Pack List Pages */
+.icon32-posts-pigeonpack_list {
+	background-image: url( '../images/lists-32x32.png' ) !important;
+}
+
+div#prev_pigeonpack_subscribers {
+	float: left;
+	display: block;	
+}
+
+div#next_pigeonpack_subscribers {
+	float: right;	
+	display: block;
+}
+
+table#pigeonpack_list_subscriber_table, table#pigeonpack_list_fields_table {
+	-webkit-border-radius: 5px 5px 0 0;
+	-moz-border-radius: 5px 5px 0 0;
+	border-radius: 5px 5px 0 0;
+	border: 1px solid #666;
+	border-spacing: 0px;
+	margin-bottom: 15px;
+	background: none repeat scroll 0 0 #E7E7E7;
+}
+
+table#pigeonpack_list_new_subscriber_table tr th {
+	text-align: left;
+	margin: 0px;
+	border-right: 1px solid #DDD;
+	line-height: 2em;
+}
+
+table#pigeonpack_list_subscriber_table tr th, table#pigeonpack_list_fields_table tr th {
+	text-align: center;
+	border-bottom: 1px solid #666;
+	width: auto;
+}
+
+table#pigeonpack_list_subscriber_table tr td, table#pigeonpack_list_fields_table tr td {
+	text-align: center;
+	vertical-align: middle;
+	margin: 0px;
+	border-right: 1px solid #DDD;
+	line-height: 2em;
+}
+
+table#pigeonpack_list_subscriber_table tr.even td, table#pigeonpack_list_fields_table tr.even td {
+	background: none repeat scroll 0 0 #FFF;
+}
+
+table#pigeonpack_list_subscriber_table tr.odd td, table#pigeonpack_list_fields_table tr.odd td {
+	background: none repeat scroll 0 0 #f5f5f5;
+}
+
+table#pigeonpack_list_new_subscriber_table td:last-of-type, table#pigeonpack_list_subscriber_table td:last-of-type, table#pigeonpack_list_fields_table td:last-of-type {
+    border-right: 0 none;
+}
+
+.pigeonpack_delete_field {
+	cursor: pointer;
+}
+
+#add_list_field {
+	cursor: pointer;
+	vertical-align: top;
+	margin-bottom: 10px;
+}
+
+#list_field_types {
+	display: none;
+}
+
+input.pigeonpack-medium-text {
+	width: 6em;
+}
+
+span.subfield {
+	clear: both;
+	display: block;
+}
+
+span.subfield label {
+	font-size: .9em;
+	font-style: italic;
+	width: 125px;
+	display: inline-block;
+}
+
+span.subfield input[type=radio] {
+	margin-right: 5px;
+}
+
+th.required, td.required {
+	color: #C00;
+	font-weight: bold;
+}
+
+input.error {
+	border: 1px solid #C00;
+}
+
+div#update_subscriber_button {
+	display: none;	
+}

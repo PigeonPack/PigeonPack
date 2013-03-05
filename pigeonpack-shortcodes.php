@@ -57,7 +57,7 @@ if ( ! class_exists( 'PigeonPack_Shortcodes' ) ) {
 		 *
 		 * @param array $atts Agruments pass through shortcode
 		 */
-		function do_subscribe_form( $atts ) {
+		public static function do_subscribe_form( $atts ) {
 			
 			global $post;
 			
@@ -65,8 +65,10 @@ if ( ! class_exists( 'PigeonPack_Shortcodes' ) ) {
 			$results = '';
 			
 			$defaults = array(
-				'list_id'	=> false,
-				'title'		=> true
+				'list_id'			=> false,
+				'title'				=> '',
+				'desc'				=> '',
+				'required_only'		=> false,
 			);
 			
 			// Merge defaults with passed atts
@@ -89,6 +91,9 @@ if ( ! class_exists( 'PigeonPack_Shortcodes' ) ) {
 						$required = 'pigeonpack-required';
 					else
 						$required = '';
+						
+					if ( ( 'true' === $required_only || 'on' === $required_only ) && empty( $required ) )
+						continue;
 					
 					$results .= '<tr>';
 					$results .= '	<th class="' . $required . '">' . $list_field['label'] . '</th>';

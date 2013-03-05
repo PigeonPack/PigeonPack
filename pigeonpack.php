@@ -39,10 +39,11 @@ function pigeonpack_plugins_loaded() {
 		$dl_plugin_pigeonpack = new PigeonPack();
 		
 		require_once( 'pigeonpack-functions.php' );
-		require_once( 'pigeonpack-campaign-post-type.php' );
-		require_once( 'pigeonpack-list-post-type.php' );
+		require_once( 'pigeonpack-campaign-post-type.php' ); //put this somewhere else for better efficiency
+		require_once( 'pigeonpack-list-post-type.php' ); //put this somewhere else for better efficiency
 		require_once( 'pigeonpack-shortcodes.php' );
 		require_once( 'pigeonpack-widgets.php' );
+		require_once( 'pigeonpack-user-settings.php' ); //put this somewhere else for better efficiency
 			
 		$pigeonpack_shortcodes = new PigeonPack_Shortcodes();
 			

@@ -72,10 +72,44 @@ if ( !function_exists( 'add_pigeonpack_campaigns_metaboxes' ) ) {
 	 */	
 	function add_pigeonpack_campaigns_metaboxes() {
 		
+		add_meta_box( 'pigeonpack_campaign_text_format_box', __( 'Pigeon Pack Campaign Text Format', 'pigeonpack' ), 'pigeonpack_campaign_text_format_box', 'pigeonpack_campaign', 'normal', 'high' );
 		add_meta_box( 'pigeonpack_campaign_meta_box', __( 'Pigeon Pack Campaign Options', 'pigeonpack' ), 'pigeonpack_campaign_meta_box', 'pigeonpack_campaign', 'normal', 'high' );
 		
 	}
 
+}
+
+if ( !function_exists( 'pigeonpack_campaign_text_format_box' ) ) {
+		
+	/**
+	 * Called by add_meta_box function call
+	 *
+	 * Outputs metabox for text formatted campaign emails 
+	 * (for susbcribers who select 'text' at their prefered email format)
+	 * If this is left blank, Pigeon Pack will attempt to strip the HTML
+	 *
+	 * This is different from the "Text" mode tab in the visual editor.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param object $post WordPress post object
+	 */			
+	function pigeonpack_campaign_text_format_box( $post ) {
+		
+		$text_email	= get_post_meta( $post->ID, '_pigeonpack_campaign_text_format', true );
+		
+		?>
+		
+		<div id="pigeonpack_campaign_textformat_metabox">
+        
+        <textarea id="pigeonpack_text_email" class="large-text" name="pigeonpack_text_email" cols="100" rows="8"><?php echo htmlspecialchars( stripslashes( $text_email ) ); ?></textarea>
+		
+		</div>
+		
+		<?php	
+		
+	}
+	
 }
 
 if ( !function_exists( 'pigeonpack_campaign_meta_box' ) ) {
@@ -120,9 +154,6 @@ if ( !function_exists( 'pigeonpack_campaign_meta_box' ) ) {
 		
 		$from_email = get_post_meta( $post->ID, '_pigeonpack_from_email', true );
 		$from_email = ( $from_email ) ? $from_email : $pigeonpack_settings['from_email'];
-		
-		$email_format = get_post_meta( $post->ID, '_pigeonpack_email_format', true );
-		$email_format = ( $email_format ) ? $email_format : $pigeonpack_settings['email_format'];
 		
 		?>
 		
@@ -310,18 +341,10 @@ if ( !function_exists( 'pigeonpack_campaign_meta_box' ) ) {
 						<th><?php _e( 'From Name', 'pigeonpack' ); ?></th>
 						<td><input type="text" name="pigeonpack_from_name" value="<?php echo $from_name; ?>" /></td>
 					</tr>
+                    
 					<tr>
 						<th><?php _e( 'Reply-to Email', 'pigeonpack' ); ?></th>
 						<td><input type="text" name="pigeonpack_from_email" value="<?php echo $from_email; ?>" /></td>
-					</tr>
-					<tr>
-						<th><?php _e( 'Email Format', 'pigeonpack' ); ?></th>
-						<td>
-							<select name="pigeonpack_email_format">
-								<option value="html" <?php selected( $email_format, 'html' ); ?>><?php _e( 'HTML', 'pigeonpack' ); ?></option>
-								<option value="plain-text" <?php selected( $email_format, 'plain-text' ); ?>><?php _e( 'Plain Text', 'pigeonpack' ); ?></option>
-							</select>
-						</td>
 					</tr>
 				
 				</tbody>
@@ -361,6 +384,9 @@ if ( !function_exists( 'save_pigeonpack_campaign_meta' ) ) {
 			
 		if ( !isset( $_REQUEST['pigeonpack_edit_nonce'] ) || !wp_verify_nonce( $_REQUEST['pigeonpack_edit_nonce'], plugin_basename( __FILE__ ) ) )
 			return;
+			
+		if ( isset( $_REQUEST['pigeonpack_text_email'] ) && !empty( $_REQUEST['pigeonpack_text_email'] ) )
+			update_post_meta( $post_id, '_pigeonpack_campaign_text_format', $_REQUEST['pigeonpack_text_email'] );
 			
 		if ( isset( $_REQUEST['campaign_type'] ) ) {
 			
@@ -410,9 +436,6 @@ if ( !function_exists( 'save_pigeonpack_campaign_meta' ) ) {
 			
 		if ( isset( $_REQUEST['pigeonpack_from_email'] ) )
 			update_post_meta( $post_id, '_pigeonpack_from_email', $_REQUEST['pigeonpack_from_email'] );
-			
-		if ( isset( $_REQUEST['pigeonpack_email_format'] ) )
-			update_post_meta( $post_id, '_pigeonpack_email_format', $_REQUEST['pigeonpack_email_format'] );
 			
 	}
 	add_action( 'save_post', 'save_pigeonpack_campaign_meta' );

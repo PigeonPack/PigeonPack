@@ -92,7 +92,7 @@ if ( !function_exists( 'pigeonpack_double_optin_mail' ) ) {
 		$subject = $double_optin_settings['subject'];
 		$message = $double_optin_settings['message'];
 
-		list( $subject, $message, $footer ) = pigeonpack_unmerge_misc( $double_optin_settings['subject'], $double_optin_settings['message'], '', $list->ID );
+		list( $subject, $message, $footer ) = pigeonpack_unmerge_misc( $double_optin_settings['subject'], $double_optin_settings['message'], '', array( 'type' => 'list', 'id' => $list->ID ) );
 		
 		list( $email, $subject, $message, $footer ) = pigeonpack_unmerge_subscriber( $subscriber, $subject, $message, '' );
 		
@@ -284,6 +284,32 @@ if ( !function_exists( 'do_pigeonpack_wp_post_campaigns' ) ) {
 			}
 			
 		}
+		
+	}
+	
+}
+
+if ( !function_exists( 'extract_list_id' ) ) {
+	
+	/**
+	 * Extracts the list ID associated with a given campaign (WordPress role or Pigeon Pack list)
+	 *
+	 * If WordPress role, returns false
+	 * If Pigeon Pack list, return the list ID
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param string $list_type Either R followed by Role name (e.g. RAdministrator) or L followed by List ID (e.g. L132)
+	 * @return int|bool Integer ID of list or false
+	 */
+	function extract_list_id( $list_type ) {
+	
+		if ( 'R' === substr( $list_type, 0, 1 ) )
+			return array( 'type' => 'role', 'id' => substr( $list_type, 1 ) );
+		else if ( 'L' === substr( $list_type, 0, 1 ) )
+			return array( 'type' => 'list', 'id' => substr( $list_type, 1 ) );
+		
+		return false;
 		
 	}
 	
@@ -531,14 +557,17 @@ if ( !function_exists( 'pigeonpack_unmerge_misc' ) ) {
 	 * @param string $subject Email subject to be merged
 	 * @param string $message Email body to be merged
 	 * @param string $footer Email footer to be merged
+	 * @param array $list_info Email footer to be merged
 	 * @return array Merged subject, merged body, and merged footer
 	 */
-	function pigeonpack_unmerge_misc( $subject, $message, $footer, $list_id = false ) {
+	function pigeonpack_unmerge_misc( $subject, $message, $footer, $list_info ) {
 		
 		/**
 		 * WordPress time format
 		 */
 		$dateformat = get_option( 'date_format' );
+		
+		$pigeonpack_settings = get_pigeonpack_settings();
 		
 		$merged_subject = $subject;
 		$merged_message = $message;
@@ -546,9 +575,43 @@ if ( !function_exists( 'pigeonpack_unmerge_misc' ) ) {
 		
 		list( $merged_subject, $merged_message ) = str_ireplace( '{{DATE}}', date_i18n( $dateformat ), array( $merged_subject, $merged_message ) );
 		
-		if ( $list_id ) {
+		if ( !empty( $list_info ) ) {
 		
-			list( $merged_subject, $merged_message ) = str_ireplace( '{{LIST_NAME}}', get_the_title( $list_id ), array( $merged_subject, $merged_message ) );
+			if ( 'list' === $list_info['type'] ) {
+				
+				list( $merged_subject, $merged_message, $merged_footer  ) = str_ireplace( '{{LIST_NAME}}', get_the_title( $list_info['id'] ), array( $merged_subject, $merged_message, $merged_footer  ) );
+				
+				$required_footer = get_post_meta( $list_info['id'], '_pigeonpack_required_footer_settings', true );
+				$required_footer_string = '<p id="required-address-info">'
+										. __( 'Our mailing address is:', 'pigeonpack' ) . '<br />' 
+										. $required_footer['company'] . '<br />'
+										. $required_footer['address'] . '<br />'
+										. '</p>';
+										
+				list( $merged_message, $merged_footer ) = str_ireplace( '{{REQUIRED_FOOTER_CONTENT}}', $required_footer_string, array( $merged_message, $merged_footer ));
+				list( $merged_message, $merged_footer ) = str_ireplace( '{{REMINDER}}', '<p id="reminder">' . $required_footer['reminder'] . '</p>', array( $merged_message, $merged_footer ) );
+				
+			} else if ( 'role' === $list_info['type'] ) {
+				
+				list( $merged_subject, $merged_message, $merged_footer  ) = str_ireplace( '{{LIST_NAME}}', ucfirst( $list_info['id'] ), array( $merged_subject, $merged_message, $merged_footer  ) );
+				
+				$required_footer = get_option( '_pigeonpack_default_required_footer_settings' );
+				$required_footer_string = '<p id="required-address-info">'
+										. __( 'Our mailing address is:', 'pigeonpack' ) . '<br />' 
+										. $pigeonpack_settings['company'] . '<br />'
+										. $pigeonpack_settings['address'] . '<br />'
+										. '</p>';
+										
+				list( $merged_message, $merged_footer ) = str_ireplace( '{{REQUIRED_FOOTER_CONTENT}}', $required_footer_string, array( $merged_message, $merged_footer ) );
+				list( $merged_message, $merged_footer ) = str_ireplace( '{{REMINDER}}', '<p id="reminder">' . $pigeonpack_settings['reminder'] . '</p>', array( $merged_message, $merged_footer ) );
+				
+			}
+			
+		} else {
+		
+			list( $merged_subject, $merged_message ) = str_ireplace( '{{LIST_NAME}}', '', array( $merged_subject, $merged_message ) );
+			list( $merged_message, $merged_footer ) = str_ireplace( '{{REQUIRED_FOOTER_CONTENT}}', '', array( $merged_message, $merged_footer ) );
+			list( $merged_message, $merged_footer ) = str_ireplace( '{{REMINDER}}', '', array( $merged_message, $merged_footer ) );
 			
 		}
 		
@@ -599,6 +662,7 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 	 *
 	 * @since 0.0.1
 	 * @uses apply_filters() Calls 'the_content' hook on campaign post content.
+	 * @uses apply_filters() Calls 'default_pigeonpack_mail_footer' hook on footer string with replacement arguments.
 	 * @uses apply_filters() Calls 'pre_subscriber_loop_pigeonpack_headers' hook on an array of headers before subscriber loop is processing.
 	 * @uses apply_filters() Calls 'subscriber_loop_pigeonpack_headers' hook on an array of headers while subscriber loop is processing.
 	 *
@@ -628,20 +692,9 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 		
 		$subject = $campaign->post_title;
 		$message =  apply_filters( 'the_content', $campaign->post_content );
-		$footer = '<p>{{UNSUBSCRIBE_URL}}</p>';
+		$footer = apply_filters( 'default_pigeonpack_mail_footer', '{{REMINDER}}{{REQUIRED_FOOTER_CONTENT}}{{UNSUBSCRIBE_URL}}' );
 		
-		
-		if ( isset( $pigeonpack_settings['smtp_enable'] ) && 'smtp' === $pigeonpack_settings['smtp_enable'] )
-			add_action( 'phpmailer_init', 'pigeonpack_phpmailer_init' );
-		
-		$args = array(
-					'limit' 	=> $pigeonpack_settings['emails_per_cycle'],
-					'offset' 	=> $offset,
-				);
-		
-		$subscribers = get_pigeonpack_subscriber_by_type( $recipients, $args );
-	
-		list( $subject, $message, $footer ) = pigeonpack_unmerge_misc( $subject, $message, $footer );
+		list( $subject, $message, $footer ) = pigeonpack_unmerge_misc( $subject, $message, $footer, extract_list_id( $recipients ) );
 		
 		if ( !empty( $posts ) ) {
 		
@@ -656,6 +709,17 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 			list( $subject, $message ) = pigeonpack_unmerge_postdata( $subject, $message, $posts );
 			
 		}
+		
+		// If we're using an SMTP server, set it up now...
+		if ( isset( $pigeonpack_settings['smtp_enable'] ) && 'smtp' === $pigeonpack_settings['smtp_enable'] )
+			add_action( 'phpmailer_init', 'pigeonpack_phpmailer_init' );
+					
+		$args = array(
+					'limit' 	=> $pigeonpack_settings['emails_per_cycle'],
+					'offset' 	=> $offset,
+				);
+				
+		$subscribers = get_pigeonpack_subscriber_by_type( $recipients, $args );
 		
 		if ( !empty( $subscribers ) ) {
 			

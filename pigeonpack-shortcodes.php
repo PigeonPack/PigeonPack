@@ -149,6 +149,19 @@ if ( ! class_exists( 'PigeonPack_Shortcodes' ) ) {
 					$results .= '</tr>';
 					
 				}
+	
+				$results .= '<tr>';
+				$results .= '	<th>' . __( 'Email Format', 'pigeonpack' ) . '</th>';
+				$results .= '	<td>';
+				$results .= '	<div class="dropdownfield">';
+				$results .= '	<select id="email-format-dropdown" name="pigeonpack_email_format">';
+				$results .= '		<option value="html" />HTML</option>';
+				$results .= '		<option value="plain" />' . __( 'Plain Text', 'pigeonpack' ) . '</option>';
+				$results .= '	</select>';
+				$results .= '	</div>';
+				$results .= '	</td>';
+				$results .= '</tr>';
+					
 
 				$results .= '</table>';
 				

@@ -84,8 +84,6 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		 */
 		function pigeonpack_admin_menu() {
 			
-			$pigeonpack_settings = $this->get_pigeonpack_settings();
-			
 			add_menu_page( __( 'Pigeon Pack', 'pigeonpack' ), __( 'Pigeon Pack', 'pidgenpack' ), apply_filters( 'manage_pigeonpack_settings', 'manage_pigeonpack_settings' ), 'pigeon-pack', array( $this, 'pigeonpack_settings_page' ), PIGEON_PACK_PLUGIN_URL . '/images/pigeon-16x16.png' );
 			
 			add_submenu_page( 'pigeon-pack', __( 'Settings', 'pigeonpack' ), __( 'Settings', 'pigeonpack' ), apply_filters( 'manage_pigeonpack_settings', 'manage_pigeonpack_settings' ), 'pigeonpack-settings', array( $this, 'pigeonpack_settings_page' ) );
@@ -240,7 +238,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		function get_pigeonpack_settings() {
 			
 			$defaults = array( 
-								'api_key' 					=> '', 
+								'api_key' 							=> '', 
 								'from_name'							=> get_option( 'blogname' ),
 								'from_email'						=> get_option( 'admin_email' ),
 								'email_format'						=> 'html',
@@ -256,7 +254,9 @@ if ( !class_exists( 'PigeonPack' ) ) {
 								'smtp_password'						=> '',
 								'emails_per_cycle'					=> 100,
 								'email_cycle'						=> '1',
-								
+								'company'							=> get_option( 'blogname' ),
+								'address'							=> '',
+								'reminder'							=> sprintf( __( 'You are receiving this email because you opted in at our website %s.', 'pigeonpack' ), site_url() ),
 							);
 		
 			$pigeonpack_settings = get_option( 'pigeonpack' );
@@ -274,75 +274,81 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			
 			// Get the user options
 			$pigeonpack_settings = $this->get_pigeonpack_settings();
+			$settings_updated = false;
 			
 			if ( isset( $_REQUEST['update_pigeonpack_settings'] ) ) {
 				
-				if ( isset( $_REQUEST['api_key'] ) )
-					$pigeonpack_settings['api_key'] = $_REQUEST['api_key'];
+				if ( !isset( $_REQUEST['pigeonpack_general_options_nonce'] ) 
+					|| !wp_verify_nonce( $_REQUEST['pigeonpack_general_options_nonce'], 'pigeonpack_general_options' ) ) {
+						
 					
-				if ( isset( $_REQUEST['page_for_subscription_settings'] ) )
-					$pigeonpack_settings['page_for_subscription_settings'] = $_REQUEST['page_for_subscription_settings'];
-					
-				if ( isset( $_REQUEST['css_style'] ) )
-					$pigeonpack_settings['css_style'] = $_REQUEST['css_style'];
-					
-				if ( isset( $_REQUEST['from_name'] ) )
-					$pigeonpack_settings['from_name'] = $_REQUEST['from_name'];
-					
-				if ( isset( $_REQUEST['from_email'] ) )
-					$pigeonpack_settings['from_email'] = $_REQUEST['from_email'];
-					
-				if ( isset( $_REQUEST['page_for_subscription_settings'] ) )
-					$pigeonpack_settings['page_for_subscription_settings'] = $_REQUEST['page_for_subscription_settings'];
-					
-				if ( isset( $_REQUEST['smtp_enable'] ) )
-					$pigeonpack_settings['smtp_enable'] = $_REQUEST['smtp_enable'];
-					
-				if ( isset( $_REQUEST['smtp_server'] ) )
-					$pigeonpack_settings['smtp_server'] = $_REQUEST['smtp_server'];
-					
-				if ( isset( $_REQUEST['smtp_port'] ) )
-					$pigeonpack_settings['smtp_port'] = $_REQUEST['smtp_port'];
-					
-				if ( isset( $_REQUEST['smtp_encryption'] ) )
-					$pigeonpack_settings['smtp_encryption'] = $_REQUEST['smtp_encryption'];
-					
-				if ( isset( $_REQUEST['smtp_authentication'] ) )
-					$pigeonpack_settings['smtp_authentication'] = $_REQUEST['smtp_authentication'];
-					
-				if ( isset( $_REQUEST['smtp_username'] ) )
-					$pigeonpack_settings['smtp_username'] = $_REQUEST['smtp_username'];
-					
-				if ( isset( $_REQUEST['smtp_password'] ) )
-					$pigeonpack_settings['smtp_password'] = $_REQUEST['smtp_password'];
-					
-				if ( isset( $_REQUEST['emails_per_cycle'] ) )
-					$pigeonpack_settings['emails_per_cycle'] = $_REQUEST['emails_per_cycle'];
-					
-				if ( isset( $_REQUEST['email_cycle'] ) )
-					$pigeonpack_settings['email_cycle'] = $_REQUEST['email_cycle'];
+					echo '<div class="error"><p><strong>' . __( 'Security Error, unable to determine correct nonce.', 'pigeonpack' ) . '</strong></p></div>';
 				
-				update_option( 'pigeonpack', $pigeonpack_settings );
+				} else {
 					
-				// It's not pretty, but the easiest way to get the menu to refresh after save...
-				?>
-					<script type="text/javascript">
-					<!--
-					window.location = "<?php add_query_arg( array(  'page'				=> 'pigeonpack-settings',
-																	'settings_saved' 	=> '' ) ); ?>"
-					//-->
-					</script>
-				<?php
+					if ( isset( $_REQUEST['api_key'] ) )
+						$pigeonpack_settings['api_key'] = $_REQUEST['api_key'];
+						
+					if ( isset( $_REQUEST['page_for_subscription_settings'] ) )
+						$pigeonpack_settings['page_for_subscription_settings'] = $_REQUEST['page_for_subscription_settings'];
+						
+					if ( isset( $_REQUEST['css_style'] ) )
+						$pigeonpack_settings['css_style'] = $_REQUEST['css_style'];
+						
+					if ( isset( $_REQUEST['from_name'] ) )
+						$pigeonpack_settings['from_name'] = $_REQUEST['from_name'];
+						
+					if ( isset( $_REQUEST['from_email'] ) )
+						$pigeonpack_settings['from_email'] = $_REQUEST['from_email'];
+						
+					if ( isset( $_REQUEST['page_for_subscription_settings'] ) )
+						$pigeonpack_settings['page_for_subscription_settings'] = $_REQUEST['page_for_subscription_settings'];
+						
+					if ( isset( $_REQUEST['smtp_enable'] ) )
+						$pigeonpack_settings['smtp_enable'] = $_REQUEST['smtp_enable'];
+						
+					if ( isset( $_REQUEST['smtp_server'] ) )
+						$pigeonpack_settings['smtp_server'] = $_REQUEST['smtp_server'];
+						
+					if ( isset( $_REQUEST['smtp_port'] ) )
+						$pigeonpack_settings['smtp_port'] = $_REQUEST['smtp_port'];
+						
+					if ( isset( $_REQUEST['smtp_encryption'] ) )
+						$pigeonpack_settings['smtp_encryption'] = $_REQUEST['smtp_encryption'];
+						
+					if ( isset( $_REQUEST['smtp_authentication'] ) )
+						$pigeonpack_settings['smtp_authentication'] = $_REQUEST['smtp_authentication'];
+						
+					if ( isset( $_REQUEST['smtp_username'] ) )
+						$pigeonpack_settings['smtp_username'] = $_REQUEST['smtp_username'];
+						
+					if ( isset( $_REQUEST['smtp_password'] ) )
+						$pigeonpack_settings['smtp_password'] = $_REQUEST['smtp_password'];
+						
+					if ( isset( $_REQUEST['emails_per_cycle'] ) )
+						$pigeonpack_settings['emails_per_cycle'] = $_REQUEST['emails_per_cycle'];
+						
+					if ( isset( $_REQUEST['email_cycle'] ) )
+						$pigeonpack_settings['email_cycle'] = $_REQUEST['email_cycle'];
+						
+					if ( isset( $_REQUEST['company'] ) )
+						$pigeonpack_settings['company'] = $_REQUEST['company'];
+						
+					if ( isset( $_REQUEST['address'] ) )
+						$pigeonpack_settings['address'] = $_REQUEST['address'];
+						
+					if ( isset( $_REQUEST['reminder'] ) )
+						$pigeonpack_settings['reminder'] = $_REQUEST['reminder'];
+					
+					update_option( 'pigeonpack', $pigeonpack_settings );
+					$settings_updated = true;
+					
+				}
 				
 			}
 			
-			if ( isset( $_REQUEST['update_pigeonpack_settings'] ) || isset( $_REQUEST['settings_saved'] ) ) {
-				
-				// update settings notification ?>
-				<div class="updated"><p><strong><?php _e( 'Pigeon Pack Settings Updated.', 'pigeonpack' );?></strong></p></div>
-				<?php
-				
-			}
+			if ( $settings_updated )
+				echo '<div class="updated"><p><strong>' . __( 'Pigeon Pack Settings Updated.', 'pigeonpack' ) . '</strong></p></div>';
 			
 			// Display HTML form for the options below
 			?>
@@ -426,22 +432,56 @@ if ( !class_exists( 'PigeonPack' ) ) {
 								</select>
                                 </td>
                             </tr>
-                        
-                        	<tr>
-                                <th> <?php _e( 'Show a "follow blog" option in the comment form', 'pigeonpack' ); ?></th>
-                                <td>
-                                </td>
-                            </tr>
-                        
-                        	<tr>
-                                <th> <?php _e( 'Show a "follow comments" option in the comment form', 'pigeonpack' ); ?></th>
-                                <td>
-                                </td>
-                            </tr>
                             
                         </table>
                         
                         <?php wp_nonce_field( 'pigeonpack_general_options', 'pigeonpack_general_options_nonce' ); ?>
+                                                  
+                        <p class="submit">
+                            <input class="button-primary" type="submit" name="update_pigeonpack_settings" value="<?php _e( 'Save Settings', 'pigeonpack' ) ?>" />
+                        </p>
+
+                        </div>
+                        
+                    </div>
+                    
+                    <div id="modules" class="postbox">
+                    
+                        <div class="handlediv" title="Click to toggle"><br /></div>
+                        
+                        <h3 class="hndle"><span><?php _e( 'Pigeon Pack Required Footer Content', 'pigeonpack' ); ?></span></h3>
+                        
+                        <div class="inside">
+                        
+                        <p><?php _e( "Enter the contact information and physical mailing address for the owner of this list. It's required by law.", 'pigeonpack' ); ?></p>
+                            
+                        <table id="pigeonpack_administrator_options">
+                        
+                        	<tr>
+                                <th> <?php _e( 'Company/Organization', 'pigeonpack' ); ?></th>
+                                <td>
+                                <input type="text" id="company" name="company" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['company'] ) ); ?>" />
+                                </td>
+                            </tr>
+                            
+                        	<tr>
+                                <th> <?php _e( 'Address', 'pigeonpack' ); ?></th>
+                                <td>
+                    				<textarea id="address" class="large-text" name="address" cols="50" rows="3"><?php echo htmlspecialchars( stripslashes( $pigeonpack_settings['address'] ) ); ?></textarea>
+                                </td>
+                            </tr>
+                            
+                        	<tr>
+                                <th> <?php _e( 'Permission Reminder', 'pigeonpack' ); ?></th>
+                                <td>
+                    				<textarea id="reminder" class="large-text" name="reminder" cols="50" rows="3"><?php echo htmlspecialchars( stripslashes( $pigeonpack_settings['reminder'] ) ); ?></textarea>
+                    <p class="description">
+                    <?php _e( "Recipients forget signing up to lists all the time. To prevent false spam reports, let's briefly remind your recipients how they got on your list.", 'pigeonpack' ); ?>
+                    </p>
+                                </td>
+                            </tr>
+                            
+                        </table>
                                                   
                         <p class="submit">
                             <input class="button-primary" type="submit" name="update_pigeonpack_settings" value="<?php _e( 'Save Settings', 'pigeonpack' ) ?>" />
@@ -799,6 +839,7 @@ Examples:
 				subscriber_modified datetime 		DEFAULT '0000-00-00 00:00:00' NOT NULL,
 				subscriber_status 	VARCHAR(100)	DEFAULT 'pending' NOT NULL,
 				subscriber_hash 	VARCHAR(64) 	DEFAULT NULL,
+				message_preference 	VARCHAR(10) 	DEFAULT 'html',
 				UNIQUE KEY id (id)
 			);";
 			

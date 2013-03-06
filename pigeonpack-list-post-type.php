@@ -76,6 +76,7 @@ if ( !function_exists ( 'add_pigeonpack_list_metaboxes' ) ) {
 		add_meta_box( 'pigeonpack_list_subscriber_box', __( 'Pigeon Pack Subscribers', 'pigeonpack' ), 'pigeonpack_list_subscriber_box', 'pigeonpack_list', 'normal', 'high' );
 		add_meta_box( 'pigeonpack_list_fields_box', __( 'Pigeon Pack Subscriber Fields & {{MERGE}} Tags', 'pigeonpack' ), 'pigeonpack_list_fields_box', 'pigeonpack_list', 'normal', 'high' );
 		add_meta_box( 'pigeonpack_list_options_box', __( 'Pigeon Pack List Options', 'pigeonpack' ), 'pigeonpack_list_options_box', 'pigeonpack_list', 'normal', 'high' );
+		add_meta_box( 'pigeonpack_list_options_box', __( 'Required Email Footer Content', 'pigeonpack' ), 'pigeonpack_required_footer_settings', 'pigeonpack_list', 'normal', 'high' );
 		add_meta_box( 'pigeonpack_double_optin_box', __( 'Double Opt-In Options', 'pigeonpack' ), 'pigeonpack_double_optin_box', 'pigeonpack_list', 'normal', 'high' );
 		
 	}
@@ -563,35 +564,35 @@ if ( !function_exists( 'pigeonpack_double_optin_box' ) ) {
 			<table id="pigeonpack_double_optin_table" class="pigeonpack_table">
             
                 <tr>
-                    <th> <?php _e( 'Enable Double Opt-In', 'pigeonpack' ); ?></th>
+                    <th><?php _e( 'Enable Double Opt-In', 'pigeonpack' ); ?></th>
                     <td>
                     <input type="checkbox" id="pigeonpack_double_optin_enabled" name="pigeonpack_double_optin_enabled" <?php checked( 'on' === $double_optin['enabled'], true ); ?> />
                     </td>
                 </tr>
             
                 <tr>
-                    <th> <?php _e( 'From Name', 'pigeonpack' ); ?></th>
+                    <th><?php _e( 'From Name', 'pigeonpack' ); ?></th>
                     <td>
                     <input type="text" id="pigeonpack_double_optin_from_name" class="regular-text" name="pigeonpack_double_optin_from_name" value="<?php echo htmlspecialchars( stripcslashes( $double_optin['from_name'] ) ); ?>" />
                     </td>
                 </tr>
                 
                 <tr>
-                    <th> <?php _e( 'From Email', 'pigeonpack' ); ?></th>
+                    <th><?php _e( 'From Email', 'pigeonpack' ); ?></th>
                     <td>
                     <input type="text" id="pigeonpack_double_optin_from_email" class="regular-text" name="pigeonpack_double_optin_from_email" value="<?php echo htmlspecialchars( stripcslashes( $double_optin['from_email'] ) ); ?>" />
                     </td>
                 </tr>
                 
                 <tr>
-                    <th> <?php _e( 'Subject', 'pigeonpack' ); ?></th>
+                    <th><?php _e( 'Subject', 'pigeonpack' ); ?></th>
                     <td>
                     <input type="text" id="pigeonpack_double_optin_subject" class="regular-text" name="pigeonpack_double_optin_subject" value="<?php echo htmlspecialchars( stripcslashes( $double_optin['subject'] ) ); ?>" />
                     </td>
                 </tr>
                 
                 <tr>
-                    <th> <?php _e( 'Message', 'pigeonpack' ); ?></th>
+                    <th><?php _e( 'Message', 'pigeonpack' ); ?></th>
                     <td>
                     <textarea id="pigeonpack_double_optin_message" class="large-text" name="pigeonpack_double_optin_message" cols="50" rows="6"><?php echo htmlspecialchars( stripslashes( $double_optin['message'] ) ); ?></textarea>
                     </td>
@@ -606,6 +607,72 @@ if ( !function_exists( 'pigeonpack_double_optin_box' ) ) {
 	}
 	
 }
+
+if ( !function_exists( 'pigeonpack_required_footer_settings' ) ) {
+		
+	/**
+	 * Display Pigeon Pack Required Email Footer options
+	 * These are required to comply with SPAM laws
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param object $post WordPress post object
+	 **/
+	function pigeonpack_required_footer_settings( $post ) {
+		
+		$pigeonpack_settings = get_pigeonpack_settings();
+		
+		$default_email_footer = array(
+									'company'		=> $pigeonpack_settings['company'],
+									'address'		=> $pigeonpack_settings['address'],
+									'reminder'		=> $pigeonpack_settings['reminder'],
+								);
+		
+		$required_email_footer = get_post_meta( $post->ID, '_pigeonpack_required_footer_settings', true );
+		$required_email_footer = wp_parse_args( $required_email_footer, $default_email_footer );
+		
+		?>
+
+		<div id="pigeonpack_required_email_footer_metabox">
+    
+            <p><?php _e( "Enter the contact information and physical mailing address for the owner of this list. It's required by law.", 'pigeonpack' ); ?></p>
+                        
+			<table id="pigeonpack_required_email_footer_table" class="pigeonpack_table">
+            
+                <tr>
+                    <th><?php _e( 'Company/Organization', 'pigeonpack' ); ?></th>
+                    <td>
+                    <input type="text" id="pigeonpack_footer_company" name="pigeonpack_footer_company" value="<?php echo htmlspecialchars( stripcslashes( $required_email_footer['company'] ) ); ?>" />
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th><?php _e( 'Address', 'pigeonpack' ); ?></th>
+                    <td>
+                    <textarea id="pigeonpack_footer_address" class="large-text" name="pigeonpack_footer_address" cols="50" rows="3"><?php echo htmlspecialchars( stripslashes( $required_email_footer['address'] ) ); ?></textarea>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th><?php _e( 'Permission Reminder', 'pigeonpack' ); ?></th>
+                    <td>
+                    <textarea id="pigeonpack_footer_reminder" class="large-text" name="pigeonpack_footer_reminder" cols="50" rows="3"><?php echo htmlspecialchars( stripslashes( $required_email_footer['reminder'] ) ); ?></textarea>
+                    <p class="description">
+                    <?php _e( "Recipients forget signing up to lists all the time. To prevent false spam reports, let's briefly remind your recipients how they got on your list.", 'pigeonpack' ); ?>
+                    </p>
+                    </td>
+                </tr>
+                
+            </table>
+        
+        </div>
+                    
+	<?php
+		
+	}
+	
+}
+
 
 if ( !function_exists( 'get_pigeonpack_list_fields' ) ) {
 	
@@ -760,6 +827,21 @@ if ( !function_exists( 'save_pigeonpack_list_meta' ) ) {
 			
 		if ( isset( $_REQUEST['pigeonpack_allow_user_format'] ) )
 			update_post_meta( $list_id, '_pigeonpack_allow_user_format', $_REQUEST['pigeonpack_allow_user_format'] );
+			
+		// Begin Required Footer Email Content //
+		if ( isset( $_REQUEST['pigeonpack_footer_company'] ) )
+			$required_footer['company'] = $_REQUEST['pigeonpack_footer_company'];
+			
+		if ( isset( $_REQUEST['pigeonpack_footer_address'] ) )
+			$required_footer['address'] = $_REQUEST['pigeonpack_footer_address'];
+			
+		if ( isset( $_REQUEST['pigeonpack_footer_reminder'] ) )
+			$required_footer['reminder'] = $_REQUEST['pigeonpack_footer_reminder'];
+		
+		update_post_meta( $list_id, '_pigeonpack_required_footer_settings', $required_footer );	
+		
+		unset( $required_footer );
+		// End Required Footer Email Content //
 							
 		// Begin Double Opt-in Settings //
 		if ( isset( $_REQUEST['pigeonpack_double_optin_enabled'] ) )
@@ -779,10 +861,12 @@ if ( !function_exists( 'save_pigeonpack_list_meta' ) ) {
 		if ( isset( $_REQUEST['pigeonpack_double_optin_message'] ) )
 			$double_optin['message'] = $_REQUEST['pigeonpack_double_optin_message'];
 			
-		update_post_meta( $list_id, '_pigeonpack_double_optin_settings', $double_optin );		
+		update_post_meta( $list_id, '_pigeonpack_double_optin_settings', $double_optin );	
+			
+		unset( $double_optin );
 		// End Double Opt-in Settings //
 		
-		$new_subscriber = array();
+		// Begin Subscriber Fields //
 		$new_fields		= array();
 		$fieldlabels 	= isset( $_REQUEST['pigeonpack_field_label'] ) 			? $_REQUEST['pigeonpack_field_label'] 		: array() ;
 		$types 			= isset( $_REQUEST['pigeonpack_field_type'] ) 			? $_REQUEST['pigeonpack_field_type'] 		: array() ;
@@ -816,9 +900,13 @@ if ( !function_exists( 'save_pigeonpack_list_meta' ) ) {
 		}
 		
 		update_post_meta( $list_id, '_pigeonpack_list_fields', $new_fields );
+		// End Subcriber Fields //
 		
 		if ( isset( $last_merge_id ) )
 			update_post_meta( $list_id, '_last_merge_id', $last_merge_id );
+		
+		// Begin New Subscriber //
+		$new_subscriber = array();
 		
 		foreach ( $required_fields as $field ) {
 			
@@ -898,6 +986,7 @@ if ( !function_exists( 'save_pigeonpack_list_meta' ) ) {
 		
 		if ( !empty( $new_subscriber ) )
 			add_pigeonpack_subscriber( $list_id, $new_subscriber, 'subscribed' );
+		// End New Susbcriber //
 	
 	}
 	add_action( 'save_post', 'save_pigeonpack_list_meta' );
@@ -1059,20 +1148,24 @@ if ( !function_exists( 'add_pigeonpack_subscriber' ) ) {
 	 * @param string $status pending, subscribed, unsubscribed, or bounced
 	 * @return array|bool Associated array of new subscriber or FALSE if failed
 	 */		
-	function add_pigeonpack_subscriber( $list_id, $subscriber, $status = 'pending' ) {
+	function add_pigeonpack_subscriber( $list_id, $subscriber, $status = 'pending', $format = 'html' ) {
 	
 		global $wpdb;
 	
 		if ( !$list_id = absint( $list_id )  )
 			return false;
 			
-		if ( NULL === $hash )
-			$hash = pigeonpack_hash( $susbriber['M0'] ); //Hash the email address
-			
 		$result = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'pigeonpack_subscribers WHERE list_id = %d AND email = %s', $list_id, $subscriber['M0'] ), ARRAY_A ); //M0 (aka MERGE0) should ALWAYS be email
 			
 		if ( !empty( $result ) ) //Do not add duplicate email addresses
 			return false;
+			
+		if ( isset( $subscriber['pigeonpack_email_format'] ) ) {
+			
+			$format = $subscriber['pigeonpack_email_format'];
+			unset( $subscriber['pigeonpack_email_format'] ); // We don't want to include this setting in the subscriber_meta column
+			
+		}
 		
 		$new_subscriber = array(
 							'list_id'				=> $list_id,
@@ -1081,7 +1174,8 @@ if ( !function_exists( 'add_pigeonpack_subscriber' ) ) {
 							'subscriber_added'		=> date_i18n( 'Y-m-d H:i:s' ),
 							'subscriber_modified'	=> date_i18n( 'Y-m-d H:i:s' ),
 							'subscriber_status'		=> $status,
-							'subscriber_hash'		=> $hash,
+							'subscriber_hash'		=> pigeonpack_hash( $subscriber['M0'] ), //Hash the email address
+							'message_preference'	=> $format,
 							);
 		
 		$return = $wpdb->insert( $wpdb->prefix . 'pigeonpack_subscribers', $new_subscriber );

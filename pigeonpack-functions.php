@@ -863,7 +863,7 @@ if ( !function_exists( 'pigeonpack_hash' ) ) {
 		
 		$salt[] = get_bloginfo( 'name' );
 			
-		return md5( md5( implode( $salt ) ) . md5( $new_subscriber['M0'] ) ); // doesn't have to be too secure, just want a pretty random string
+		return md5( md5( implode( $salt ) ) . md5( $str ) ); // doesn't have to be too secure, just want a pretty random string
 		
 	}
 	

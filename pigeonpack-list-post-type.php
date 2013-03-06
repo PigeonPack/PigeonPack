@@ -1065,9 +1065,14 @@ if ( !function_exists( 'add_pigeonpack_subscriber' ) ) {
 	
 		if ( !$list_id = absint( $list_id )  )
 			return false;
+<<<<<<< HEAD
 			
 		if ( NULL === $hash )
 			$hash = pigeonpack_hash( $susbriber['M0'] ); //Hash the email address
+=======
+		
+		$hash = $list_id . '|' . pigeonpack_hash( $subscriber['M0'] ); //Hash the email address
+>>>>>>> e52ab6d3e8af70eb07a530f456b27f5b23a084e4
 			
 		$result = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'pigeonpack_subscribers WHERE list_id = %d AND email = %s', $list_id, $subscriber['M0'] ), ARRAY_A ); //M0 (aka MERGE0) should ALWAYS be email
 			

@@ -41,6 +41,12 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			add_action( 'transition_post_status', array( $this, 'pigeonpack_transition_post_status' ), 100, 3 );
 			
 			add_action( 'wp', array( $this, 'process_pigeonpack_requests' ) );
+	
+			//Add opt-in/opt-out options to profile.php
+			add_action( 'show_user_profile', array( $this, 'pigeonpack_show_user_profile' ) );
+			add_action( 'edit_user_profile', array( $this, 'pigeonpack_show_user_profile' ) );
+			add_action( 'personal_options_update', array( $this, 'pigeonpack_profile_update' ) );
+			add_action( 'edit_user_profile_update', array( $this, 'pigeonpack_profile_update' ) );
 			
 			/*
 			add_action( 'admin_notices', array( $this, 'pigeonpack_notification' ) );
@@ -1043,6 +1049,56 @@ Examples:
 				}
 				
 			}
+			
+		}	
+			
+		/**
+		 * Action from 'show_user_profile' and 'edit_user_profile' to 
+		 * display Pigeon Pack profile field options.
+		 *
+		 * @since 0.0.1
+		 *
+		 * @param object $user User object passed through action hook
+		 */
+		function pigeonpack_show_user_profile( $user ) {
+			
+			?>
+            
+            <h3><?php _e( 'Subscription Options', 'pigeonpack' ); ?></h3>
+            
+			<table class="form-table">
+			<tr id="profile-optin">
+				<th><label for="pigeonpack_subscription"><?php _e('Yes, I want to receive email updates'); ?></label></th>
+				<td>
+                <input type="checkbox" name="pigeonpack_subscription" id="pigeonpack_subscription" <?php checked( 'on' === get_user_meta( $user->ID, '_pigeonpack_subscription', true ) ); ?> />
+                <p class="description">
+                <?php _e( 'Unchecking this box will stop you from receiving emails based on your user profile with this site, this will not unsubscribe you from any other lists you subscribed to manually.', 'pigeonpack' ); ?>
+                </p>
+				</td>
+			</tr>
+			</table>
+            
+			<?php
+			
+		}
+		
+		/**
+		 * Action from 'personal_options_update' and 'edit_edit_user_profile_update' to 
+		 * update Pigeon Pack profile field options.
+		 *
+		 * @since 0.0.1
+		 *
+		 * @param int $user_id User ID passed through action hook
+		 */
+		function pigeonpack_profile_update( $user_id ) {
+			
+			if ( !current_user_can( 'edit_user', $user_id ) )
+				return false;
+			
+			if ( isset( $_POST['pigeonpack_subscription'] ) )
+				update_user_meta( $user_id, '_pigeonpack_subscription', 'on' );
+			else
+				delete_user_meta( $user_id, '_pigeonpack_subscription' );
 			
 		}
 		

@@ -380,6 +380,17 @@ if ( !function_exists( 'pigeonpack_unmerge_subscriber' ) ) {
 			list( $merged_subject, $merged_message ) = str_ireplace( '{{SITE}}', 	$subscriber_meta->user_url, 		array( $merged_subject, $merged_message ) );
 			list( $merged_subject, $merged_message ) = str_ireplace( '{{USERNAME}}', $subscriber_meta->user_login, 	array( $merged_subject, $merged_message ) );
 			
+			//check for existing hash, if not there, create it
+			if ( !$hash = get_user_meta( $subscriber->ID, '_pigeonpack_subscriber_hash', true ) ) {
+				
+				$hash = pigeonpack_hash( $subscriber_meta->user_email );
+				update_user_meta( $subscriber->ID, '_pigeonpack_subscriber_hash', $hash );
+				
+			}
+			
+			$unsubscribe_url = get_home_url() . '?pigeonpack=unsubscribe&role_name=' . array_shift( $subscriber_meta->roles ) . '&subscriber=' . $hash;
+			list( $merged_message, $merged_footer ) = str_ireplace( '{{UNSUBSCRIBE_URL}}', '<a href="' . $unsubscribe_url . '">' . $unsubscribe_url . '</a>' , array( $merged_message, $merged_footer ) );
+			
 			$email = $subscriber_meta->user_email;
 			
 		} else if ( is_array( $subscriber ) ) {
@@ -397,7 +408,13 @@ if ( !function_exists( 'pigeonpack_unmerge_subscriber' ) ) {
 				
 			}
 			
-			$hash = $subscriber['subscriber_hash'];
+			//check for existing hash, if not there, create it
+			if ( !$hash = $subscriber['subscriber_hash'] ) {
+				
+				$hash = pigeonpack_hash( $subscriber_meta['M0'] );
+				update_pigeonpack_subscriber_hash( $subscriber['id'], $hash );
+				
+			}
 			
 			$optin_url = get_home_url() . '?pigeonpack=subscribe&list_id=' . $subscriber['list_id'] . '&subscriber=' . $hash;
 			$merged_message = str_ireplace( '{{OPTIN_URL}}', '<a href="' . $optin_url . '">' . $optin_url . '</a>' , $merged_message );

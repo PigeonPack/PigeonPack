@@ -441,9 +441,9 @@ if ( !function_exists( 'pigeonpack_dropdown_roles' ) ) {
 			$name = translate_user_role( $details['name'] );
 			
 			if ( 'R' . $name === $selected ) // preselect specified role
-				$p = "\n\t<option selected='selected' value='R" . esc_attr($name) . "'>$name (" . __( 'Role', 'pigeonpack' ) . ")</option>";
+				$p = "\n\t<option selected='selected' value='R" . esc_attr( $name ) . "'>$name (" . __( 'Role', 'pigeonpack' ) . ")</option>";
 			else
-				$r .= "\n\t<option value='R" . esc_attr($name) . "'>$name (" . __( 'Role', 'pigeonpack' ) . ")</option>";
+				$r .= "\n\t<option value='R" . esc_attr( $name ) . "'>$name (" . __( 'Role', 'pigeonpack' ) . ")</option>";
 				
 		}
 		
@@ -477,9 +477,9 @@ if ( !function_exists( 'pigeonpack_dropdown_lists' ) ) {
 		foreach ( $lists as $list ) {
 			
 			if ( 'L' . $list->ID === $selected ) // preselect specified role
-				$p = "\n\t<option selected='selected' value='L" . esc_attr($list->ID) . "'>" . $list->post_title . " (" . __( 'List', 'pigeonpack' ) . ")</option>";
+				$p = "\n\t<option selected='selected' value='L" . esc_attr( $list->ID ) . "'>" . $list->post_title . " (" . __( 'List', 'pigeonpack' ) . ")</option>";
 			else
-				$r .= "\n\t<option value='L" . esc_attr($list->ID) . "'>" . $list->post_title . " (" . __( 'List', 'pigeonpack' ) . ")</option>";
+				$r .= "\n\t<option value='L" . esc_attr( $list->ID ) . "'>" . $list->post_title . " (" . __( 'List', 'pigeonpack' ) . ")</option>";
 			
 		}
 		

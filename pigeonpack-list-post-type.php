@@ -989,7 +989,7 @@ if ( !function_exists( 'get_pigeonpack_subscriber' ) ) {
 if ( !function_exists( 'get_pigeonpack_subscriber_by_list_id_and_hash' ) ) {
 	
 	/**
-	 * Returns specific Pigeon Pack subscriber by subscriber ID
+	 * Returns specific Pigeon Pack subscriber by list id and hash
 	 *
 	 * @since 0.0.1
 	 * @uses $wpdb WordPress datbase API
@@ -1004,6 +1004,40 @@ if ( !function_exists( 'get_pigeonpack_subscriber_by_list_id_and_hash' ) ) {
 		global $wpdb;
 	
 		return $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'pigeonpack_subscribers WHERE list_id = %d and subscriber_hash = %s', $list_id, $subscriber_hash ), ARRAY_A );
+		
+	}
+
+}
+if ( !function_exists( 'get_pigeonpack_wordpress_subscriber_by_hash' ) ) {
+	
+	/**
+	 * Returns specific Pigeon Pack subscriber by hash
+	 *
+	 * @since 0.0.1
+	 * @uses $wpdb WordPress datbase API
+	 * @see http://codex.wordpress.org/Class_Reference/wpdb
+	 *
+	 * @param string|md5 $subscriber_hash Subscriber's unique hash from double opt-in email
+	 * @return mixed Associative array of subscriber for given subscriber ID
+	 */				
+	function get_pigeonpack_wordpress_subscriber_by_hash( $subscriber_hash ) {
+	
+		global $wpdb;
+	
+		$user_id = $wpdb->get_var( $wpdb->prepare( 'SELECT user_id FROM ' . $wpdb->usermeta . ' WHERE meta_key = %s AND meta_value = %s', '_pigeonpack_subscriber_hash', $subscriber_hash ) ); //get the user id
+		
+		if ( !$user_id )
+			return false;
+			
+		$user = get_userdata( $user_id );
+			
+		$subscriber = array(
+						'user_id'			=> $user_id,
+						'email' 			=> $user->user_email,
+						'subscriber_status' => ( 'on' === get_user_meta( $user_id, '_pigeonpack_subscription', true ) ) ? 'subscribed' : 'unsubscribed',
+						);
+						
+		return $subscriber;
 		
 	}
 
@@ -1033,7 +1067,7 @@ if ( !function_exists( 'add_pigeonpack_subscriber' ) ) {
 			return false;
 			
 		if ( NULL === $hash )
-			$hash = $list_id . '|' . pigeonpack_hash( $susbriber['M0'] ); //Hash the email address
+			$hash = pigeonpack_hash( $susbriber['M0'] ); //Hash the email address
 			
 		$result = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'pigeonpack_subscribers WHERE list_id = %d AND email = %s', $list_id, $subscriber['M0'] ), ARRAY_A ); //M0 (aka MERGE0) should ALWAYS be email
 			
@@ -1089,7 +1123,7 @@ if ( !function_exists( 'update_pigeonpack_subscriber' ) ) {
 		if ( !$list_id = absint( $list_id )  )
 			return false;
 			
-		$result = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'pigeonpack_subscribers WHERE list_id = %d AND id = %s', $list_id, $subscriber_id ), ARRAY_A ); //M0 (aka MERGE0) should ALWAYS be email
+		$result = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'pigeonpack_subscribers WHERE list_id = %d AND id = %d', $list_id, $subscriber_id ), ARRAY_A );
 			
 		if ( empty( $result ) ) //subscriber doesn't exist
 			return false;
@@ -1099,6 +1133,47 @@ if ( !function_exists( 'update_pigeonpack_subscriber' ) ) {
 								'subscriber_meta'		=> maybe_serialize( $subscriber ),
 								'subscriber_modified'	=> date_i18n( 'Y-m-d H:i:s' ),
 								'subscriber_status'		=> $status ? $status : $result['subscriber_status'], //only update if $status is not false otehrwise use current setting
+							);
+		
+		$return = $wpdb->update( $wpdb->prefix . 'pigeonpack_subscribers', $update_subscriber, array( 'id' => $subscriber_id ) );
+					
+		if ( $return )
+			return $subscriber_id;
+		else
+			return false;
+		
+	}
+
+}
+
+if ( !function_exists( 'update_pigeonpack_subscriber_hash' ) ) {
+			
+	/**
+	 * Updates existing subscriber's hash
+	 *
+	 * @since 0.0.1
+	 * @uses $wpdb WordPress datbase API
+	 * @see http://codex.wordpress.org/Class_Reference/wpdb
+	 *
+	 * @param int $subscriber_id Existing subscriber ID
+	 * @param string $subscriber_hash Susbcriber's hash
+	 * @return int|bool Subscriber ID or FALSE if failed
+	 */		
+	function update_pigeonpack_subscriber_hash( $subscriber_id, $subscriber_hash ) {
+	
+		global $wpdb;
+	
+		if ( !$list_id = absint( $list_id )  )
+			return false;
+			
+		$result = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'pigeonpack_subscribers WHERE id = %d', $subscriber_id ), ARRAY_A );
+			
+		if ( empty( $result ) ) //subscriber doesn't exist
+			return false;
+		
+		$update_subscriber = array(
+								'subscriber_modified'	=> date_i18n( 'Y-m-d H:i:s' ),
+								'subscriber_hash'		=> $subscriber_hash,
 							);
 		
 		$return = $wpdb->update( $wpdb->prefix . 'pigeonpack_subscribers', $update_subscriber, array( 'id' => $subscriber_id ) );

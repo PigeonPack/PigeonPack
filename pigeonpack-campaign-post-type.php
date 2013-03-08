@@ -69,16 +69,19 @@ if ( !function_exists( 'add_pigeonpack_campaigns_metaboxes' ) ) {
 	 * Adds metabox for campaign
 	 *
 	 * @since 0.0.1
+	 * @uses do_action() To call 'add_pigeonpack_campaigns_metaboxes' for future addons
 	 */	
 	function add_pigeonpack_campaigns_metaboxes() {
 		
-		add_meta_box( 'pigeonpack_campaign_text_format_box', __( 'Pigeon Pack Campaign Text Format', 'pigeonpack' ), 'pigeonpack_campaign_text_format_box', 'pigeonpack_campaign', 'normal', 'high' );
 		add_meta_box( 'pigeonpack_campaign_meta_box', __( 'Pigeon Pack Campaign Options', 'pigeonpack' ), 'pigeonpack_campaign_meta_box', 'pigeonpack_campaign', 'normal', 'high' );
+		
+		do_action( 'add_pigeonpack_campaigns_metaboxes' );
 		
 	}
 
 }
 
+//Not Currently Used
 if ( !function_exists( 'pigeonpack_campaign_text_format_box' ) ) {
 		
 	/**

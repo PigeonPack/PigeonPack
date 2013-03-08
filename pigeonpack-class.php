@@ -33,6 +33,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			
 			add_action( 'admin_enqueue_scripts', array( $this, 'pigeonpack_admin_wp_enqueue_scripts' ) );
 			add_action( 'admin_print_styles', array( $this, 'pigeonpack_admin_wp_print_styles' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'pigeonpack_wp_enqueue_scripts' ) );
 					
 			add_action( 'admin_menu', array( $this, 'pigeonpack_admin_menu' ) );
 			
@@ -48,29 +49,25 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			add_action( 'personal_options_update', array( $this, 'pigeonpack_profile_update' ) );
 			add_action( 'edit_user_profile_update', array( $this, 'pigeonpack_profile_update' ) );
 			
-			/*
-			add_action( 'admin_notices', array( $this, 'pigeonpack_notification' ) );
-
 			//Premium Plugin Filters
-			add_filter( 'plugins_api', array( $this, 'pigeonpack_plugins_api' ), 10, 3 );
-			add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'pigeonpack_update_plugins' ) );
+			if ( !empty( $pigeonpack_settings['api_key'] ) ) {
+					
+				add_filter( 'plugins_api', array( $this, 'pigeonpack_plugins_api' ), 10, 3 );
+				add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'pigeonpack_update_plugins' ) );
 			
-			if ( empty( $pigeonpack_settings['api_key'] ) ) {
-			
-				update_option( 'pigeonpack_api_error_received', true );
-				update_option( 'pigeonpack_api_error_message', __( 'Please enter your pigeonpack API key in the <a href="/wp-admin/edit.php?post_type=blast&page=pigeonpack">pigeonpack Settings</a> to continue to get support and upgrades.', 'pigeonpack' ) );
-				
-			} else {
-				
 				delete_option( 'pigeonpack_api_error_received' );
 				delete_option( 'pigeonpack_api_error_message' );
+				delete_option( 'pigeonpack_api_error_message_version_dismissed' );
+				
+			} else {
+			
+				update_option( 'pigeonpack_api_error_received', true );
+				update_option( 'pigeonpack_api_error_message', __( 'Please enter your Pigeon Pack API key in the <a href="/wp-admin/admin.php?page=pigeonpack-settings">Pigeon Pack Settings</a> to get access to premium support and addons.', 'pigeonpack' ) );
+				add_action( 'admin_notices', array( $this, 'pigeonpack_notification' ) );
 				
 			}
 				
-			register_deactivation_hook( __FILE__, array( $this, 'pigeonpack_deactivation' ) );
-			
-			//add_filter( 'views_edit-blast', array( $this, 'display_pigeonpack_dot_com_rss_item' ) );
-			*/
+			//register_deactivation_hook( __FILE__, array( $this, 'pigeonpack_deactivation' ) );
 			
 		}
 		
@@ -81,6 +78,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		 * @uses add_menu_page() Creates Pigeon Pack menu
 		 * @uses add_submenu_page() Creates Settings submenu to Pigeon Pack menu
 		 * @uses add_submenu_page() Creates Help submenu to Pigeon Pack menu
+		 * @uses do_action() To call 'pigeonpack_admin_menu' for future addons
 		 */
 		function pigeonpack_admin_menu() {
 			
@@ -89,6 +87,8 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			add_submenu_page( 'pigeon-pack', __( 'Settings', 'pigeonpack' ), __( 'Settings', 'pigeonpack' ), apply_filters( 'manage_pigeonpack_settings', 'manage_pigeonpack_settings' ), 'pigeonpack-settings', array( $this, 'pigeonpack_settings_page' ) );
 			
 			add_submenu_page( 'pigeon-pack', __( 'Help', 'pigeonpack' ), __( 'Help', 'pigeonpack' ), apply_filters( 'manage_pigeonpack_settings', 'manage_pigeonpack_settings' ), 'pigeonpack-help', array( $this, 'pigeonpack_help_page' ) );
+			
+			do_action( 'pigeonpack_admin_menu' );
 			
 		}
 		
@@ -99,23 +99,9 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		 */
 		function pigeonpack_deactivation() {
 			
-		}
-		
-		/* NOT USED
-		function display_pigeonpack_dot_com_rss_item( $views ) {
-		
-			if ( $last_rss_item = get_option( 'last_pigeonpack_dot_com_rss_item' ) ) {
-				
-				echo '<div id="pigeonpack_rss_item">';
-				echo $last_rss_item;
-				echo '</div>';
-				
-			}
-			
-			return $views;
+			// Nothing to do here, yet...
 			
 		}
-		*/
 		
 		/**
 		 * Prints backend pigeonpack styles
@@ -217,20 +203,42 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		}
 		
 		/**
-		 * Enqueues frontend pigeonpack scripts
-		 *
-		 * @todo get this working :)
+		 * Enqueue Pigeon Pack scripts on the front end of the site
 		 *
 		 * @since 0.0.1
+		 * @uses wp_enqueue_style() To load Pigeon Pack stylesheet
+		 * @uses wp_enqueue_script() To load Pigeon Pack jQuery script
+		 * @uses wp_localize_script() To load WordPress' default AJAX script, used in Pigeon Pack's jQuery script
 		 */
-		function pigeonpack_frontend_js() {
+		function pigeonpack_wp_enqueue_scripts() {
 		
+			$pigeonpack_settings = $this->get_pigeonpack_settings();
+		
+			switch( $pigeonpack_settings['css_style'] ) {
+				
+				case 'none' :
+					break;
+				
+				case 'default' :
+				default : 
+					wp_enqueue_style( 'pigeonpack_style', PIGEON_PACK_PLUGIN_URL . '/css/pigeonpack.css', '', PIGEON_PACK_VERSION );
+					break;
+					
+			}
+			
+			wp_enqueue_script( 'pigeonpack_script', PIGEON_PACK_PLUGIN_URL . '/js/pigeonpack.js', array( 'jquery' ), PIGEON_PACK_VERSION );
+			$args = array(
+						'ajax_url'	=> admin_url( 'admin-ajax.php' ),
+						);
+			wp_localize_script( 'pigeonpack_script', 'pigeonpack_ajax_object', $args );
+			
 		}
 		
 		/**
 		 * Get pigeonpack options set in options table
 		 *
 		 * @since 0.0.1
+		 * @uses apply_filters() To call 'pigeonpack_default_settings' for future addons
 		 * @uses wp_parse_args function to merge default with stored options
 		 *
 		 * return array Pigeon Pack settings
@@ -243,7 +251,6 @@ if ( !class_exists( 'PigeonPack' ) ) {
 								'from_email'						=> get_option( 'admin_email' ),
 								'email_format'						=> 'html',
 								'allow_user_format'					=> 'yes',
-								'page_for_subscription_settings'	=> 0,
 								'css_style'							=> 'default',
 								'smtp_enable'						=> 'mail',
 								'smtp_server'						=> 'localhost',
@@ -258,6 +265,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 								'address'							=> '',
 								'reminder'							=> sprintf( __( 'You are receiving this email because you opted in at our website %s.', 'pigeonpack' ), site_url() ),
 							);
+			$defaults = apply_filters( 'pigeonpack_default_settings', $defaults );
 		
 			$pigeonpack_settings = get_option( 'pigeonpack' );
 			
@@ -269,6 +277,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		 * Output Pigeon Pack's settings page and saves new settings on form submit
 		 *
 		 * @since 0.0.1
+		 * @uses do_action() To call 'pigeonpack_settings_page' for future addons
 		 */
 		function pigeonpack_settings_page() {
 			
@@ -282,15 +291,12 @@ if ( !class_exists( 'PigeonPack' ) ) {
 					|| !wp_verify_nonce( $_REQUEST['pigeonpack_general_options_nonce'], 'pigeonpack_general_options' ) ) {
 						
 					
-					echo '<div class="error"><p><strong>' . __( 'Security Error, unable to determine correct nonce.', 'pigeonpack' ) . '</strong></p></div>';
+					echo '<div class="error"><p><strong>' . __( 'ERROR: Unable to save settings.', 'pigeonpack' ) . '</strong></p></div>';
 				
 				} else {
 					
 					if ( isset( $_REQUEST['api_key'] ) )
 						$pigeonpack_settings['api_key'] = $_REQUEST['api_key'];
-						
-					if ( isset( $_REQUEST['page_for_subscription_settings'] ) )
-						$pigeonpack_settings['page_for_subscription_settings'] = $_REQUEST['page_for_subscription_settings'];
 						
 					if ( isset( $_REQUEST['css_style'] ) )
 						$pigeonpack_settings['css_style'] = $_REQUEST['css_style'];
@@ -300,9 +306,6 @@ if ( !class_exists( 'PigeonPack' ) ) {
 						
 					if ( isset( $_REQUEST['from_email'] ) )
 						$pigeonpack_settings['from_email'] = $_REQUEST['from_email'];
-						
-					if ( isset( $_REQUEST['page_for_subscription_settings'] ) )
-						$pigeonpack_settings['page_for_subscription_settings'] = $_REQUEST['page_for_subscription_settings'];
 						
 					if ( isset( $_REQUEST['smtp_enable'] ) )
 						$pigeonpack_settings['smtp_enable'] = $_REQUEST['smtp_enable'];
@@ -339,6 +342,8 @@ if ( !class_exists( 'PigeonPack' ) ) {
 						
 					if ( isset( $_REQUEST['reminder'] ) )
 						$pigeonpack_settings['reminder'] = $_REQUEST['reminder'];
+						
+					$pigeonpack_settings = apply_filters( 'update_pigeonpack_settings', $pigeonpack_settings );
 					
 					update_option( 'pigeonpack', $pigeonpack_settings );
 					$settings_updated = true;
@@ -416,11 +421,6 @@ if ( !class_exists( 'PigeonPack' ) ) {
                                 <td>
                                 <input type="text" id="from_email" class="regular-text" name="from_email" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['from_email'] ) ); ?>" />
                                 </td>
-                            </tr>
-                        
-                        	<tr>
-                                <th> <?php _e( 'Subscription Settings Page', 'pigeonpack' ); ?></th>
-                                <td><?php echo wp_dropdown_pages( array( 'name' => 'page_for_subscription_settings', 'echo' => 0, 'show_option_none' => __( '&mdash; Select &mdash;' ), 'option_none_value' => '0', 'selected' => $pigeonpack_settings['page_for_subscription_settings'] ) ); ?></td>
                             </tr>
                         
                         	<tr>
@@ -586,41 +586,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
                         
                     </div>
                     
-                    <div id="modules" class="postbox">
-                    
-                        <div class="handlediv" title="Click to toggle"><br /></div>
-                        
-                        <h3 class="hndle"><span><?php _e( 'SPAM Laws', 'pigeonpack' ); ?></span></h3>
-                        
-                        <div class="inside">
-                        
-                        <p>
-                        <?php printf( __( '%s enables you to own and operate your own email campaign manager. You have full control and ownership over your email lists, campaigns, autoresponders, and more. Due to this, you are also required to follow the SPAM laws, guidelines and recommendations for your country. The plugin is setup to meet compliance with current laws, however, you have the responsibility to know the laws and make sure you are using the plugin appropriately. For more information about the SPAM laws in your country, see the list below or google "SPAM LAWS" for your country.', 'pigeonpack' ), 'Pigeon Pack' ); ?>
-                        </p>
-                        
-						<ol>
-                            
-                            <li><a href="http://www.business.ftc.gov/documents/bus61-can-spam-act-compliance-guide-business" target="_blank"><?php _e( 'United States - CAN-SPAM Act', 'pigeonpack' ); ?></a></li>
-                            <li><a href="http://www2.parl.gc.ca/HousePublications/Publication.aspx?Language=E&Parl=40&Ses=3&Mode=1&Pub=Bill&Doc=C-28_3" target="_blank"><?php _e( 'Canada - C-28', 'pigeonpack' ); ?></a></li>
-                            <li><?php _e( 'Australia', 'pigeonpack' ); ?> - <?php _e( 'Spam Act 2003, Act No. 129 of 2003 as amended..', 'pigeonpack' ); ?></li>
-                            <li><a href="http://ec.europa.eu/information_society/policy/ecomm/todays_framework/privacy_protection/spam/index_en.htm" target="_blank"><?php _e( 'EU - Article 13 of DIRECTIVE 2002/58/EC OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 12 July 2002', 'pigeonpack' ); ?></a></li>
-                            <li><a href="http://www.legislation.gov.uk/uksi?title=The%20Privacy%20and%20Electronic%20Communication" target="_blank"><?php _e( 'UK - The Privacy and Electronic Communications Regulations', 'pigeonpack' ); ?></a></li>
-                            <li><a href="http://www.rtr.at/en/tk/TKG2003" target="_blank"><?php _e( 'Austria - Telecommunications Act 2003', 'pigeonpack' ); ?></a></li>
-                            <li><a href="http://www.privacy.fgov.be/publications/spam_4-7-03_fr.pdf" target="_blank"><?php _e( 'Belgium - Etat des lieux en juillet 2003, July 4, 2003', 'pigeonpack' ); ?></a></li>
-                            <li><a href="http://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/index_en/index_en?opendocument" target="_blank"><?php _e( 'Cyprus - Section 06 of the Regulation of Electronic Communications and Postal Services Law of 2004', 'pigeonpack' ); ?></a></li>
-                            <li><?php _e( 'Czech Republic', 'pigeonpack' ); ?> - <?php _e( 'Act No. 480/2004 Coll., on Certain Information Society Services', 'pigeonpack' ); ?></li>
-                            <li><a href="https://www.riigiteataja.ee/akt/780289" target="_blank"><?php _e( 'Estonia - Information Society Service Act', 'pigeonpack' ); ?></a></li>
-                            <li><a href="http://www.cnil.fr/dossiers/conso-pub-spam/fiches-pratiques/article/la-prospection-commerciale-par-courrier-electronique/" target="_blank"><?php _e( 'France - CNIL Guidelines on email marketing.', 'pigeonpack' ); ?></a></li>
-                            <li><a href="http://www.iuscomp.org/gla/statutes/BDSG.htm" target="_blank"><?php _e( 'Germany - Art. 7 German Unfair Competition Law (Gesetz gegen Unlauteren Wettbewerb)', 'pigeonpack' ); ?></a></li>
-                            <li><a href="http://www.garanteprivacy.it/garante/document?ID=311066" target="_blank"><?php _e( 'Italy - Personal Data Protection Code (legislative decree no. 196/2003)', 'pigeonpack' ); ?></a></li>
-                            <li><?php _e( 'Netherlands', 'pigeonpack' ); ?> - <?php _e( 'Article 11.7 of the Dutch Telecommunications Act and Dutch Data Protection Act.', 'pigeonpack' ); ?></li>
-                            <li><?php _e( 'Sweden', 'pigeonpack' ); ?> - <?php _e( 'Swedish Code of Statutes, SFS 1995:450 & Swedish Code of Statutes, SFS 1998:204.', 'pigeonpack' ); ?></li>
-                        
-                        </ul>
-                        
-                        </div>
-                        
-                    </div>
+                    <?php do_action( 'pigeonpack_settings_page' ); ?>
                     
                 </form>
                 
@@ -636,10 +602,10 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		 * Output Pigeon Pack's help page
 		 *
 		 * @since 0.0.1
+		 * @uses do_action() To call 'pigeonpack_help_page' for future addons
 		 */
 		function pigeonpack_help_page() {
 			
-			// Display HTML
 			?>
 			<div id="pigeonpack_help_page" class=wrap>
             
@@ -651,11 +617,11 @@ if ( !class_exists( 'PigeonPack' ) ) {
             <div class="metabox-holder">	
             <div class="meta-box-sortables ui-sortable">
                 
-                <div id="pigeonpack-campaigns" class="postbox">
+                <div id="pigeonpack-subcribe-form-shortcode" class="postbox">
                 
                     <div class="handlediv" title="Click to toggle"><br /></div>
     
-                    <h3 class="hndle"><span><?php _e( '[pigeonpack_sub_pref] - Subscription Preferences Shortcode', 'pigeonpack' ); ?></span></h3>
+                    <h3 class="hndle"><span>[pigeonpack_subscribe_form] - Pigeon Pack <?php _e( 'Susbcribe Form', 'pigeonpack' ); ?></span></h3>
                     
                     <div class="inside">
                                     
@@ -665,32 +631,27 @@ if ( !class_exists( 'PigeonPack' ) ) {
                             
                                 <td>
                                 	
-                                    Pigeon Pack pack Subscription Preferences: <code style="font-size: 1.2em; background: #ffffe0;">[pigeonpack_sub_pref]</code>
+                                    <p>Pigeon Pack <?php _e( 'Subscribe Form', 'pigeonpack' ); ?>: <code style="font-size: 1.2em; background: #ffffe0;">[pigeonpack_subscribe_form]</code></p>
                                     
-                                    <p>Blah Blah Blah</p>
+                                    <p><?php _e( 'Displays a subscribe form on your website.', 'pigeonpack' ); ?></p>
                                     
-                                    <pre>
+                                    <pre class="pigeonpack-shortcode-examples">
+<?php _e( 'Required Arguments', 'pigeonpack' ); ?>:
+'list_id' => <?php _e( 'Integer ID of Pigeon Pack List (a.k.a WordPress Post ID)', 'pigeonpack' ); ?>
                                                     
-Default Variables:
+<?php _e( 'Default Arguments', 'pigeonpack' ); ?>:
+'title' => ''
+'desc' => ''
+'required_only' => false
 
-orderby => 'term_id'
-order => 'DESC'
-limit => 0
-pdf_title => pigeonpack Setting "PDF Title"
-default_image => pigeonpack Setting "Default Cover Image"
+<?php _e( 'Optional Arguments', 'pigeonpack' ); ?>:
+title => '<?php _e( 'Text', 'pigeonpack' ); ?>'
+desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
+required_only => 'true', 'on', 'false', 'off' (<?php _e( "whether to only show the list's required fields", 'pigeonpack' ); ?>)
 
-Accepted Arguments:
-
-orderby => 'term_id', 'issue_order', 'name' (for Issue ID Number, Issue Order, or Issue Name)
-order => 'DESC' or 'ASC' (for Descending or Ascending)
-limit => Any number 0 and greater
-pdf_title => 'Text'
-default_image => 'Image URL'
-
-Examples:
-
-[pigeonpack_archives orderby="issue_order"]
-[pigeonpack_archives orderby="name" order="ASC" limit=5 pdf_title="Download Now" default_image="http://yoursite.com/yourimage.jpg"]
+<?php _e( 'Examples', 'pigeonpack' ); ?>:
+[pigeonpack_subscribe_form list_id="456" title="Subscribe to Our Newsletter" desc="Get the latest updates from our website."]
+[pigeonpack_subscribe_form list_id="456" required_only="true"]
 
                                     </pre>
                                     
@@ -699,6 +660,87 @@ Examples:
                             </tr>
                             
                         </table>
+                    
+                    </div>
+                    
+                </div>
+                
+                <div id="pigeonpack-user-optin-form-shortcode" class="postbox">
+                
+                    <div class="handlediv" title="Click to toggle"><br /></div>
+    
+                    <h3 class="hndle"><span>[pigeonpack_user_optin_form] - Pigeon Pack <?php _e( 'User Opt-In Form', 'pigeonpack' ); ?></span></h3>
+                    
+                    <div class="inside">
+                                    
+                        <table class="form-table">
+                    
+                            <tr>
+                            
+                                <td>
+                                	
+                                    <p>Pigeon Pack <?php _e( 'User Opt-In Form', 'pigeonpack' ); ?>: <code style="font-size: 1.2em; background: #ffffe0;">[pigeonpack_user_optin_form]</code></p>
+                                    
+                                    <p><?php _e( 'Displays a checkbox form on your website, for WordPress users to opt-in.', 'pigeonpack' ); ?></p>
+                                    
+                                    <pre class="pigeonpack-shortcode-examples">           
+<?php _e( 'Default Arguments', 'pigeonpack' ); ?>:
+'label' => '<?php _e( 'Yes, I want to receive email updates', 'pigeonpack' ); ?>'
+'desc' => '<?php _e( 'Unchecking this box will stop you from receiving emails based on your user profile with this site, this will not unsubscribe you from any other lists you subscribed to manually.', 'pigeonpack' ); ?>'
+
+<?php _e( 'Optional Arguments', 'pigeonpack' ); ?>:
+label => '<?php _e( 'Text', 'pigeonpack' ); ?>'
+desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
+
+<?php _e( 'Examples', 'pigeonpack' ); ?>:
+[pigeonpack_user_optin_form]
+[pigeonpack_user_optin_form label="<?php _e( 'Sign me up for email updates', 'pigeonpack' ); ?>" desc=""]
+
+                                    </pre>
+                                    
+                                </td>
+                                
+                            </tr>
+                            
+                        </table>
+                    
+                    </div>
+                    
+                </div>
+                
+                <?php do_action( 'pigeonpack_help_page' ); ?>
+                
+                <div id="can-spam" class="postbox">
+                
+                    <div class="handlediv" title="Click to toggle"><br /></div>
+                    
+                    <h3 class="hndle"><span><?php _e( 'SPAM Laws', 'pigeonpack' ); ?></span></h3>
+                    
+                    <div class="inside">
+                    
+                    <p>
+                    <?php printf( __( '%s enables you to own and operate your own email campaign manager. You have full control and ownership over your email lists, campaigns, autoresponders, and more. Due to this, you are also required to follow the SPAM laws, guidelines and recommendations for your country. The plugin is setup to meet compliance with current laws, however, you have the responsibility to know the laws and make sure you are using the plugin appropriately. For more information about the SPAM laws in your country, see the list below or google "SPAM LAWS" for your country.', 'pigeonpack' ), 'Pigeon Pack' ); ?>
+                    </p>
+                    
+                    <ol>
+                        
+                        <li><a href="http://www.business.ftc.gov/documents/bus61-can-spam-act-compliance-guide-business" target="_blank"><?php _e( 'United States - CAN-SPAM Act', 'pigeonpack' ); ?></a></li>
+                        <li><a href="http://www2.parl.gc.ca/HousePublications/Publication.aspx?Language=E&Parl=40&Ses=3&Mode=1&Pub=Bill&Doc=C-28_3" target="_blank"><?php _e( 'Canada - C-28', 'pigeonpack' ); ?></a></li>
+                        <li><?php _e( 'Australia', 'pigeonpack' ); ?> - <?php _e( 'Spam Act 2003, Act No. 129 of 2003 as amended.', 'pigeonpack' ); ?></li>
+                        <li><a href="http://ec.europa.eu/information_society/policy/ecomm/todays_framework/privacy_protection/spam/index_en.htm" target="_blank"><?php _e( 'EU - Article 13 of DIRECTIVE 2002/58/EC OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 12 July 2002', 'pigeonpack' ); ?></a></li>
+                        <li><a href="http://www.legislation.gov.uk/uksi?title=The%20Privacy%20and%20Electronic%20Communication" target="_blank"><?php _e( 'UK - The Privacy and Electronic Communications Regulations', 'pigeonpack' ); ?></a></li>
+                        <li><a href="http://www.rtr.at/en/tk/TKG2003" target="_blank"><?php _e( 'Austria - Telecommunications Act 2003', 'pigeonpack' ); ?></a></li>
+                        <li><a href="http://www.privacy.fgov.be/publications/spam_4-7-03_fr.pdf" target="_blank"><?php _e( 'Belgium - Etat des lieux en juillet 2003, July 4, 2003', 'pigeonpack' ); ?></a></li>
+                        <li><a href="http://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/index_en/index_en?opendocument" target="_blank"><?php _e( 'Cyprus - Section 06 of the Regulation of Electronic Communications and Postal Services Law of 2004', 'pigeonpack' ); ?></a></li>
+                        <li><?php _e( 'Czech Republic', 'pigeonpack' ); ?> - <?php _e( 'Act No. 480/2004 Coll., on Certain Information Society Services', 'pigeonpack' ); ?></li>
+                        <li><a href="https://www.riigiteataja.ee/akt/780289" target="_blank"><?php _e( 'Estonia - Information Society Service Act', 'pigeonpack' ); ?></a></li>
+                        <li><a href="http://www.cnil.fr/dossiers/conso-pub-spam/fiches-pratiques/article/la-prospection-commerciale-par-courrier-electronique/" target="_blank"><?php _e( 'France - CNIL Guidelines on email marketing.', 'pigeonpack' ); ?></a></li>
+                        <li><a href="http://www.iuscomp.org/gla/statutes/BDSG.htm" target="_blank"><?php _e( 'Germany - Art. 7 German Unfair Competition Law (Gesetz gegen Unlauteren Wettbewerb)', 'pigeonpack' ); ?></a></li>
+                        <li><a href="http://www.garanteprivacy.it/garante/document?ID=311066" target="_blank"><?php _e( 'Italy - Personal Data Protection Code (legislative decree no. 196/2003)', 'pigeonpack' ); ?></a></li>
+                        <li><?php _e( 'Netherlands', 'pigeonpack' ); ?> - <?php _e( 'Article 11.7 of the Dutch Telecommunications Act and Dutch Data Protection Act.', 'pigeonpack' ); ?></li>
+                        <li><?php _e( 'Sweden', 'pigeonpack' ); ?> - <?php _e( 'Swedish Code of Statutes, SFS 1995:450 & Swedish Code of Statutes, SFS 1998:204.', 'pigeonpack' ); ?></li>
+                    
+                    </ul>
                     
                     </div>
                     
@@ -897,7 +939,8 @@ Examples:
 				
 			// POST data to send to your API
 			$args = array(
-				'action' 	=> 'get-plugin-information'
+				'action' 	=> 'get-plugin-information',
+				'slug'		=> $plugin_slug
 			);
 				
 			// Send request for detailed information
@@ -1015,8 +1058,9 @@ Examples:
 				
 			}
 		
-			if ( ( $notification = get_option( 'pigeonpack_api_error_message' ) ) && version_compare( get_option( 'pigeonpack_api_error_message_version_dismissed' ), PIGEON_PACK_VERSION, '<' ) )
-				echo '<div class="update-nag">' . $notification . '<br /><a href="' . add_query_arg( 'remove_pigeonpack_api_error_message', true ) . '">' . __( 'Dismiss', 'pigeonpack' ) . '</a></div>';
+			if ( ( $notification = get_option( 'pigeonpack_api_error_message' ) ) 
+				&& version_compare( get_option( 'pigeonpack_api_error_message_version_dismissed' ), PIGEON_PACK_VERSION, '<' ) )
+				echo '<div class="update-nag"><p>' . $notification . '</p><p><a href="' . add_query_arg( 'remove_pigeonpack_api_error_message', true ) . '">' . __( 'Dismiss', 'pigeonpack' ) . '</a></p></div>';
 		 
 		}
 		
@@ -1030,8 +1074,8 @@ Examples:
 		 * @since 0.0.1
 		 */
 		function pigeonpack_transition_post_status( $new_status, $old_status, $post ) {
-		
-			if ( 'publish' === $new_status ) {
+			
+			if ( 'publish' === $new_status && 'publish' !== $old_status ) {
 				
 				if ( 'pigeonpack_campaign' === $post->post_type ) {
 					
@@ -1109,7 +1153,7 @@ Examples:
             
 			<table class="form-table">
 			<tr id="profile-optin">
-				<th><label for="pigeonpack_subscription"><?php _e('Yes, I want to receive email updates'); ?></label></th>
+				<th><label for="pigeonpack_subscription"><?php _e( 'Yes, I want to receive email updates', 'pigeonpack' ); ?></label></th>
 				<td>
                 <input type="checkbox" name="pigeonpack_subscription" id="pigeonpack_subscription" <?php checked( 'on' === get_user_meta( $user->ID, '_pigeonpack_subscription', true ) ); ?> />
                 <p class="description">
@@ -1136,7 +1180,7 @@ Examples:
 			if ( !current_user_can( 'edit_user', $user_id ) )
 				return false;
 			
-			if ( isset( $_POST['pigeonpack_subscription'] ) )
+			if ( isset( $_REQUEST['pigeonpack_subscription'] ) )
 				update_user_meta( $user_id, '_pigeonpack_subscription', 'on' );
 			else
 				delete_user_meta( $user_id, '_pigeonpack_subscription' );

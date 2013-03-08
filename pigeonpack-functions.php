@@ -85,9 +85,6 @@ if ( !function_exists( 'pigeonpack_double_optin_mail' ) ) {
 		$double_optin_settings = get_post_meta( $list->ID, '_pigeonpack_double_optin_settings', true );
 		
 		$headers[] = 'From: ' . $double_optin_settings['from_name'] . ' <' . $double_optin_settings['from_email'] . '>';
-		
-		if ( isset( $pigeonpack_settings['smtp_enable'] ) && 'smtp' === $pigeonpack_settings['smtp_enable'] )
-			add_action( 'phpmailer_init', 'pigeonpack_phpmailer_init' );
 			
 		$subject = $double_optin_settings['subject'];
 		$message = $double_optin_settings['message'];
@@ -98,11 +95,20 @@ if ( !function_exists( 'pigeonpack_double_optin_mail' ) ) {
 		
 		$content_type = 'content-type: ' . pigeonpack_subscriber_content_type( $subscriber );
 		
-		if ( 'text/plain' === $content_type )
-			$message = strip_tags( $message );
+		if ( 'content-type: text/plain' === $content_type ) {
+			
+			require_once( PIGEON_PACK_PLUGIN_PATH . '/includes/html2txt.php' );
+			
+			$message = convert_html_to_text( $message );
+			
+		}
 		
 		$subscriber_headers = apply_filters( 'double_optin_pigeonpack_headers', array_merge( $headers, array( $content_type ) ), $subscriber );
-		
+	
+		// If we're using an SMTP server, set it up now...
+		if ( isset( $pigeonpack_settings['smtp_enable'] ) && 'smtp' === $pigeonpack_settings['smtp_enable'] )
+			add_action( 'phpmailer_init', 'pigeonpack_phpmailer_init' );
+			
 		wp_mail( $email, strip_tags( $subject ), $message, $subscriber_headers );
 		
 	}
@@ -595,7 +601,6 @@ if ( !function_exists( 'pigeonpack_unmerge_misc' ) ) {
 				
 				list( $merged_subject, $merged_message, $merged_footer  ) = str_ireplace( '{{LIST_NAME}}', ucfirst( $list_info['id'] ), array( $merged_subject, $merged_message, $merged_footer  ) );
 				
-				$required_footer = get_option( '_pigeonpack_default_required_footer_settings' );
 				$required_footer_string = '<p id="required-address-info">'
 										. __( 'Our mailing address is:', 'pigeonpack' ) . '<br />' 
 										. $pigeonpack_settings['company'] . '<br />'
@@ -709,10 +714,6 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 			list( $subject, $message ) = pigeonpack_unmerge_postdata( $subject, $message, $posts );
 			
 		}
-		
-		// If we're using an SMTP server, set it up now...
-		if ( isset( $pigeonpack_settings['smtp_enable'] ) && 'smtp' === $pigeonpack_settings['smtp_enable'] )
-			add_action( 'phpmailer_init', 'pigeonpack_phpmailer_init' );
 					
 		$args = array(
 					'limit' 	=> $pigeonpack_settings['emails_per_cycle'],
@@ -722,19 +723,30 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 		$subscribers = get_pigeonpack_subscriber_by_type( $recipients, $args );
 		
 		if ( !empty( $subscribers ) ) {
-			
+				
+			// If we're using an SMTP server, set it up now...
+			if ( isset( $pigeonpack_settings['smtp_enable'] ) && 'smtp' === $pigeonpack_settings['smtp_enable'] )
+				add_action( 'phpmailer_init', 'pigeonpack_phpmailer_init' );
+				
 			foreach ( $subscribers as $subscriber ) {
 				
 				list( $email, $merged_subject, $merged_message, $merged_footer ) = pigeonpack_unmerge_subscriber( $subscriber, $subject, $message, $footer );
 				
 				$content_type = 'content-type: ' . pigeonpack_subscriber_content_type( $subscriber );
 				
-				if ( 'text/plain' === $content_type )
-					$merged_message = strip_tags( $merged_message );
+				$body = $merged_message . $merged_footer;
+				
+				if ( 'content-type: text/plain' === $content_type ) {
+					
+					require_once( PIGEON_PACK_PLUGIN_PATH . '/includes/html2txt.php' );
+					
+					$body = convert_html_to_text( $body );
+					
+				}
 				
 				$subscriber_headers = apply_filters( 'subscriber_loop_pigeonpack_headers', array_merge( $headers, array( $content_type ) ), $subscriber );
 				
-				wp_mail( $email, strip_tags( $merged_subject ), $merged_message . $merged_footer, $subscriber_headers );
+				wp_mail( $email, strip_tags( $merged_subject ), $body, $subscriber_headers );
 				
 			}
 			

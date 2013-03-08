@@ -30,11 +30,11 @@ $pigeonpack_list(document).ready(function($) {
 			return;
 	
 		var data = {
-			'action':	'add_pigeonpack_subscriber',
-			'data':		$( 'table#pigeonpack_list_new_subscriber_table input' ).serializeArray(),
-			'list_id':	$( 'input#post_ID' ).val(),
-			'status':	'subscribed',
-			'_wpnonce': $( 'input#pigeonpack_list_nonce' ).val()
+			'action':				'add_pigeonpack_subscriber',
+			'data':					$( 'table#pigeonpack_list_new_subscriber_table input' ).serializeArray(),
+			'list_id':				$( 'input#post_ID' ).val(),
+			'subscriber_status':	'subscribed',
+			'_wpnonce': 			$( 'input#pigeonpack_list_nonce' ).val()
 		};
 		
 		$.post( ajaxurl, data, function(response) {
@@ -150,11 +150,15 @@ $pigeonpack_list(document).ready(function($) {
 			
 			results = $.parseJSON( response );
 			
+			clear_subscriber_fields();
+			
 			$.each( results, function(key,val) {
 				
 				$( 'input[name="' + key + '"]' ).val( val );
 				
 			});
+			
+			$( 'select[name=pigeonpack_email_format]' ).val( results['email_format'] );
 			
 		});
 		

@@ -20,7 +20,8 @@ Turbomilk - http://graphicriver.net/free/web-icon-set/ - http://www.turbomilk.co
 define( 'PIGEON_PACK_VERSION' , '0.0.1' );
 define( 'PIGEON_PACK_DB_VERSION', '0.0.1' );
 define( 'PIGEON_PACK_API_URL', 'http://getpigeonpack.com/api' );
-define( 'PIGEON_PACK_PLUGIN_URL', plugins_url( '', __FILE__ ) );
+define( 'PIGEON_PACK_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'PIGEON_PACK_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
 /**
  * Instantiate Pigeon Pack class, require helper files
@@ -39,16 +40,15 @@ function pigeonpack_plugins_loaded() {
 		$dl_plugin_pigeonpack = new PigeonPack();
 		
 		require_once( 'pigeonpack-functions.php' );
-		require_once( 'pigeonpack-campaign-post-type.php' ); //put this somewhere else for better efficiency
-		require_once( 'pigeonpack-list-post-type.php' ); //put this somewhere else for better efficiency
+		require_once( 'pigeonpack-campaign-post-type.php' );
+		require_once( 'pigeonpack-list-post-type.php' );
 		require_once( 'pigeonpack-shortcodes.php' );
 		require_once( 'pigeonpack-widgets.php' );
-		require_once( 'pigeonpack-user-settings.php' ); //put this somewhere else for better efficiency
-			
+					
 		$pigeonpack_shortcodes = new PigeonPack_Shortcodes();
 			
 		//Internationalization
-		load_plugin_textdomain( 'pigeonpack', false, PIGEON_PACK_PLUGIN_URL . '/i18n/' );
+		load_plugin_textdomain( 'pigeonpack', false, PIGEON_PACK_PLUGIN_PATH . '/i18n/' );
 			
 	}
 

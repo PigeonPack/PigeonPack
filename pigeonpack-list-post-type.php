@@ -69,15 +69,18 @@ if ( !function_exists ( 'add_pigeonpack_list_metaboxes' ) ) {
 	 * Adds metabox for Pigeon Pack list
 	 *
 	 * @since 0.0.1
+	 * @uses do_action() To call 'add_pigeonpack_list_metaboxes' for future addons
 	 */	
 	function add_pigeonpack_list_metaboxes() {
 		
-		add_meta_box( 'pigeonpack_list_new_subscriber_box', __( 'Add New Subscriber(s)', 'pigeonpack' ), 'pigeonpack_list_new_subscriber_box', 'pigeonpack_list', 'normal', 'high' );
+		add_meta_box( 'pigeonpack_list_new_subscriber_box', __( 'Add New Subscriber', 'pigeonpack' ), 'pigeonpack_list_new_subscriber_box', 'pigeonpack_list', 'normal', 'high' );
 		add_meta_box( 'pigeonpack_list_subscriber_box', __( 'Pigeon Pack Subscribers', 'pigeonpack' ), 'pigeonpack_list_subscriber_box', 'pigeonpack_list', 'normal', 'high' );
 		add_meta_box( 'pigeonpack_list_fields_box', __( 'Pigeon Pack Subscriber Fields & {{MERGE}} Tags', 'pigeonpack' ), 'pigeonpack_list_fields_box', 'pigeonpack_list', 'normal', 'high' );
 		add_meta_box( 'pigeonpack_list_options_box', __( 'Pigeon Pack List Options', 'pigeonpack' ), 'pigeonpack_list_options_box', 'pigeonpack_list', 'normal', 'high' );
 		add_meta_box( 'pigeonpack_list_options_box', __( 'Required Email Footer Content', 'pigeonpack' ), 'pigeonpack_required_footer_settings', 'pigeonpack_list', 'normal', 'high' );
 		add_meta_box( 'pigeonpack_double_optin_box', __( 'Double Opt-In Options', 'pigeonpack' ), 'pigeonpack_double_optin_box', 'pigeonpack_list', 'normal', 'high' );
+		
+		do_action( 'add_pigeonpack_list_metaboxes' );
 		
 	}
 
@@ -174,6 +177,18 @@ if ( !function_exists ( 'pigeonpack_list_new_subscriber_box' ) ) {
 					<?php
 					
 				}
+	
+				echo '<tr>';
+				echo '	<th>' . __( 'Email Format', 'pigeonpack' ) . '</th>';
+				echo '	<td>';
+				echo '	<div class="dropdownfield">';
+				echo '	<select id="email-format-dropdown" name="pigeonpack_email_format">';
+				echo '		<option value="html" />HTML</option>';
+				echo '		<option value="plain" />' . __( 'Plain Text', 'pigeonpack' ) . '</option>';
+				echo '	</select>';
+				echo '	</div>';
+				echo '	</td>';
+				echo '</tr>';
 				
 				?>
 			
@@ -906,7 +921,7 @@ if ( !function_exists( 'save_pigeonpack_list_meta' ) ) {
 			update_post_meta( $list_id, '_last_merge_id', $last_merge_id );
 		
 		// Begin New Subscriber //
-		$new_subscriber = array();
+		$subscriber_meta = array();
 		
 		foreach ( $required_fields as $field ) {
 			
@@ -917,7 +932,7 @@ if ( !function_exists( 'save_pigeonpack_list_meta' ) ) {
 				if ( !isset( $_REQUEST['M' . $merge] ) || empty( $_REQUEST['M' . $merge] ) )
 					return;
 				
-				$new_subscriber['M' . $merge] = $_REQUEST['M' . $merge];
+				$subscriber_meta['M' . $merge] = $_REQUEST['M' . $merge];
 					
 			} else {
 			
@@ -933,16 +948,16 @@ if ( !function_exists( 'save_pigeonpack_list_meta' ) ) {
 				if ( !isset( $_REQUEST['M' . $merge . '-zip'] ) || empty( $_REQUEST['M' . $merge . '-zip'] ) )
 					return;	
 					
-				$new_subscriber['M' . $merge . '-addr1'] 	= $_REQUEST['M' . $merge . '-addr1'];
-				$new_subscriber['M' . $merge . '-city'] 	= $_REQUEST['M' . $merge . '-city'];
-				$new_subscriber['M' . $merge . '-state'] 	= $_REQUEST['M' . $merge . '-state'];
-				$new_subscriber['M' . $merge . '-zip'] 		= $_REQUEST['M' . $merge . '-zip'];
+				$subscriber_meta['M' . $merge . '-addr1'] 	= $_REQUEST['M' . $merge . '-addr1'];
+				$subscriber_meta['M' . $merge . '-city'] 	= $_REQUEST['M' . $merge . '-city'];
+				$subscriber_meta['M' . $merge . '-state'] 	= $_REQUEST['M' . $merge . '-state'];
+				$subscriber_meta['M' . $merge . '-zip'] 	= $_REQUEST['M' . $merge . '-zip'];
 				
 				if ( isset( $_REQUEST['M' . $merge . '-addr2'] ) && !empty( $_REQUEST['M' . $merge . '-addr2'] ) )
-					$new_subscriber['M' . $merge . '-addr2'] 	= $_REQUEST['M' . $merge . '-addr2'];
+					$subscriber_meta['M' . $merge . '-addr2'] 	= $_REQUEST['M' . $merge . '-addr2'];
 					
 				if ( isset( $_REQUEST['M' . $merge . '-country'] ) && !empty( $_REQUEST['M' . $merge . '-country'] ) )
-					$new_subscriber['M' . $merge . '-country'] 	= $_REQUEST['M' . $merge . '-country'];
+					$subscriber_meta['M' . $merge . '-country'] = $_REQUEST['M' . $merge . '-country'];
 				
 			}
 			
@@ -952,40 +967,40 @@ if ( !function_exists( 'save_pigeonpack_list_meta' ) ) {
 		
 			$merge = $field['static_merge'];
 			
-			if ( isset( $new_subscriber['M' . $merge] ) ) //skip any required fields that have already been set
+			if ( isset( $subscriber_meta['M' . $merge] ) ) //skip any required fields that have already been set
 				continue;
 		
 			if ( 'address' !== $field['type'] ) {
 				
 				if ( isset( $_REQUEST['M' . $merge] ) && !empty( $_REQUEST['M' . $merge] ) )
-					$new_subscriber['M' . $merge] = $_REQUEST['M' . $merge];
+					$subscriber_meta['M' . $merge] = $_REQUEST['M' . $merge];
 					
 			} else {
 			
 				if ( isset( $_REQUEST['M' . $merge . '-addr1'] ) && !empty( $_REQUEST['M' . $merge . '-addr1'] ) )
-					$new_subscriber['M' . $merge . '-addr1'] = $_REQUEST['M' . $merge . '-addr1'];
+					$subscriber_meta['M' . $merge . '-addr1'] = $_REQUEST['M' . $merge . '-addr1'];
 			
 				if ( isset( $_REQUEST['M' . $merge . '-city'] ) && !empty( $_REQUEST['M' . $merge . '-city'] ) )
-					$new_subscriber['M' . $merge . '-city'] = $_REQUEST['M' . $merge . '-city'];
+					$subscriber_meta['M' . $merge . '-city'] = $_REQUEST['M' . $merge . '-city'];
 			
 				if ( isset( $_REQUEST['M' . $merge . '-state'] ) && !empty( $_REQUEST['M' . $merge . '-state'] ) )
-					$new_subscriber['M' . $merge . '-state'] = $_REQUEST['M' . $merge . '-state'];
+					$subscriber_meta['M' . $merge . '-state'] = $_REQUEST['M' . $merge . '-state'];
 			
 				if ( isset( $_REQUEST['M' . $merge . '-zip'] ) && !empty( $_REQUEST['M' . $merge . '-zip'] ) )
-					$new_subscriber['M' . $merge . '-zip'] = $_REQUEST['M' . $merge . '-zip'];
+					$subscriber_meta['M' . $merge . '-zip'] = $_REQUEST['M' . $merge . '-zip'];
 				
 				if ( isset( $_REQUEST['M' . $merge . '-addr2'] ) && !empty( $_REQUEST['M' . $merge . '-addr2'] ) )
-					$new_subscriber['M' . $merge . '-addr2'] = $_REQUEST['M' . $merge . '-addr2'];
+					$subscriber_meta['M' . $merge . '-addr2'] = $_REQUEST['M' . $merge . '-addr2'];
 					
 				if ( isset( $_REQUEST['M' . $merge . '-country'] ) && !empty( $_REQUEST['M' . $merge . '-country'] ) )
-					$new_subscriber['M' . $merge . '-country'] = $_REQUEST['M' . $merge . '-country'];
+					$subscriber_meta['M' . $merge . '-country'] = $_REQUEST['M' . $merge . '-country'];
 				
 			}
 			
 		}
 		
-		if ( !empty( $new_subscriber ) )
-			add_pigeonpack_subscriber( $list_id, $new_subscriber, 'subscribed' );
+		if ( !empty( $subscriber_meta ) )
+			add_pigeonpack_subscriber( $list_id, $subscriber_meta, 'subscribed' );
 		// End New Susbcriber //
 	
 	}
@@ -1144,48 +1159,100 @@ if ( !function_exists( 'add_pigeonpack_subscriber' ) ) {
 	 * @see http://codex.wordpress.org/Class_Reference/wpdb
 	 *
 	 * @param int $list_id Pigeon Pack list ID (e.g. WordPress post ID)
-	 * @param array $subscriber Associative array of subcriber details
+	 * @param array $subscriber_meta Associative array of subcriber values
 	 * @param string $status pending, subscribed, unsubscribed, or bounced
-	 * @return array|bool Associated array of new subscriber or FALSE if failed
+	 * @return array|bool Associated array of new subscriber, message, and double optin setting or FALSE if failed
 	 */		
-	function add_pigeonpack_subscriber( $list_id, $subscriber, $status = 'pending', $format = 'html' ) {
+	function add_pigeonpack_subscriber( $list_id, $subscriber_meta, $status = 'pending', $format = 'html' ) {
 	
 		global $wpdb;
+		
+		$message = '';
+		$new_subscriber = true;
+		
+		if ( 'pending' === $status ) {
+			
+			$double_optin = get_post_meta( $list_id, '_pigeonpack_double_optin_settings', true );
+				
+			if ( isset( $double_optin['enabled'] ) && 'on' === $double_optin['enabled'] ) {
+				
+				$double_optin = true;
+			
+			} else {
+				
+				$status = 'subscribed'; //not double opt-in, default is 'subscribed'
+				$double_optin = false;
+				
+			}
+		
+		}
 	
 		if ( !$list_id = absint( $list_id )  )
 			return false;
 			
-		$result = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'pigeonpack_subscribers WHERE list_id = %d AND email = %s', $list_id, $subscriber['M0'] ), ARRAY_A ); //M0 (aka MERGE0) should ALWAYS be email
+		$result = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'pigeonpack_subscribers WHERE list_id = %d AND email = %s', $list_id, $subscriber_meta['M0'] ), ARRAY_A ); //M0 (aka MERGE0) should ALWAYS be email
 			
-		if ( !empty( $result ) ) //Do not add duplicate email addresses
-			return false;
-			
-		if ( isset( $subscriber['pigeonpack_email_format'] ) ) {
-			
-			$format = $subscriber['pigeonpack_email_format'];
-			unset( $subscriber['pigeonpack_email_format'] ); // We don't want to include this setting in the subscriber_meta column
+		if ( !empty( $result ) ) { //Do not add duplicate subscribers
+		
+			$subscriber_id = update_pigeonpack_subscriber( $list_id, $result['id'], $subscriber_meta, $status ); //Update
+			$new_subscriber = false;
 			
 		}
 		
-		$new_subscriber = array(
-							'list_id'				=> $list_id,
-							'email'					=> $subscriber['M0'], //M0 (aka MERGE0) should ALWAYS be email
-							'subscriber_meta'		=> maybe_serialize( $subscriber ),
-							'subscriber_added'		=> date_i18n( 'Y-m-d H:i:s' ),
-							'subscriber_modified'	=> date_i18n( 'Y-m-d H:i:s' ),
-							'subscriber_status'		=> $status,
-							'subscriber_hash'		=> pigeonpack_hash( $subscriber['M0'] ), //Hash the email address
-							'message_preference'	=> $format,
-							);
-		
-		$return = $wpdb->insert( $wpdb->prefix . 'pigeonpack_subscribers', $new_subscriber );
-					
-		if ( $return ) {
+		if ( $new_subscriber ) {
 			
-			$new_subscriber['id'] = $wpdb->insert_id;
-			return $new_subscriber;
+			if ( isset( $subscriber_meta['pigeonpack_email_format'] ) ) {
+				
+				$format = $subscriber_meta['pigeonpack_email_format'];
+				unset( $subscriber_meta['pigeonpack_email_format'] ); // We don't want to include this setting in the subscriber_meta column
+				
+			}
+			
+			$new_subscriber = array(
+								'list_id'				=> $list_id,
+								'email'					=> $subscriber_meta['M0'], //M0 (aka MERGE0) should ALWAYS be email
+								'subscriber_meta'		=> maybe_serialize( $subscriber_meta ),
+								'subscriber_added'		=> date_i18n( 'Y-m-d H:i:s' ),
+								'subscriber_modified'	=> date_i18n( 'Y-m-d H:i:s' ),
+								'subscriber_status'		=> $status,
+								'subscriber_hash'		=> pigeonpack_hash( $subscriber_meta['M0'] ), //Hash the email address
+								'message_preference'	=> $format,
+								);
+			
+			$return = $wpdb->insert( $wpdb->prefix . 'pigeonpack_subscribers', $new_subscriber );
+			
+			if ( $return )
+				$subscriber_id = $wpdb->insert_id;
 			
 		}
+		
+		if ( $subscriber_id && $double_optin ) {
+			
+			pigeonpack_double_optin_scheduler( $list_id, $subscriber_id );
+			
+			$message = '<h3>' . __( 'Almost finished...' , 'pigeonpack' ) . '</h3>';
+			$message .= '<p>' . __( 'We need to confirm your email address.' , 'pigeonpack' ) . '</p>';
+			$message .= '<p>' . __( 'To complete the subscription process, please click the link in the email we just sent you.' , 'pigeonpack' ) . '</p>';
+			$message = apply_filters( 'double_optin_almost_message', $message );
+			
+		} else if ( $subscriber_id ) {
+		
+			$message = '<h3>' . __( 'Subscription Confirmed', 'pigeonpack' ) . '</h3>';
+			$message .= '<p>' . __( 'Your subscription to our list has been confirmed.', 'pigeonpack' ) . '</p>';
+			$message .= '<p>' . __( 'Thank you for subscribing!', 'pigeonpack' ) . '</p>';
+			$message = apply_filters( 'new_subscriber_success_message', $message );
+			
+		} else {
+		
+			$message = '<h3>' . __( 'Error Processing Subscription', 'pigeonpack' ) . '</h3>';
+			$message .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
+			$message .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
+			$message = apply_filters( 'new_subscriber_error_message', $message );
+			
+		}
+		
+		if ( $subscriber_id )
+			return array( $subscriber_id, $message, $double_optin );
 		
 		return false;
 		
@@ -1206,11 +1273,11 @@ if ( !function_exists( 'update_pigeonpack_subscriber' ) ) {
 	 *
 	 * @param int $list_id Pigeon Pack list ID (e.g. WordPress post ID)
 	 * @param int $subscriber_id Existing subscriber ID
-	 * @param array $subscriber Associative array of new subscriber values
+	 * @param array $subscriber_meta Associative array of new subscriber values
 	 * @param string $status Optional string to update susbcribers subscription status
 	 * @return int|bool Subscriber ID or FALSE if failed
 	 */		
-	function update_pigeonpack_subscriber( $list_id, $subscriber_id, $subscriber, $status = false ) {
+	function update_pigeonpack_subscriber( $list_id, $subscriber_id, $subscriber_meta, $status = false, $format = 'html' ) {
 	
 		global $wpdb;
 	
@@ -1221,12 +1288,22 @@ if ( !function_exists( 'update_pigeonpack_subscriber' ) ) {
 			
 		if ( empty( $result ) ) //subscriber doesn't exist
 			return false;
+			
+		if ( isset( $subscriber_meta['pigeonpack_email_format'] ) ) {
+			
+			$format = $subscriber_meta['pigeonpack_email_format'];
+			unset( $subscriber_meta['pigeonpack_email_format'] ); // We don't want to include this setting in the subscriber_meta column
+			
+		}
+			
+		$subscriber_meta = wp_parse_args( $subscriber_meta, maybe_unserialize( $result['subscriber_meta'] ) );
 		
 		$update_subscriber = array(
-								'email'					=> $subscriber['M0'], //M0 (aka MERGE0) should ALWAYS be email
-								'subscriber_meta'		=> maybe_serialize( $subscriber ),
+								'email'					=> $subscriber_meta['M0'], //M0 (aka MERGE0) should ALWAYS be email
+								'subscriber_meta'		=> maybe_serialize( $subscriber_meta ),
 								'subscriber_modified'	=> date_i18n( 'Y-m-d H:i:s' ),
 								'subscriber_status'		=> $status ? $status : $result['subscriber_status'], //only update if $status is not false otehrwise use current setting
+								'message_preference'	=> $format,
 							);
 		
 		$return = $wpdb->update( $wpdb->prefix . 'pigeonpack_subscribers', $update_subscriber, array( 'id' => $subscriber_id ) );
@@ -1257,7 +1334,7 @@ if ( !function_exists( 'update_pigeonpack_subscriber_hash' ) ) {
 	
 		global $wpdb;
 	
-		if ( !$list_id = absint( $list_id )  )
+		if ( !$subscriber_id = absint( $subscriber_id )  )
 			return false;
 			
 		$result = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'pigeonpack_subscribers WHERE id = %d', $subscriber_id ), ARRAY_A );
@@ -1388,11 +1465,10 @@ if ( !function_exists( 'wp_ajax_add_pigeonpack_subscriber' ) ) {
 		check_ajax_referer( 'update_pigeonpack_list' );
 		
 		$new_subscriber = array();
-		$message = '';
 		
 		foreach ( $_REQUEST['data'] as $data ) {
 		
-			$new_subscriber[$data['name']] = $data['value'];
+			$subscriber_meta[$data['name']] = $data['value'];
 			
 		}
 		
@@ -1401,53 +1477,11 @@ if ( !function_exists( 'wp_ajax_add_pigeonpack_subscriber' ) ) {
 		else
 			$status = 'pending';
 		
-		if ( 'pending' === $status ) {
-			
-			$double_optin = get_post_meta( $_REQUEST['list_id'], '_pigeonpack_double_optin_settings', true );
-				
-			if ( isset( $double_optin['enabled'] ) && 'on' === $double_optin['enabled'] ) {
-				
-				$double_optin = true;
-			
-			} else {
-				
-				$status = 'subscribed'; //not double opt-in, default is 'subscribed'
-				$double_optin = false;
-				
-			}
-		
-		}
-		
-		$subscriber = add_pigeonpack_subscriber( $_REQUEST['list_id'], $new_subscriber, $status );
-		
-		if ( $subscriber && $double_optin ) {
-			
-			pigeonpack_double_optin_scheduler( $_REQUEST['list_id'], $subscriber['id'] );
-			
-			$message = '<h3>' . __( 'Almost finished...' , 'pigeonpack' ) . '</h3>';
-			$message .= '<p>' . __( 'We need to confirm your email address.' , 'pigeonpack' ) . '</p>';
-			$message .= '<p>' . __( 'To complete the subscription process, please click the link in the email we just sent you.' , 'pigeonpack' ) . '</p>';
-			$message = apply_filters( 'double_optin_almost_message', $message );
-			
-		} else if ( $subscriber ) {
-		
-			$message = '<h3>' . __( 'Subscription Confirmed', 'pigeonpack' ) . '</h3>';
-			$message .= '<p>' . __( 'Your subscription to our list has been confirmed.', 'pigeonpack' ) . '</p>';
-			$message .= '<p>' . __( 'Thank you for subscribing!', 'pigeonpack' ) . '</p>';
-			$message = apply_filters( 'new_subscriber_success_message', $message );
-			
-		} else {
-		
-			$message = '<h3>' . __( 'Error Processing Subscription', 'pigeonpack' ) . '</h3>';
-			$message .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
-			$message .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
-			$message = apply_filters( 'new_subscriber_error_message', $message );
-			
-		}
+		list( $subscriber_id, $message, $double_optin ) = add_pigeonpack_subscriber( $_REQUEST['list_id'], $subscriber_meta, $status );
 		
 		$list_fields = get_pigeonpack_list_fields( $_REQUEST['list_id'] );
 		
-		die( json_encode( array( $subscriber['id'], subscriber_row( $subscriber, $list_fields ), $double_optin, $message ) ) );
+		die( json_encode( array( $subscriber_id, subscriber_row( get_pigeonpack_subscriber( $subscriber_id ), $list_fields ), $double_optin, $message ) ) );
 		
 	}
 	add_action( 'wp_ajax_add_pigeonpack_subscriber', 'wp_ajax_add_pigeonpack_subscriber' );
@@ -1471,7 +1505,7 @@ if ( !function_exists( 'wp_ajax_edit_pigeonpack_subscriber' ) ) {
 		else
 			die( false );
 		
-		die( json_encode( maybe_unserialize( $subscriber['subscriber_meta'] ) ) );
+		die( json_encode( array_merge( maybe_unserialize( $subscriber['subscriber_meta'] ), array( 'email_format' => $subscriber['message_preference'] ) ) ) );
 		
 	}
 	add_action( 'wp_ajax_edit_pigeonpack_subscriber', 'wp_ajax_edit_pigeonpack_subscriber' );
@@ -1495,15 +1529,15 @@ if ( !function_exists( 'wp_ajax_update_pigeonpack_subscriber' ) ) {
 		if ( !isset( $_REQUEST['list_id'] ) || !$list_id = absint( $_REQUEST['list_id'] ) )
 			die();
 		
-		$subscriber = array();
+		$subscriber_meta = array();
 		
 		foreach ( $_REQUEST['data'] as $data ) {
 		
-			$subscriber[$data['name']] = $data['value'];
+			$subscriber_meta[$data['name']] = $data['value'];
 			
 		}
 		
-		$updated_subscriber = update_pigeonpack_subscriber( $list_id, $subscriber_id, $subscriber );
+		$updated_subscriber = update_pigeonpack_subscriber( $list_id, $subscriber_id, $subscriber_meta );
 		
 		$list_fields = get_pigeonpack_list_fields( $list_id );
 		

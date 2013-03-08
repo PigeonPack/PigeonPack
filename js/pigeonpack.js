@@ -25,7 +25,7 @@ $pigeonpack_frontend(document).ready(function($) {
 		
 		var data = {
 			'action':	'add_pigeonpack_subscriber',
-			'data':		$( 'table.pigeonpack-subscribe-table input', form_parent ).serializeArray(),
+			'data':		$( 'table.pigeonpack-subscribe-table input, table.pigeonpack-subscribe-table select', form_parent ).serializeArray(),
 			'list_id':	$( 'input.pigeonpack_list_id', form_parent ).val(),
 			'_wpnonce': $( 'input#pigeonpack_list_nonce', form_parent ).val()
 		};

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Register Pigeon Pack Widgets in WordPress
+ *
  * @package Pigeon Pack
  * @since 0.0.1
  */

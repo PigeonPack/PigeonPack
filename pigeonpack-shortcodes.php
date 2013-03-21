@@ -1,5 +1,7 @@
 <?php
 /**
+ * Registers Pigeon Pack Shortcodes in WordPress
+ *
  * @package Pigeon Pack
  * @since 0.0.1
  */
@@ -180,7 +182,7 @@ if ( ! class_exists( 'PigeonPack_Shortcodes' ) ) {
 		 *
 		 * @param array $atts Agruments pass through shortcode
 		 */
-		public static function  do_user_optin_form( $atts ) {
+		public static function do_user_optin_form( $atts ) {
 			
 			$processed = self::process_pigeonpack_form_submission();
 			
@@ -205,7 +207,7 @@ if ( ! class_exists( 'PigeonPack_Shortcodes' ) ) {
 			$results .= '<table class="form-table">';
 			$results .= '<tr id="profile-optin">';
 			$results .= '	<td>';
-            $results .= '    <input type="checkbox" name="pigeonpack_subscription" id="pigeonpack_subscription" ' . checked( 'on' === get_user_meta( $user->ID, '_pigeonpack_subscription', true ), true, false ) . ' /> <label for="pigeonpack_subscription">' . $label . '</label>';
+            $results .= '    <input type="checkbox" name="pigeonpack_subscription" id="pigeonpack_subscription" ' . checked( 'off' !== get_user_meta( $user->ID, '_pigeonpack_subscription', true ), true, false ) . ' /> <label for="pigeonpack_subscription">' . $label . '</label>';
 			
 			if ( !empty( $desc ) )
 	            $results .= '    <p class="description">' . $desc . '</p>';

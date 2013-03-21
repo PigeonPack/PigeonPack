@@ -1,5 +1,7 @@
 <?php
 /**
+ * Registers Pigeon Pack "list" post type in WordPress and related functions
+ *
  * @package Pigeon Pack
  * @since 0.0.1
  */
@@ -11,7 +13,7 @@ if ( !function_exists ( 'create_list_post_type' ) ) {
 	 *
 	 * Called on 'init' action hook
 	 *
-	 * @see http://codex.wordpress.org/Function_Reference/register_post_type
+	 * @link http://codex.wordpress.org/Function_Reference/register_post_type
 	 *
 	 * @since 0.0.1
 	 * @uses register_post_type() to register campaign post type
@@ -509,8 +511,6 @@ if ( !function_exists( 'pigeonpack_list_options_box' ) ) {
 	/**
 	 * Display Pigeon Pack list options
 	 *
-	 * @todo Send a final welcome email, send unsubscribe confirmation notifications to my subscribers, end-of-the-day summary of subscribe and unsubscribe activity on your list, receive quick email alerts when subscribers join or leave this list
-	 *
 	 * @since 0.0.1
 	 *
 	 * @param object $post WordPress post object
@@ -696,7 +696,7 @@ if ( !function_exists( 'get_pigeonpack_list_fields' ) ) {
 	 *
 	 * @since 0.0.1
 	 *
-	 * @param int $post_id WordPress post object ID
+	 * @param int $list_id WordPress post object ID
 	 * @return array Associative array of list fields for this list
 	 **/
 	function get_pigeonpack_list_fields( $list_id ) {
@@ -767,39 +767,39 @@ if ( !function_exists( 'get_pigeonpack_default_field_types' ) ) {
 	
 		$defaults[] = array(
 							'label'		=> __( 'Text', 'pigeonpack' ),
-							'type'		=> __( 'text', 'pigeonpack' )
+							'type'		=> 'text'
 							);
 		$defaults[] = array(
 							'label'		=> __( 'Number', 'pigeonpack' ),
-							'type'		=> __( 'text', 'pigeonpack' )
+							'type'		=> 'text'
 							);
 		$defaults[] = array(
 							'label'		=> __( 'Radio Button', 'pigeonpack' ),
-							'type'		=> __( 'text', 'pigeonpack' )
+							'type'		=> 'text'
 							);
 		$defaults[] = array(
 							'label'		=> __( 'Drop Down', 'pigeonpack' ),
-							'type'		=> __( 'text', 'pigeonpack' )
+							'type'		=> 'text'
 							);
 		$defaults[] = array(
 							'label'		=> __( 'Date', 'pigeonpack' ),
-							'type'		=> __( 'text', 'pigeonpack' )
+							'type'		=> 'text'
 							);
 		$defaults[] = array(
 							'label'		=> __( 'Address', 'pigeonpack' ),
-							'type'		=> __( 'text', 'pigeonpack' )
+							'type'		=> 'text'
 							);
 		$defaults[] = array(
 							'label'		=> __( 'Zip Code (US Only)', 'pigeonpack' ),
-							'type'		=> __( 'text', 'pigeonpack' )
+							'type'		=> 'text'
 							);
 		$defaults[] = array(
 							'label'		=> __( 'Phone', 'pigeonpack' ),
-							'type'		=> __( 'text', 'pigeonpack' )
+							'type'		=> 'text'
 							);
 		$defaults[] = array(
 							'label'		=> __( 'Website', 'pigeonpack' ),
-							'type'		=> __( 'text', 'pigeonpack' )
+							'type'		=> 'text'
 							);
 		
 		return apply_filters( 'pigeonpack_default_field_types', $defaults );
@@ -1015,11 +1015,12 @@ if ( !function_exists( 'get_pigeonpack_subscribers' ) ) {
 	 *
 	 * @since 0.0.1
 	 * @uses $wpdb WordPress datbase API
-	 * @see http://codex.wordpress.org/Class_Reference/wpdb
+	 * @link http://codex.wordpress.org/Class_Reference/wpdb
 	 *
 	 * @param int $list_id Pigeon Pack list ID (e.g. WordPress post ID)
 	 * @param int $limit optional To limit the number of subscribers returned
-	 * @param int $limit optional To offset the number of subscribers polled
+	 * @param int $offset optional To offset the number of subscribers polled
+	 * @param string $status Subscriber status, valid values: pending, subscribed, unsubscribed, or bounced
 	 */					
 	function get_pigeonpack_subscribers( $list_id, $limit = '', $offset = 0, $status = '' ) {
 	
@@ -1048,7 +1049,7 @@ if ( !function_exists( 'get_pigeonpack_subscriber_count' ) ) {
 	 *
 	 * @since 0.0.1
 	 * @uses $wpdb WordPress datbase API
-	 * @see http://codex.wordpress.org/Class_Reference/wpdb
+	 * @link http://codex.wordpress.org/Class_Reference/wpdb
 	 *
 	 * @param int $list_id Pigeon Pack list ID (e.g. WordPress post ID)
 	 * @return int Value of current subscribers for given list ID
@@ -1075,7 +1076,7 @@ if ( !function_exists( 'get_pigeonpack_subscriber' ) ) {
 	 *
 	 * @since 0.0.1
 	 * @uses $wpdb WordPress datbase API
-	 * @see http://codex.wordpress.org/Class_Reference/wpdb
+	 * @link http://codex.wordpress.org/Class_Reference/wpdb
 	 *
 	 * @param int $subscriber_id Pigeon Pack subscriber ID
 	 * @return array Associative array of subscriber for given subscriber ID
@@ -1097,7 +1098,7 @@ if ( !function_exists( 'get_pigeonpack_subscriber_by_list_id_and_hash' ) ) {
 	 *
 	 * @since 0.0.1
 	 * @uses $wpdb WordPress datbase API
-	 * @see http://codex.wordpress.org/Class_Reference/wpdb
+	 * @link http://codex.wordpress.org/Class_Reference/wpdb
 	 *
 	 * @param int $list_id Pigeon Pack list ID
 	 * @param string|md5 $subscriber_hash Subscriber's unique hash from double opt-in email
@@ -1119,7 +1120,7 @@ if ( !function_exists( 'get_pigeonpack_wordpress_subscriber_by_hash' ) ) {
 	 *
 	 * @since 0.0.1
 	 * @uses $wpdb WordPress datbase API
-	 * @see http://codex.wordpress.org/Class_Reference/wpdb
+	 * @link http://codex.wordpress.org/Class_Reference/wpdb
 	 *
 	 * @param string|md5 $subscriber_hash Subscriber's unique hash from double opt-in email
 	 * @return mixed Associative array of subscriber for given subscriber ID
@@ -1138,7 +1139,7 @@ if ( !function_exists( 'get_pigeonpack_wordpress_subscriber_by_hash' ) ) {
 		$subscriber = array(
 						'user_id'			=> $user_id,
 						'email' 			=> $user->user_email,
-						'subscriber_status' => ( 'on' === get_user_meta( $user_id, '_pigeonpack_subscription', true ) ) ? 'subscribed' : 'unsubscribed',
+						'subscriber_status' => ( 'off' !== get_user_meta( $user_id, '_pigeonpack_subscription', true ) ) ? 'subscribed' : 'unsubscribed',
 						);
 						
 		return $subscriber;
@@ -1156,11 +1157,12 @@ if ( !function_exists( 'add_pigeonpack_subscriber' ) ) {
 	 *
 	 * @since 0.0.1
 	 * @uses $wpdb WordPress datbase API
-	 * @see http://codex.wordpress.org/Class_Reference/wpdb
+	 * @link http://codex.wordpress.org/Class_Reference/wpdb
 	 *
 	 * @param int $list_id Pigeon Pack list ID (e.g. WordPress post ID)
 	 * @param array $subscriber_meta Associative array of subcriber values
-	 * @param string $status pending, subscribed, unsubscribed, or bounced
+	 * @param string $status Optional subscriber status, valid values: pending, subscribed, unsubscribed, or bounced
+	 * @param string $format Optional default email content-type: html or text
 	 * @return array|bool Associated array of new subscriber, message, and double optin setting or FALSE if failed
 	 */		
 	function add_pigeonpack_subscriber( $list_id, $subscriber_meta, $status = 'pending', $format = 'html' ) {
@@ -1269,12 +1271,13 @@ if ( !function_exists( 'update_pigeonpack_subscriber' ) ) {
 	 *
 	 * @since 0.0.1
 	 * @uses $wpdb WordPress datbase API
-	 * @see http://codex.wordpress.org/Class_Reference/wpdb
+	 * @link http://codex.wordpress.org/Class_Reference/wpdb
 	 *
 	 * @param int $list_id Pigeon Pack list ID (e.g. WordPress post ID)
 	 * @param int $subscriber_id Existing subscriber ID
 	 * @param array $subscriber_meta Associative array of new subscriber values
 	 * @param string $status Optional string to update susbcribers subscription status
+	 * @param string $format Optional default email content-type: html or text
 	 * @return int|bool Subscriber ID or FALSE if failed
 	 */		
 	function update_pigeonpack_subscriber( $list_id, $subscriber_id, $subscriber_meta, $status = false, $format = 'html' ) {
@@ -1324,7 +1327,7 @@ if ( !function_exists( 'update_pigeonpack_subscriber_hash' ) ) {
 	 *
 	 * @since 0.0.1
 	 * @uses $wpdb WordPress datbase API
-	 * @see http://codex.wordpress.org/Class_Reference/wpdb
+	 * @link http://codex.wordpress.org/Class_Reference/wpdb
 	 *
 	 * @param int $subscriber_id Existing subscriber ID
 	 * @param string $subscriber_hash Susbcriber's hash
@@ -1367,7 +1370,7 @@ if ( !function_exists( 'delete_pigeonpack_subscribers' ) ) {
 	 *
 	 * @since 0.0.1
 	 * @uses $wpdb WordPress datbase API
-	 * @see http://codex.wordpress.org/Class_Reference/wpdb
+	 * @link http://codex.wordpress.org/Class_Reference/wpdb
 	 *
 	 * @param int $list_id Pigeon Pack list ID (e.g. WordPress post ID)
 	 * @param array $subscriber_ids Existing subscriber ID
@@ -1455,8 +1458,6 @@ if ( !function_exists( 'wp_ajax_add_pigeonpack_subscriber' ) ) {
 	
 	/**
 	 * Called by 'wp_ajax_add_pigeonpack_subscriber' action hook AJAX to add new subscriber
-	 *
-	 * @todo If user exists and tries to subscribe again but is "pending" and double opt-in is enabled, resend opt-in email
 	 *
 	 * @since 0.0.1
 	 */	
@@ -1575,6 +1576,8 @@ if ( !function_exists( 'delete_subscribers_after_delete_post' ) ) {
 	 * Called by 'after_delete_post' action hook to delete subcribers from table if list is deleted in WordPress UI
 	 *
 	 * @since 0.0.1
+	 * 
+	 * @param int $list_id List ID (WordPress Post ID) being deleted
 	 */
 	function delete_subscribers_after_delete_post( $list_id ) {
 		

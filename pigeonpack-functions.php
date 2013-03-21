@@ -1,5 +1,7 @@
 <?php
 /**
+ * Helper functions used by Pigeon Pack
+ * 
  * @package Pigeon Pack
  * @since 0.0.1
  */
@@ -67,8 +69,6 @@ if ( !function_exists( 'pigeonpack_double_optin_mail' ) ) {
 
 	/**
 	 * Process the double opt-in mail
-	 *
-	 * @todo create a better text/plain version
 	 *
 	 * @since 0.0.1
 	 * @uses apply_filters() Calls 'double_optin_pigeonpack_headers' hook on an array of headers before subscriber loop is processing.
@@ -331,6 +331,7 @@ if ( !function_exists( 'get_pigeonpack_subscriber_by_type' ) ) {
 	 * If neither, return filtered array with custom get_pigeonpack_subscriber_by_type
 	 *
 	 * @since 0.0.1
+	 * @uses apply_filters() Calls 'pigeonpack_subscription_user_query_args' hook on default args array for WordPress WP_User_Query
 	 * @uses apply_filters() Calls 'get_pigeonpack_subscriber_by_type' hook on empty array for custom subscriber types
 	 *
 	 * @param string $list_type Either R followed by Role name (e.g. RAdministrator) or L followed by List ID (e.g. L132)
@@ -355,13 +356,25 @@ if ( !function_exists( 'get_pigeonpack_subscriber_by_type' ) ) {
 						'number'	=> $limit,
 						'offset'	=> $offset,
 						'meta_query' => array(
+										'relation' => 'OR',
+										array(
+											'key'		=> '_pigeonpack_subscription',
+											'compare'	=> 'NOT EXISTS', // Assume WP Users are subscribed if meta isn't set
+										),
+										array(
 											'key'		=> '_pigeonpack_subscription',
 											'value'		=> 'off',
 											'compare'	=> '!=',
 										),
+										),
 					);
 			
+			$args = apply_filters( 'pigeonpack_subscription_user_query_args', $args );
 			$users = new WP_User_Query( $args );
+			
+			$f = fopen( 'users.txt', 'a' );
+			fwrite( $f, print_r( $users, true ) );
+			fclose( $f );
 			
 			return $users->results;
 				
@@ -399,8 +412,8 @@ if ( !function_exists( 'pigeonpack_unmerge_subscriber' ) ) {
 		$merged_subject = $subject;
 		$merged_message = $message;
 		$merged_footer = $footer;
-	
-		if ( is_a( $subscriber, 'WP_User' ) ) {
+		
+		if ( is_object( $subscriber ) ) { //Looks like this wasn't introduced until WP3.5.x -> if ( is_a( $subscriber, 'WP_User' ) ) {
 			
 			$subscriber_meta = get_userdata( $subscriber->ID );
 			
@@ -421,7 +434,7 @@ if ( !function_exists( 'pigeonpack_unmerge_subscriber' ) ) {
 			}
 			
 			$unsubscribe_url = get_home_url() . '?pigeonpack=unsubscribe&role_name=' . array_shift( $subscriber_meta->roles ) . '&subscriber=' . $hash;
-			list( $merged_message, $merged_footer ) = str_ireplace( '{{UNSUBSCRIBE_URL}}', '<a href="' . $unsubscribe_url . '">' . $unsubscribe_url . '</a>' , array( $merged_message, $merged_footer ) );
+			list( $merged_message, $merged_footer ) = str_ireplace( '{{UNSUBSCRIBE_URL}}', '<a href="' . $unsubscribe_url . '">' . __( 'Unsubscribe from this list', 'pigeonpack' ) . '</a>' , array( $merged_message, $merged_footer ) );
 			
 			$email = $subscriber_meta->user_email;
 			
@@ -452,7 +465,7 @@ if ( !function_exists( 'pigeonpack_unmerge_subscriber' ) ) {
 			$merged_message = str_ireplace( '{{OPTIN_URL}}', '<a href="' . $optin_url . '">' . $optin_url . '</a>' , $merged_message );
 			
 			$unsubscribe_url = get_home_url() . '?pigeonpack=unsubscribe&list_id=' . $subscriber['list_id'] . '&subscriber=' . $hash;
-			list( $merged_message, $merged_footer ) = str_ireplace( '{{UNSUBSCRIBE_URL}}', '<a href="' . $unsubscribe_url . '">' . $unsubscribe_url . '</a>' , array( $merged_message, $merged_footer ) );
+			list( $merged_message, $merged_footer ) = str_ireplace( '{{UNSUBSCRIBE_URL}}', '<a href="' . $unsubscribe_url . '">' . __( 'Unsubscribe from this list', 'pigeonpack' ) . '</a>' , array( $merged_message, $merged_footer ) );
 			
 			$email = $subscriber['email'];
 			
@@ -633,7 +646,7 @@ if ( !function_exists( 'pigeonpack_exclude_post' ) ){
 	 *
 	 * @since 0.0.1
 	 * @uses wp_get_post_categories() to get current post categories
-	 * @see http://codex.wordpress.org/Function_Reference/wp_get_post_categories
+	 * @link http://codex.wordpress.org/Function_Reference/wp_get_post_categories
 	 *
 	 * @param int $campaign_id Used to get meta for in/ex-cluded cateories
 	 * @param int $post_id Used to get cateories associated with post
@@ -662,8 +675,6 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 
 	/**
 	 * Process the campaign mail
-	 *
-	 * @todo create a better text/plain version
 	 *
 	 * @since 0.0.1
 	 * @uses apply_filters() Calls 'the_content' hook on campaign post content.
@@ -766,8 +777,6 @@ if ( !function_exists( 'pigeonpack_subscriber_content_type' ) ) {
 	/**
 	 * Determines and returns subscriber's prefered email content type (plain text or html)
 	 *
-	 * @todo customize default with campaign setting/list setting
-	 *
 	 * @since 0.0.1
 	 *
 	 * @param object|array $subscriber WP_User object or Pigeon Pack subscriber array
@@ -775,7 +784,7 @@ if ( !function_exists( 'pigeonpack_subscriber_content_type' ) ) {
 	 */
 	function pigeonpack_subscriber_content_type( $subscriber ) {
 	
-		if ( is_a( $subscriber, 'WP_User' ) ) {
+		if ( is_object( $subscriber ) ) { //Looks like this wasn't introduced until WP3.5.x -> if ( is_a( $subscriber, 'WP_User' ) ) {
 			
 			$subscriber_options = get_user_option( 'pigeonpack_subscriber_options', $subscriber->ID );
 			
@@ -947,10 +956,30 @@ if ( !function_exists( 'pigeonpack_hash' ) ) {
 
 if ( !function_exists( 'pigeonpack_day_string' ) ) {
 
+	/**
+	 * helper function, used to print proper day for given number
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param int $day_number Number to check
+	 * @return string Day
+	 */
 	function pigeonpack_day_string( $day_number ) {
 	
+		if ( $day_number < 0 || $day_number > 7 )
+			return __( 'Sunday', 'pigeonpack' ); // Default to Sunday
+	
 		//Sunday is day 0 and day 7;
-		$day_strings = array( 'Sunday',	'Monday', 'Tuesday', 'Wendesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' );
+		$day_strings = array( 
+							__( 'Sunday', 'pigeonpack' ),	
+							__( 'Monday', 'pigeonpack' ),
+							__( 'Tuesday', 'pigeonpack' ), 
+							__( 'Wendesday', 'pigeonpack' ), 
+							__( 'Thursday', 'pigeonpack' ), 
+							__( 'Friday', 'pigeonpack' ), 
+							__( 'Saturday', 'pigeonpack' ), 
+							__( 'Sunday', 'pigeonpack' ),
+						);
 		
 		return $day_strings[$day_number];
 		

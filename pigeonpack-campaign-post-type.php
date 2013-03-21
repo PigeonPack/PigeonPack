@@ -1,5 +1,7 @@
 <?php
 /**
+ * Registers Pigeon Pack "campaign" post type in WordPress and related functions
+ *
  * @package Pigeon Pack
  * @since 0.0.1
  */
@@ -11,7 +13,7 @@ if ( !function_exists( 'create_campaign_post_type' ) ) {
 	 *
 	 * Called on 'init' action hook
 	 *
-	 * @see http://codex.wordpress.org/Function_Reference/register_post_type
+	 * @link http://codex.wordpress.org/Function_Reference/register_post_type
 	 *
 	 * @since 0.0.1
 	 * @uses register_post_type() to register campaign post type
@@ -371,8 +373,6 @@ if ( !function_exists( 'save_pigeonpack_campaign_meta' ) ) {
 	 *
 	 * Verifies we're working with a pigeonpack_campaign, parses and saves meta values
 	 *
-	 * @todo do something to remove clean up schedules and whatnot
-	 *
 	 * @since 0.0.1
 	 *
 	 * @param int $post_id WordPress post ID
@@ -524,11 +524,11 @@ if ( !function_exists( 'unset_pigeonpack_wp_post_campaigns_option_after_delete_p
 	 *
 	 * @since 0.0.1
 	 *
-	 * @param int $post_id WordPress post ID
+	 * @param int $campaign_id WordPress Post ID
 	 */	
-	function unset_pigeonpack_wp_post_campaigns_option_after_delete_post( $post_id ) {
+	function unset_pigeonpack_wp_post_campaigns_option_after_delete_post( $campaign_id ) {
 		
-		if ( !( $post_id = absint( $post_id ) )  )
+		if ( !( $campaign_id = absint( $campaign_id ) )  )
 			return false;
 
 		$post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );

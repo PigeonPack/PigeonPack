@@ -1,21 +1,22 @@
 <?php
 /**
- * @package Pigeon Pack
- */
-
-/**
- * This class registers the main pigeonpack functionality
+ * Registers Pigeon Pack class for setting up Pigeon Pack
  *
+ * @package Pigeon Pack
  * @since 0.0.1
  */
+
 if ( !class_exists( 'PigeonPack' ) ) {
 	
+	/**
+	 * This class registers the main pigeonpack functionality
+	 *
+	 * @since 0.0.1
+	 */	
 	class PigeonPack {
 		
 		/**
 		 * Class constructor, puts things in motion
-		 *
-		 * @todo add pigeon notifications, API, pigeonpack_deactivation hook, etc.
 		 *
 		 * @since 0.0.1
 		 * @uses add_action() Calls 'admin_init' hook on $this->upgrade
@@ -66,8 +67,6 @@ if ( !class_exists( 'PigeonPack' ) ) {
 				add_action( 'admin_notices', array( $this, 'pigeonpack_notification' ) );
 				
 			}
-				
-			//register_deactivation_hook( __FILE__, array( $this, 'pigeonpack_deactivation' ) );
 			
 		}
 		
@@ -89,17 +88,6 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			add_submenu_page( 'pigeon-pack', __( 'Help', 'pigeonpack' ), __( 'Help', 'pigeonpack' ), apply_filters( 'manage_pigeonpack_settings', 'manage_pigeonpack_settings' ), 'pigeonpack-help', array( $this, 'pigeonpack_help_page' ) );
 			
 			do_action( 'pigeonpack_admin_menu' );
-			
-		}
-		
-		/**
-		 * Deactivation hook
-		 *
-		 * @since 0.0.1
-		 */
-		function pigeonpack_deactivation() {
-			
-			// Nothing to do here, yet...
 			
 		}
 		
@@ -380,7 +368,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
                         <table id="pigeonpack_api_key">
                         
                         	<tr>
-                                <th> <?php _e( 'API Key', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'API Key', 'pigeonpack' ); ?></th>
                                 <td>
                                 <input type="text" id="api" class="regular-text" name="api_key" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['api_key'] ) ); ?>" />
                                 
@@ -410,21 +398,21 @@ if ( !class_exists( 'PigeonPack' ) ) {
                         <table id="pigeonpack_administrator_options">
                         
                         	<tr>
-                                <th> <?php _e( 'From Name', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'From Name', 'pigeonpack' ); ?></th>
                                 <td>
                                 <input type="text" id="from_name" class="regular-text" name="from_name" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['from_name'] ) ); ?>" />
                                 </td>
                             </tr>
                             
                         	<tr>
-                                <th> <?php _e( 'From Email', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'From Email', 'pigeonpack' ); ?></th>
                                 <td>
                                 <input type="text" id="from_email" class="regular-text" name="from_email" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['from_email'] ) ); ?>" />
                                 </td>
                             </tr>
                         
                         	<tr>
-                                <th> <?php _e( 'CSS Style', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'CSS Style', 'pigeonpack' ); ?></th>
                                 <td>
 								<select id='css_style' name='css_style'>
 									<option value='default' <?php selected( 'default', $pigeonpack_settings['css_style'] ); ?> ><?php _e( 'Default', 'pigeonpack' ); ?></option>
@@ -458,21 +446,21 @@ if ( !class_exists( 'PigeonPack' ) ) {
                         <table id="pigeonpack_administrator_options">
                         
                         	<tr>
-                                <th> <?php _e( 'Company/Organization', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'Company/Organization', 'pigeonpack' ); ?></th>
                                 <td>
                                 <input type="text" id="company" name="company" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['company'] ) ); ?>" />
                                 </td>
                             </tr>
                             
                         	<tr>
-                                <th> <?php _e( 'Address', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'Address', 'pigeonpack' ); ?></th>
                                 <td>
                     				<textarea id="address" class="large-text" name="address" cols="50" rows="3"><?php echo htmlspecialchars( stripslashes( $pigeonpack_settings['address'] ) ); ?></textarea>
                                 </td>
                             </tr>
                             
                         	<tr>
-                                <th> <?php _e( 'Permission Reminder', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'Permission Reminder', 'pigeonpack' ); ?></th>
                                 <td>
                     				<textarea id="reminder" class="large-text" name="reminder" cols="50" rows="3"><?php echo htmlspecialchars( stripslashes( $pigeonpack_settings['reminder'] ) ); ?></textarea>
                     <p class="description">
@@ -502,7 +490,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
                         <table id="pigeonpack_smtp_settings">
                         
                         	<tr>
-                                <th> <?php _e( 'Use SMTP Server?', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'Use SMTP Server?', 'pigeonpack' ); ?></th>
                                 <td>
                                 <input type="radio" id="mail_checkbox" name="smtp_enable" value="mail" <?php checked( 'mail', $pigeonpack_settings['smtp_enable'] ); ?> /> <label for="mail_checkbox"><?php _e( 'Use built-in wp_mail() function to send emails.' , 'pigeonpack' ); ?></label>
                                 <br />
@@ -518,21 +506,21 @@ if ( !class_exists( 'PigeonPack' ) ) {
 							?>
                         
                         	<tr class="smtp_options" <?php echo $hidden; ?>>
-                                <th> <?php _e( 'SMTP Server', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'SMTP Server', 'pigeonpack' ); ?></th>
                                 <td>
                                 <input type="text" id="smtp_server" class="regular-text" name="smtp_server" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['smtp_server'] ) ); ?>" />
                                 </td>
                             </tr>
                             
                         	<tr class="smtp_options" <?php echo $hidden; ?>>
-                                <th> <?php _e( 'SMTP Port', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'SMTP Port', 'pigeonpack' ); ?></th>
                                 <td>
                                 <input type="text" id="smtp_port" class="regular-text" name="smtp_port" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['smtp_port'] ) ); ?>" />
                                 </td>
                             </tr>
                             
                         	<tr class="smtp_options" <?php echo $hidden; ?>>
-                                <th> <?php _e( 'Encryption', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'Encryption', 'pigeonpack' ); ?></th>
                                 <td>
                                 <input type="radio" id="smtp_ssl_none" class="smtp_encryption" class="regular-text" name="smtp_encryption" value="none" <?php checked( 'none' === $pigeonpack_settings['smtp_encryption'] ); ?> /> <label for="smtp_ssl_none"><?php _e( 'No encryption', 'pigeonpack' ); ?></label> <br />
                                 <input type="radio" id="smtp_ssl_ssl" class="smtp_encryption" class="regular-text" name="smtp_encryption" value="ssl" <?php checked( 'ssl' === $pigeonpack_settings['smtp_encryption'] ); ?> /> <label for="smtp_ssl_ssl"><?php _e( 'Use SSL encryption', 'pigeonpack' ); ?></label> <br />
@@ -541,7 +529,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
                             </tr>
                             
                         	<tr class="smtp_options" <?php echo $hidden; ?>>
-                                <th> <?php _e( 'Authentication', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'Authentication', 'pigeonpack' ); ?></th>
                                 <td>
                                 <input type="radio" id="smtp_auth_none" class="smtp_authentication" class="regular-text" name="smtp_authentication" value="none" <?php checked( 'none' === $pigeonpack_settings['smtp_authentication'] ); ?> /> <label for="smtp_auth_none"><?php _e( 'No authentication', 'pigeonpack' ); ?></label> <br />
                                 <input type="radio" id="smtp_auth_true" class="smtp_authentication" class="regular-text" name="smtp_authentication" value="none" <?php checked( 'true' === $pigeonpack_settings['smtp_authentication'] ); ?> /> <label for="smtp_auth_true"><?php _e( 'Yes, use SMTP authentication', 'pigeonpack' ); ?></label> <br />
@@ -549,30 +537,30 @@ if ( !class_exists( 'PigeonPack' ) ) {
                             </tr>
                             
                         	<tr class="smtp_options" <?php echo $hidden; ?>>
-                                <th> <?php _e( 'SMTP Username', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'SMTP Username', 'pigeonpack' ); ?></th>
                                 <td>
                                 <input type="text" id="smtp_username" class="regular-text" name="smtp_username" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['smtp_username'] ) ); ?>" />
                                 </td>
                             </tr>
                             
                         	<tr class="smtp_options" <?php echo $hidden; ?>>
-                                <th> <?php _e( 'SMTP Password', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'SMTP Password', 'pigeonpack' ); ?></th>
                                 <td>
                                 <input type="text" id="smtp_password" class="regular-text" name="smtp_password" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['smtp_password'] ) ); ?>" />
                                 </td>
                             </tr>
                             
                         	<tr>
-                                <th> <?php _e( 'Emails per cycle', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'Emails per cycle', 'pigeonpack' ); ?></th>
                                 <td>
-                                <input type="text" id="emails_per_cycle" class="small-text" name="emails_per_cycle" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['emails_per_cycle'] ) ); ?>" /> <?php _e( 'emails', 'pigeonpack' ); ?>.
+                                <input type="text" id="emails_per_cycle" class="small-text" name="emails_per_cycle" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['emails_per_cycle'] ) ); ?>" /> <?php _e( 'emails', 'pigeonpack' ); ?> - <?php _e( 'Verify these settings with your web host or SMTP provider.', 'pigeonpack' ); ?>
                                 </td>
                             </tr>
                             
                         	<tr>
-                                <th> <?php _e( 'Email cycle', 'pigeonpack' ); ?></th>
+                                <th><?php _e( 'Email cycle', 'pigeonpack' ); ?></th>
                                 <td>
-                                <input type="text" id="email_cycle" class="small-text" name="email_cycle" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['email_cycle'] ) ); ?>" /> <?php _e( 'minutes', 'pigeonpack' ); ?>.
+                                <input type="text" id="email_cycle" class="small-text" name="email_cycle" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['email_cycle'] ) ); ?>" /> <?php _e( 'minutes', 'pigeonpack' ); ?>
                                 </td>
                             </tr>
                             
@@ -709,6 +697,36 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
                 </div>
                 
                 <?php do_action( 'pigeonpack_help_page' ); ?>
+                
+                <div id="pigeonpack-mail-limits" class="postbox">
+                
+                    <div class="handlediv" title="Click to toggle"><br /></div>
+    
+                    <h3 class="hndle"><span><?php _e( 'Email Limits', 'pigeonpack' ); ?></span></h3>
+                    
+                    <div class="inside">
+                                    
+                    <p>
+                    <?php _e( 'Every web host and SMTP provider has limits on the numbers of messages that can be sent from their systems. Please check with your web host or SMTP provider to verify their email limit policy. This is important to ensure you setup the plugin properly to prevent your customers from missing emails.', 'pigeonpack' ); ?>
+                    </p>
+                    <p>
+                    <?php _e( 'Here are some web hosts and their default sending limits (as of March 2013):', 'pigeonpack' ); ?>
+                    <ol>
+                    	<li><a href="http://www.linode.com/?r=b17583e04c00a2298c4351247a5eceb12e5203c0">Linode</a> - <?php _e( 'Unlimited (VPS*) - What the Pigeon Pack servers run on!', 'pigeonpack' ); ?></li>
+                    	<li><a href="http://www.dreamhost.com/r.cgi?1434131">Dreamhost</a> - <?php _e( '200 emails every 60 minutes (shared web servers) or Unlimited (VPS* or Dedicated servers)', 'pigeonpack' ); ?></li>
+                        <li><a href="http://www.bluehost.com/track/leenkme">Bluehost</a> - <?php _e( '500 emails every 60 minutes', 'pigeonpack' ); ?></li>
+                    	<li><a href="http://asmallorange.com/?a_aid=leenkme">A Small Orange</a> - <?php _e( '500 emails every 60 minutes (shared web servers) or Unlimited (VPS*)', 'pigeonpack' ); ?></li>
+                    	<li><a href="http://www.1and1.com/">1and1</a> - <?php _e( '300 emails every 5 minutes', 'pigeonpack' ); ?></li>
+                    </ol>    
+                    </p>                
+                    <p><?php _e( 'As a best practice, please set the number of emails to less than the maximum allowed.', 'pigeonpack' ); ?></p>
+                    <p><?php _e( '* VPS (Virtual Private Server) or dedicated server solutions require significant more skill to setup than your typical shared web host servers.', 'pigeonpack' ); ?></p>
+                    <p>
+                    <?php _e( 'If you need a simpler solution and your web host does not support bulk emails, we recommend <a href="http://aws.amazon.com/ses/">Amazon Simple Email Server (SES)</a>. Amazon SES lets you send bulk and transactional email to customers in a quick and cost-effective manner.', 'pigeonpack' ); ?>
+                    </p>
+                    </div>
+                    
+                </div>
                 
                 <div id="can-spam" class="postbox">
                 
@@ -861,7 +879,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		/**
 		 * Initialized & Upgrade Pigeon Pack Database Table
 		 *
-		 * @see http://codex.wordpress.org/Creating_Tables_with_Plugins
+		 * @link http://codex.wordpress.org/Creating_Tables_with_Plugins
 		 *
 		 * @since 0.0.1
 		 */
@@ -893,8 +911,6 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		/**
 		 * AJAX call to verify API key with Pigeon Pack servers
 		 *
-		 * @todo get this working!
-		 *
 		 * @since 0.0.1
 		 */
 		function pigeonpack_api_ajax_verify() {
@@ -925,9 +941,11 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		/**
 		 * Filtering 'plugins_api' hook to get plugin information from Pigeon Pack servers
 		 *
-		 * @todo get this working!
-		 *
 		 * @since 0.0.1
+		 * 
+		 * @param bool $false Always False
+		 * @param string $action Action to take on the API
+		 * @param array $args Array of arguments to pass to the API
 		 */
 		function pigeonpack_plugins_api( $false, $action, $args ) {
 		
@@ -953,9 +971,9 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		/**
 		 * Filtering 'pre_set_site_transient_update_plugins' hook to get plugin latest version from Pigeon Pack servers
 		 *
-		 * @todo get this working!
-		 *
 		 * @since 0.0.1
+		 * 
+		 * @param object $transient WordPress transient object
 		 */
 		function pigeonpack_update_plugins( $transient ) {
 			
@@ -987,10 +1005,10 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		/**
 		 * Normalize Pigeon Pack API request
 		 *
-		 * @todo get this working!
-		 *
 		 * @since 0.0.1
 		 * @uses wp_remote_post
+		 *
+		 * @param array $args Array of arguments to pass to the API request
 		 */
 		function pigeonpack_api_request( $args ) {
 			
@@ -1021,9 +1039,9 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		/**
 		 * Determine API status and set/remove notifications
 		 *
-		 * @todo get this working!
-		 *
 		 * @since 0.0.1
+		 *
+		 * @param object $response WordPress remote request object
 		 */
 		function api_status( $response ) {
 		
@@ -1044,8 +1062,6 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		
 		/**
 		 * Added Pigeon Pack API error messages
-		 *
-		 * @todo get this working!
 		 *
 		 * @since 0.0.1
 		 */
@@ -1072,6 +1088,10 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		 * Posts get added to digests (if digest campaigns exist)
 		 *
 		 * @since 0.0.1
+		 * 
+		 * @param string $new_status Post transition's new status
+		 * @param string $old_status Post transition's old status
+		 * @param object $post WordPress post object
 		 */
 		function pigeonpack_transition_post_status( $new_status, $old_status, $post ) {
 			
@@ -1155,7 +1175,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 			<tr id="profile-optin">
 				<th><label for="pigeonpack_subscription"><?php _e( 'Yes, I want to receive email updates', 'pigeonpack' ); ?></label></th>
 				<td>
-                <input type="checkbox" name="pigeonpack_subscription" id="pigeonpack_subscription" <?php checked( 'on' === get_user_meta( $user->ID, '_pigeonpack_subscription', true ) ); ?> />
+                <input type="checkbox" name="pigeonpack_subscription" id="pigeonpack_subscription" <?php checked( 'off' !== get_user_meta( $user->ID, '_pigeonpack_subscription', true ) ); ?> />
                 <p class="description">
                 <?php _e( 'Unchecking this box will stop you from receiving emails based on your user profile with this site, this will not unsubscribe you from any other lists you subscribed to manually.', 'pigeonpack' ); ?>
                 </p>
@@ -1183,7 +1203,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 			if ( isset( $_REQUEST['pigeonpack_subscription'] ) )
 				update_user_meta( $user_id, '_pigeonpack_subscription', 'on' );
 			else
-				delete_user_meta( $user_id, '_pigeonpack_subscription' );
+				update_user_meta( $user_id, '_pigeonpack_subscription', 'off' );
 			
 		}
 		

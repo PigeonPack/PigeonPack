@@ -1,4 +1,11 @@
 <?php
+/**
+ * Converts HTML email to Plain Text email
+ *
+ * @package Pigeon Pack
+ * @since 0.0.1
+ */
+ 
 /******************************************************************************
  * Copyright (c) 2010 Jevon Wright and others.
  * All rights reserved. This program and the accompanying materials
@@ -10,22 +17,22 @@
  *    Jevon Wright - initial API and implementation
  ****************************************************************************/
 
-/**
- * Tries to convert the given HTML into a plain text format - best suited for
- * e-mail display, etc.
- *
- * <p>In particular, it tries to maintain the following features:
- * <ul>
- *   <li>Links are maintained, with the 'href' copied over
- *   <li>Information in the &lt;head&gt; is lost
- * </ul>
- *
- * @param html the input HTML
- * @return the HTML converted, as best as possible, to text
- */
 if ( !function_exists( 'convert_html_to_text' ) ) {
-	
-	function convert_html_to_text($html) {
+		
+	/**
+	 * Tries to convert the given HTML into a plain text format - best suited for
+	 * e-mail display, etc.
+	 *
+	 * <p>In particular, it tries to maintain the following features:
+	 * <ul>
+	 *   <li>Links are maintained, with the 'href' copied over
+	 *   <li>Information in the &lt;head&gt; is lost
+	 * </ul>
+	 *
+	 * @param string $html the input HTML
+	 * @return string the HTML converted, as best as possible, to text
+	 */
+	function convert_html_to_text( $html ) {
 		
 		$html = fix_newlines( $html );
 		
@@ -47,16 +54,16 @@ if ( !function_exists( 'convert_html_to_text' ) ) {
 
 }
 
-/**
- * Unify newlines; in particular, \r\n becomes \n, and
- * then \r becomes \n. This means that all newlines (Unix, Windows, Mac)
- * all become \ns.
- *
- * @param text text with any number of \r, \r\n and \n combinations
- * @return the fixed text
- */
 if ( !function_exists( 'fix_newlines' ) ) {
-	
+		
+	/**
+	 * Unify newlines; in particular, \r\n becomes \n, and
+	 * then \r becomes \n. This means that all newlines (Unix, Windows, Mac)
+	 * all become \ns.
+	 *
+	 * @param string $text text with any number of \r, \r\n and \n combinations
+	 * @return string the fixed text
+	 */
 	function fix_newlines( $text ) {
 	
 		// replace \r\n to \n
@@ -71,7 +78,13 @@ if ( !function_exists( 'fix_newlines' ) ) {
 }
 
 if ( !function_exists( 'next_child_name' ) ) {
-	
+			
+	/**
+	 * Returns the next child node name
+	 *
+	 * @param object $node The current node
+	 * @return string the next node name
+	 */
 	function next_child_name( $node ) {
 	
 		// get the next child
@@ -97,7 +110,13 @@ if ( !function_exists( 'next_child_name' ) ) {
 }
 
 if ( !function_exists( 'prev_child_name' ) ) {
-		
+			
+	/**
+	 * Returns the previous child node name
+	 *
+	 * @param object $node The current node
+	 * @return string the previous node name
+	 */
 	function prev_child_name( $node ) {
 		
 		// get the previous child
@@ -123,7 +142,13 @@ if ( !function_exists( 'prev_child_name' ) ) {
 }
 
 if ( !function_exists( 'iterate_over_node' ) ) {
-		
+			
+	/**
+	 * Iterates over the node
+	 *
+	 * @param object $node The current node
+	 * @return string text replacement of the HTML node
+	 */
 	function iterate_over_node( $node ) {
 		
 		if ( $node instanceof DOMText )
@@ -257,11 +282,24 @@ if ( !function_exists( 'iterate_over_node' ) ) {
 }
 
 if ( !class_exists( 'Html2TextException' ) ) {
-
+	
+	/**
+	 * Class extends Exception to output thrown errors
+	 */
 	class Html2TextException extends Exception {
 	
+		/**
+		 * String of more info
+		 * @var string $more_info String of more info
+		 */
 		var $more_info;
-	
+			
+		/**
+		 * Returns the next child node name
+		 *
+		 * @param string $message Error message
+		 * @param string $more_info String of more infos
+		 */
 		public function __construct( $message = '', $more_info = '' ) {
 			
 			parent::__construct( $message );

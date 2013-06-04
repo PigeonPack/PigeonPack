@@ -55,11 +55,11 @@ if ( !function_exists( 'pigeonpack_double_optin_scheduler' ) ) {
 	 * @param int|string ID of campaign being run
 	 * @param array Option array of post IDs to merge with this campaign (really only used for WordPress Post campaigns
 	 */
-    function pigeonpack_double_optin_scheduler( $list_id, $susbcriber_id ) {
+    function pigeonpack_double_optin_scheduler( $list_id, $subscriber_id ) {
 		
 		//we want to schedule an event to happen right now, to send out the first batch of emails
 		//we do not want to call the pigeonpack_mail function directly, it can cause a delay when publish a post.
-		wp_schedule_single_event( current_time( 'timestamp', 1 ), 'scheduled_pigeonpack_double_optin_mail', array( $list_id, $susbcriber_id ) );
+		wp_schedule_single_event( current_time( 'timestamp', 1 ), 'scheduled_pigeonpack_double_optin_mail', array( $list_id, $subscriber_id ) );
 	
     }   
 	
@@ -134,22 +134,15 @@ if ( !function_exists( 'pigeonpack_wp_post_campaign_init' ) ) {
 		$post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
 		
 		$type = get_post_meta( $campaign_id, '_pigeonpack_wp_post_type', true );
-		
-		// Change type if we're updating an existing campaign
-		foreach( $post_campaigns as $post_campaign ) {
-		
-			if ( $campaign_id === $post_campaign['id'] )
-				$post_campaign['type'] = $type;
-			
-		}
 	
 		$new_campaign = array(
 							'id'	=> $campaign_id,
 							'type'	=> $type,
 							);
 		
-		//only add NEW campaigns				
-		if ( !in_array( $new_campaign, $post_campaigns ) )
+		if ( $i = array_search( $new_campaign, $post_campaigns ) ) //update the type for existing campaigns
+			$post_campaigns[$i]['type'] = $type;
+		else //add new campaigns
 			$post_campaigns[] = $new_campaign;
 		
 		//update with modified array
@@ -233,7 +226,7 @@ if ( !function_exists( 'pigeonpack_wp_post_campaign_init' ) ) {
 			
 			// if a previous schedule already exists for this campaign, we want to unschedule it and schedule the new event
 			if ( !empty( $previous_schedule) && $next_schedule = wp_next_scheduled( 'scheduled_wp_post_digest_campaign', $previous_schedule[1] ) )
-				if ( $previous_schedule[0] === $next_schedule ) //doubel check that the schedules are the same before removing it
+				if ( $previous_schedule[0] === $next_schedule ) //double check that the schedules are the same before removing it
 					wp_unschedule_event( $previous_schedule[0], 'scheduled_wp_post_digest_campaign', $previous_schedule[1] );
 			
 			//wp_schedule_single_event( $schedule, 'scheduled_wp_post_digest_campaign', array( $campaign->ID, $schedule ) );
@@ -243,6 +236,54 @@ if ( !function_exists( 'pigeonpack_wp_post_campaign_init' ) ) {
 			update_post_meta( $campaign_id, '_scheduled_event', array( $schedule, array( $campaign_id, $schedule ) ) );
 			
 		}
+		
+	}
+	
+}
+
+if ( !function_exists( 'remove_pigeonpack_wp_post_campaign' ) ) {
+
+	/**
+	 * Removes campaign from pigeonpack_wp_post_campaigns option in WordPress options table
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param int $campaign_id ID of campaign being initialized
+	 */
+	function remove_pigeonpack_wp_post_campaign( $campaign_id ) {
+	
+		if ( $wp_post_type = get_post_meta( $campaign_id, '_pigeonpack_wp_post_type', true ) ) {
+						
+			$post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
+			
+			// If the current campaign is listed as a wp_post campaign, unset it and update the option
+			if ( $i = array_search( array( 'id' => $campaign_id, 'type' => $wp_post_type ), $post_campaigns ) ) {
+				
+				unset( $post_campaigns[$i] );			
+				update_option( 'pigeonpack_wp_post_campaigns', $post_campaigns );
+			
+			}
+		
+		}
+		
+	}
+	
+}
+
+if ( !function_exists( 'remove_pigeonpack_wp_post_digest_schedule' ) ) {
+
+	/**
+	 * Removes digest campaign schedule
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param int $campaign_id ID of campaign being initialized
+	 */
+	function remove_pigeonpack_wp_post_digest_schedule( $campaign_id ) {
+				
+		$previous_schedule = get_post_meta( $campaign_id, '_scheduled_event', true );
+		wp_unschedule_event( $previous_schedule[0], 'scheduled_wp_post_digest_campaign', $previous_schedule[1] );
+		delete_post_meta( $campaign_id, '_scheduled_event' );
 		
 	}
 	
@@ -295,7 +336,7 @@ if ( !function_exists( 'do_pigeonpack_wp_post_campaigns' ) ) {
 	
 }
 
-if ( !function_exists( 'extract_list_id' ) ) {
+if ( !function_exists( 'extract_pigeonpack_list_id' ) ) {
 	
 	/**
 	 * Extracts the list ID associated with a given campaign (WordPress role or Pigeon Pack list)
@@ -304,18 +345,19 @@ if ( !function_exists( 'extract_list_id' ) ) {
 	 * If Pigeon Pack list, return the list ID
 	 *
 	 * @since 0.0.1
+	 * @uses apply_filter() To call 'extract_pigeonpack_list_id' for future addons
 	 *
 	 * @param string $list_type Either R followed by Role name (e.g. RAdministrator) or L followed by List ID (e.g. L132)
 	 * @return int|bool Integer ID of list or false
 	 */
-	function extract_list_id( $list_type ) {
+	function extract_pigeonpack_list_id( $list_type ) {
 	
 		if ( 'R' === substr( $list_type, 0, 1 ) )
 			return array( 'type' => 'role', 'id' => substr( $list_type, 1 ) );
 		else if ( 'L' === substr( $list_type, 0, 1 ) )
 			return array( 'type' => 'list', 'id' => substr( $list_type, 1 ) );
 		
-		return false;
+		return apply_filter( 'extract_pigeonpack_list_id', false, $list_type );
 		
 	}
 	
@@ -355,26 +397,12 @@ if ( !function_exists( 'get_pigeonpack_subscriber_by_type' ) ) {
 						'role'		=> substr( $list_type, 1 ),
 						'number'	=> $limit,
 						'offset'	=> $offset,
-						'meta_query' => array(
-										'relation' => 'OR',
-										array(
-											'key'		=> '_pigeonpack_subscription',
-											'compare'	=> 'NOT EXISTS', // Assume WP Users are subscribed if meta isn't set
-										),
-										array(
-											'key'		=> '_pigeonpack_subscription',
-											'value'		=> 'off',
-											'compare'	=> '!=',
-										),
-										),
 					);
+					
+			add_action( 'pre_user_query', 'pigeonpack_pre_user_query', 1 );
 			
 			$args = apply_filters( 'pigeonpack_subscription_user_query_args', $args );
 			$users = new WP_User_Query( $args );
-			
-			$f = fopen( 'users.txt', 'a' );
-			fwrite( $f, print_r( $users, true ) );
-			fclose( $f );
 			
 			return $users->results;
 				
@@ -388,6 +416,49 @@ if ( !function_exists( 'get_pigeonpack_subscriber_by_type' ) ) {
 		
 	}
 	
+}
+
+if ( !function_exists( 'pigeonpack_pre_user_query' ) ) {
+	
+	/**
+	 * Called by 'pre_user_query' action for modifying the subscriber user query.
+	 *
+	 * There is a bug in WordPress 3.5+ that prevents us from using a complicated meta_query argument
+	 * in the WP_User_Query. So we have to modify the query here to check if the _pigeonpack_subscription option
+	 * is not set to "off" or if the key does not exist. If either of those cases is true, that is a valid 
+	 * subscriber. 
+	 * @link http://core.trac.wordpress.org/ticket/23849
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param object $query Current user query
+	 */
+	function pigeonpack_pre_user_query( &$query ) {
+		
+		global $wpdb;
+	
+		$query->query_fields = 'DISTINCT ' . $query->query_fields;
+		
+		$query->query_from .= ' INNER JOIN ' . $wpdb->usermeta . ' AS pp1 ON ( ' . $wpdb->users . '.ID = pp1.user_id )';
+		$query->query_from .= ' LEFT JOIN ' . $wpdb->usermeta . ' AS pp2 ON ( ' . $wpdb->users . '.ID = pp2.user_id AND pp2.meta_key = "_pigeonpack_subscription" )';
+		
+		$query->query_where .= " AND ( ( pp1.meta_key = '_pigeonpack_subscription' AND CAST(pp1.meta_value AS CHAR) NOT LIKE '%off%')";
+		$query->query_where .= ' OR pp2.user_id IS NULL )';
+		
+		/*
+		SELECT DISTINCT SQL_CALC_FOUND_ROWS wp_users.* 
+		FROM wp_users 
+		INNER JOIN wp_usermeta ON (wp_users.ID = wp_usermeta.user_id) 
+		INNER JOIN wp_usermeta AS pp1 ON ( wp_users.ID = pp1.user_id ) 
+		LEFT JOIN wp_usermeta AS pp2 ON ( wp_users.ID = pp2.user_id AND pp2.meta_key = "_pigeonpack_subscription" ) 
+		WHERE 1=1 
+		AND ( (wp_usermeta.meta_key = 'wp_capabilities' AND CAST(wp_usermeta.meta_value AS CHAR) LIKE '%\"Administrator\"%') ) 
+		AND ( ( pp1.meta_key = '_pigeonpack_subscription' AND CAST(pp1.meta_value AS CHAR) NOT LIKE '%off%') OR pp2.user_id IS NULL ) 
+		ORDER BY user_login ASC LIMIT 100
+		*/
+		
+	}
+
 }
 
 if ( !function_exists( 'pigeonpack_unmerge_subscriber' ) ) { 
@@ -598,7 +669,7 @@ if ( !function_exists( 'pigeonpack_unmerge_misc' ) ) {
 		
 			if ( 'list' === $list_info['type'] ) {
 				
-				list( $merged_subject, $merged_message, $merged_footer  ) = str_ireplace( '{{LIST_NAME}}', get_the_title( $list_info['id'] ), array( $merged_subject, $merged_message, $merged_footer  ) );
+				list( $merged_subject, $merged_message, $merged_footer ) = str_ireplace( '{{LIST_NAME}}', get_the_title( $list_info['id'] ), array( $merged_subject, $merged_message, $merged_footer  ) );
 				
 				$required_footer = get_post_meta( $list_info['id'], '_pigeonpack_required_footer_settings', true );
 				$required_footer_string = '<p id="required-address-info">'
@@ -625,6 +696,8 @@ if ( !function_exists( 'pigeonpack_unmerge_misc' ) ) {
 				
 			}
 			
+			list( $merged_subject, $merged_message, $merged_footer ) = apply_filters( 'custom_pigeonpack_unmerge_misc_list_info', array( $merged_subject, $merged_message, $merged_footer ), $subject, $message, $footer, $list_info );
+			
 		} else {
 		
 			list( $merged_subject, $merged_message ) = str_ireplace( '{{LIST_NAME}}', '', array( $merged_subject, $merged_message ) );
@@ -633,7 +706,7 @@ if ( !function_exists( 'pigeonpack_unmerge_misc' ) ) {
 			
 		}
 		
-		return apply_filters( 'pigeonpack_unmerge_misc', array( $merged_subject, $merged_message, $merged_footer ), $subject, $message, $footer );
+		return apply_filters( 'pigeonpack_unmerge_misc', array( $merged_subject, $merged_message, $merged_footer ), $subject, $message, $footer, $list_info );
 		
 	}
 	
@@ -710,7 +783,7 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 		$message =  apply_filters( 'the_content', $campaign->post_content );
 		$footer = apply_filters( 'default_pigeonpack_mail_footer', '{{REMINDER}}{{REQUIRED_FOOTER_CONTENT}}{{UNSUBSCRIBE_URL}}' );
 		
-		list( $subject, $message, $footer ) = pigeonpack_unmerge_misc( $subject, $message, $footer, extract_list_id( $recipients ) );
+		list( $subject, $message, $footer ) = pigeonpack_unmerge_misc( $subject, $message, $footer, extract_pigeonpack_list_id( $recipients ) );
 		
 		if ( !empty( $posts ) ) {
 		
@@ -999,9 +1072,9 @@ if ( !function_exists( 'ordinal_suffix' ) ) {
 	 * @param int $num Number to check
 	 * @return string Number plus correct ordinal suffix
 	 */
-	function ordinal_suffix( $num ){
+	function ordinal_suffix( $num ) {
 		
-		if( $num < 11 || $num > 13 ){
+		if( $num < 11 || $num > 13 ) {
 	
 			switch( $num % 10 ) {
 			

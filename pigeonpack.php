@@ -17,6 +17,9 @@ Tags: email, marketing, email marketing, newsletters, email newsletters, campaig
 Special Thanks: 
 Yusuke Kamiyamane - http://p.yusukekamiyamane.com/ - http://www.iconfinder.com/search/?q=iconset%3Afugue
 Turbomilk - http://graphicriver.net/free/web-icon-set/ - http://www.turbomilk.com/ - http://www.iconfinder.com/search/?q=iconset%3Awebset
+Minifiers:
+http://www.minifyjs.com/javascript-compressor/
+http://www.minifycss.com/css-compressor/
 */
 
 //Define global variables...

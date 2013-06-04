@@ -117,7 +117,7 @@ if ( !function_exists( 'process_pigeonpack_subscribe' ) ){
 				$success .= '<p>' . __( 'Your subscription to our list has been confirmed.', 'pigeonpack' ) . '</p>';
 				$success .= '<p>' . __( 'Thank you for subscribing!', 'pigeonpack' ) . '</p>';
 				
-				wp_die( apply_filters( 'pigeonpack_double_optin_unknown_error_message', $success ) . BACK_TO_SITE_LINK, get_the_title( $list_id ) );
+				wp_die( apply_filters( 'pigeonpack_double_optin_already_subscribed_message', $success ) . BACK_TO_SITE_LINK, get_the_title( $list_id ) );
 				
 			}
 			
@@ -179,7 +179,7 @@ if ( !function_exists( 'process_pigeonpack_unsubscribe' ) ){
 				$success = '<h3>' . __( 'Unsubscribe Successful', 'pigeonpack' ) . '</h3>';
 				$success .= '<p>' . __( 'You have been removed from this mailing list.', 'pigeonpack' ) . '</p>';
 				
-				wp_die( apply_filters( 'pigeonpack_unsubscribed_unknown_error_message', $success ) . BACK_TO_SITE_LINK, $title );
+				wp_die( apply_filters( 'pigeonpack_unsubscribed_already_unsubscribed', $success ) . BACK_TO_SITE_LINK, $title );
 				
 			}
 			

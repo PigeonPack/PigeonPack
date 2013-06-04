@@ -15,7 +15,7 @@ $pigeonpack_list(document).ready(function($) {
 		
 		var error = false;
 		
-		$( 'table#pigeonpack_list_new_subscriber_table input.required' ).each( function() {
+		$( 'table#pigeonpack_list_new_subscriber_table .required:input' ).each( function() {
 			
 			if ( '' === $( this ).val() ) {
 				
@@ -31,7 +31,7 @@ $pigeonpack_list(document).ready(function($) {
 	
 		var data = {
 			'action':				'add_pigeonpack_subscriber',
-			'data':					$( 'table#pigeonpack_list_new_subscriber_table input' ).serializeArray(),
+			'data':					$( 'table#pigeonpack_list_new_subscriber_table :input' ).serializeArray(),
 			'list_id':				$( 'input#post_ID' ).val(),
 			'subscriber_status':	'subscribed',
 			'_wpnonce': 			$( 'input#pigeonpack_list_nonce' ).val()
@@ -54,7 +54,7 @@ $pigeonpack_list(document).ready(function($) {
 		
 	});
 	
-	$( 'table#pigeonpack_list_new_subscriber_table input.required' ).focus( function() {
+	$( 'table#pigeonpack_list_new_subscriber_table .required:input' ).focus( function() {
 		
 		$( this ).removeClass( 'error' );
 		
@@ -168,7 +168,7 @@ $pigeonpack_list(document).ready(function($) {
 	
 		var data = {
 			'action':			'update_pigeonpack_subscriber',
-			'data':				$( 'table#pigeonpack_list_new_subscriber_table input' ).serializeArray(),
+			'data':				$( 'table#pigeonpack_list_new_subscriber_table :input' ).serializeArray(),
 			'list_id':			$( 'input#post_ID' ).val(),
 			'subscriber_id':	$( 'input#update_pigeonpack_subscriber_id' ).val(),
 			'_wpnonce':			$( 'input#pigeonpack_list_nonce' ).val()

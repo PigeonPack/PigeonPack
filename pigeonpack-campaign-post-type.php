@@ -153,22 +153,35 @@ if ( !function_exists( 'pigeonpack_human_readable_recipients' ) ) {
 	 * @since 0.0.1
 	 * @uses do_action() To call 'pigeonpack_human_readable_recipients' for future addons
 	 *
-	 * @param string $recipients Recipient type Role or List
+	 * @param string $recipients_arr Recipient type Role or List
 	 * @return string Human readable version of the recipient
 	 */	
-	function pigeonpack_human_readable_recipients( $recipients ) {
+	function pigeonpack_human_readable_recipients( $recipients_arr ) {
 	
-		if ( 'R' === substr( $recipients, 0, 1 ) ) {
+		$string = '';
+		
+
+		if ( !is_array( $recipients_arr ) )
+			$recipients_arr = array( $recipients_arr );
 			
-			return substr( $recipients, 1 );
-			
-		} else if ( 'L' === substr( $recipients, 0, 1 ) ) {
-			
-			return get_the_title( substr( $recipients, 1 ) );
+		foreach ( $recipients_arr as $recipients ) {
+		
+			if ( 'R' === substr( $recipients, 0, 1 ) ) {
+				
+				$role = get_role( substr( $recipients, 1 ) );
+				$name = translate_user_role( $role->name );
+				$string[] = $name;
+				
+			} else if ( 'L' === substr( $recipients, 0, 1 ) ) {
+				
+				$string[] = get_the_title( substr( $recipients, 1 ) );
+				
+			}
 			
 		}
-		
-		do_action( 'pigeonpack_human_readable_recipients', $recipients );
+		do_action( 'pigeonpack_human_readable_recipients', $recipients_arr );
+				
+		return implode( ', ', $string );
 		
 	}
 
@@ -232,7 +245,7 @@ if ( !function_exists( 'pigeonpack_campaign_meta_box' ) ) {
 		$wp_post_digest = wp_parse_args( $wp_post_digest, $default_wp_post_digest );
 		
 		$from_name = get_post_meta( $post->ID, '_pigeonpack_from_name', true );
-		$from_name = ( $from_name ) ? $from_name : $pigeonpack_settings['from_name'];
+		$from_name = ( $from_name ) ? $from_name : htmlspecialchars( stripcslashes( $pigeonpack_settings['from_name'] ) );
 		
 		$from_email = get_post_meta( $post->ID, '_pigeonpack_from_email', true );
 		$from_email = ( $from_email ) ? $from_email : $pigeonpack_settings['from_email'];
@@ -412,7 +425,7 @@ if ( !function_exists( 'pigeonpack_campaign_meta_box' ) ) {
 					<tr>
 						<th><label for="recipients"><?php _e( 'Campaign Recipients', 'pigeonpack' ); ?></label></th>
 						<td>
-							<select id='recipients' name='recipients'>
+							<select id='recipients' name='recipients[]' multiple="multiple">
 								<?php pigeonpack_dropdown_roles( $recipients ); ?>
 								<?php pigeonpack_dropdown_lists( $recipients ); ?>
 							</select>
@@ -453,63 +466,64 @@ if ( !function_exists( 'save_pigeonpack_campaign_meta' ) ) {
 	 * @since 0.0.1
 	 * @uses do_action() To call 'pigeonpack_campaign_type_change' for future addons
 	 *
-	 * @param int $campaign_id WordPress post ID
+	 * @param int $post_id WordPress post ID
 	 */			
-	function save_pigeonpack_campaign_meta( $campaign_id ) {
+	function save_pigeonpack_campaign_meta( $post_id ) {
 	
-		if ( isset( $_REQUEST['post_type'] ) && 'pigeonpack_campaign' !== $_REQUEST['post_type'] )
+		if ( !empty( $_REQUEST['post_type'] ) && 'pigeonpack_campaign' !== $_REQUEST['post_type'] )
 			return;
 			
-		if ( !current_user_can( 'edit_pigeonpack_campaign', $campaign_id ) )
+		if ( !current_user_can( 'edit_pigeonpack_campaign', $post_id ) )
 			return;
 			
-		if ( !isset( $_REQUEST['pigeonpack_edit_nonce'] ) || !wp_verify_nonce( $_REQUEST['pigeonpack_edit_nonce'], plugin_basename( __FILE__ ) ) )
+		if ( empty( $_REQUEST['pigeonpack_edit_nonce'] ) || !wp_verify_nonce( $_REQUEST['pigeonpack_edit_nonce'], plugin_basename( __FILE__ ) ) )
 			return;
 			
-		if ( isset( $_REQUEST['pigeonpack_text_email'] ) && !empty( $_REQUEST['pigeonpack_text_email'] ) )
-			update_post_meta( $campaign_id, '_pigeonpack_campaign_text_format', $_REQUEST['pigeonpack_text_email'] );
+		if ( !empty( $_REQUEST['pigeonpack_text_email'] ) )
+			update_post_meta( $post_id, '_pigeonpack_campaign_text_format', $_REQUEST['pigeonpack_text_email'] );
 			
-		if ( isset( $_REQUEST['campaign_type'] ) ) {
+		if ( !empty( $_REQUEST['campaign_type'] ) ) {
 			
-			if ( ( $current_campaign_type = get_post_meta( $campaign_id, '_pigeonpack_campaign_type', true ) )
+			if ( ( $current_campaign_type = get_post_meta( $post_id, '_pigeonpack_campaign_type', true ) )
 				&& $current_campaign_type !== $_REQUEST['campaign_type'] ) {
 
 				if ( 'wp_post' === $current_campaign_type )
-					remove_pigeonpack_wp_post_campaign( $campaign_id );
+					remove_pigeonpack_wp_post_campaign( $post_id );
 				
 				// If new campaign types are added, we'll need to extend this functionality with this action
-				do_action( 'pigeonpack_campaign_type_change', $campaign_id );
+				do_action( 'pigeonpack_campaign_type_change', $post_id );
 				
 			}
 			
-			update_post_meta( $campaign_id, '_pigeonpack_campaign_type', $_REQUEST['campaign_type'] );
+			update_post_meta( $post_id, '_pigeonpack_campaign_type', $_REQUEST['campaign_type'] );
 			
 		}
 			
-		if ( isset( $_REQUEST['recipients'] ) )
-			update_post_meta( $campaign_id, '_pigeonpack_recipients', $_REQUEST['recipients'] );
+		if ( !empty( $_REQUEST['recipients'] ) )
+			update_post_meta( $post_id, '_pigeonpack_recipients', $_REQUEST['recipients'] );
 			
-		if ( isset( $_REQUEST['wp_post_type'] ) ) {
+		if ( !empty( $_REQUEST['wp_post_type'] ) )
+			update_post_meta( $post_id, '_pigeonpack_wp_post_type', $_REQUEST['wp_post_type'] );
 			
-			if ( ( $current_wp_post_type = get_post_meta( $campaign_id, '_pigeonpack_wp_post_type', true ) )
+			if ( ( $current_wp_post_type = get_post_meta( $post_id, '_pigeonpack_wp_post_type', true ) )
 				&& $current_wp_post_type !== $_REQUEST['wp_post_type'] ) {
 
 				// We've already done what we need to do to remove the 'individual' wp_post campaigns
 				// now we just need to remove the next digest schedule.
 				if ( 'digest' === $current_wp_post_type ) 
-					remove_pigeonpack_wp_post_digest_schedule( $campaign_id );
+					remove_pigeonpack_wp_post_digest_schedule( $post_id );
 				
 			}
 			
-			update_post_meta( $campaign_id, '_pigeonpack_wp_post_type', $_REQUEST['wp_post_type'] );
+			update_post_meta( $post_id, '_pigeonpack_wp_post_type', $_REQUEST['wp_post_type'] );
 			
 		}
 			
-		if ( isset( $_REQUEST['clude_cat'] ) )
-			update_post_meta( $campaign_id, '_pigeonpack_clude_cat', $_REQUEST['clude_cat'] );
+		if ( !empty( $_REQUEST['clude_cat'] ) )
+			update_post_meta( $post_id, '_pigeonpack_clude_cat', $_REQUEST['clude_cat'] );
 			
-		if ( isset( $_REQUEST['clude_cats'] ) )
-			update_post_meta( $campaign_id, '_pigeonpack_clude_cats', $_REQUEST['clude_cats'] );
+		if ( !empty( $_REQUEST['clude_cats'] ) )
+			update_post_meta( $post_id, '_pigeonpack_clude_cats', $_REQUEST['clude_cats'] );
 			
 		if ( isset( $_REQUEST['wp_post_digest_frequency'] ) )
 			$wp_post_digest['freq'] = $_REQUEST['wp_post_digest_frequency'];
@@ -526,16 +540,16 @@ if ( !function_exists( 'save_pigeonpack_campaign_meta' ) ) {
 		if ( isset( $_REQUEST['wp_post_digest_days'] ) )
 			$wp_post_digest['days'] = $_REQUEST['wp_post_digest_days'];
 			
-		if ( isset( $wp_post_digest) && !empty( $wp_post_digest ) )
-			update_post_meta( $campaign_id, '_pigeonpack_wp_post_digest', $wp_post_digest );
+		if ( !empty( $wp_post_digest ) )
+			update_post_meta( $post_id, '_pigeonpack_wp_post_digest', $wp_post_digest );
 		else
-			delete_post_meta( $campaign_id, '_pigeonpack_wp_post_digest' );
+			delete_post_meta( $post_id, '_pigeonpack_wp_post_digest' );
 		
-		if ( isset( $_REQUEST['pigeonpack_from_name'] ) )
-			update_post_meta( $campaign_id, '_pigeonpack_from_name', $_REQUEST['pigeonpack_from_name'] );
+		if ( !empty( $_REQUEST['pigeonpack_from_name'] ) )
+			update_post_meta( $post_id, '_pigeonpack_from_name', $_REQUEST['pigeonpack_from_name'] );
 			
-		if ( isset( $_REQUEST['pigeonpack_from_email'] ) )
-			update_post_meta( $campaign_id, '_pigeonpack_from_email', $_REQUEST['pigeonpack_from_email'] );
+		if ( !empty( $_REQUEST['pigeonpack_from_email'] ) )
+			update_post_meta( $post_id, '_pigeonpack_from_email', $_REQUEST['pigeonpack_from_email'] );
 			
 	}
 	add_action( 'save_post', 'save_pigeonpack_campaign_meta' );
@@ -563,8 +577,10 @@ if ( !function_exists( 'pigeonpack_dropdown_roles' ) ) {
 			
 			$name = translate_user_role( $details['name'] );
 			
-			if ( 'R' . $role === $selected ) // preselect specified role
-				$p = "\n\t<option selected='selected' value='R" . esc_attr( $role ) . "'>$name (" . __( 'Role', 'pigeonpack' ) . ")</option>";
+			if ( is_array( $selected ) && in_array( 'R' . $role, $selected ) )
+				$p .= "\n\t<option selected='selected' value='R" . esc_attr( $role ) . "'>$name (" . __( 'Role', 'pigeonpack' ) . ")</option>";
+			else if ( 'R' . $role === $selected ) // preselect specified role
+				$p .= "\n\t<option selected='selected' value='R" . esc_attr( $role ) . "'>$name (" . __( 'Role', 'pigeonpack' ) . ")</option>";
 			else
 				$r .= "\n\t<option value='R" . esc_attr( $role ) . "'>$name (" . __( 'Role', 'pigeonpack' ) . ")</option>";
 				
@@ -599,8 +615,10 @@ if ( !function_exists( 'pigeonpack_dropdown_lists' ) ) {
 	
 		foreach ( $lists as $list ) {
 			
-			if ( 'L' . $list->ID === $selected ) // preselect specified role
-				$p = "\n\t<option selected='selected' value='L" . esc_attr( $list->ID ) . "'>" . $list->post_title . " (" . __( 'List', 'pigeonpack' ) . ")</option>";
+			if ( is_array( $selected ) && in_array( 'L' . $list->ID, $selected ) )
+				$p .= "\n\t<option selected='selected' value='L" . esc_attr( $list->ID ) . "'>" . $list->post_title . " (" . __( 'List', 'pigeonpack' ) . ")</option>";
+			else if ( 'L' . $list->ID === $selected ) // preselect specified role
+				$p .= "\n\t<option selected='selected' value='L" . esc_attr( $list->ID ) . "'>" . $list->post_title . " (" . __( 'List', 'pigeonpack' ) . ")</option>";
 			else
 				$r .= "\n\t<option value='L" . esc_attr( $list->ID ) . "'>" . $list->post_title . " (" . __( 'List', 'pigeonpack' ) . ")</option>";
 			
@@ -624,27 +642,35 @@ if ( !function_exists( 'unset_pigeonpack_wp_post_campaigns_option_after_delete_p
 	 *
 	 * @param int $campaign_id WordPress Post ID
 	 */	
-	function pigeonpack_campaign_deleted( $campaign_id ) {
+	function unset_pigeonpack_wp_post_campaigns_option_after_delete_post( $campaign_id ) {
 		
 		if ( !( $campaign_id = absint( $campaign_id ) )  )
 			return false;
 
-		$campaign_type = get_post_meta( $post->ID, '_pigeonpack_campaign_type', true );
+		$campaign_type = get_post_meta( $campaign_id, '_pigeonpack_campaign_type', true );
 		
 		if ( 'wp_post' === $campaign_type ) {
 			
-			remove_pigeonpack_wp_post_campaign( $post->ID );
+			remove_pigeonpack_wp_post_campaign( $campaign_id );
 			
-			$current_wp_post_type = get_post_meta( $post->ID, '_pigeonpack_wp_post_type', true );
+			$current_wp_post_type = get_post_meta( $campaign_id, '_pigeonpack_wp_post_type', true );
 			
 			if ( 'digest' === $current_wp_post_type )
-				remove_pigeonpack_wp_post_digest_schedule( $post->ID );
+				remove_pigeonpack_wp_post_digest_schedule( $campaign_id );
 				
 		}
 				
-		do_action( 'pigeonpack_campaign_deleted', $post->ID );
+		do_action( 'pigeonpack_campaign_deleted', $campaign_id );
+		
+		$post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
+		foreach( $post_campaigns as $campaign ) {
+		
+			if ( $post_id !== $campaign['id'] )
+				$new_post_campaigns[] = $campaign;
+		}
+		update_option( 'pigeonpack_wp_post_campaigns', $new_post_campaigns );
 		
 	}
-	add_action( 'after_delete_post', 'pigeonpack_campaign_deleted' );
+	add_action( 'after_delete_post', 'unset_pigeonpack_wp_post_campaigns_option_after_delete_post' );
 
 }

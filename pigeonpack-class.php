@@ -38,7 +38,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 					
 			add_action( 'admin_menu', array( $this, 'pigeonpack_admin_menu' ) );
 			
-			add_action( 'wp_ajax_pigeonpack_api_ajax_verify', array( $this, 'pigeonpack_api_ajax_verify' ) );
+			add_action( 'wp_ajax_verify', array( $this, 'pigeonpack_api_ajax_verify' ) );
 			
 			add_action( 'transition_post_status', array( $this, 'pigeonpack_transition_post_status' ), 100, 3 );
 			

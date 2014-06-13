@@ -257,7 +257,7 @@ if ( !function_exists ( 'pigeonpack_list_subscriber_box' ) ) {
 				
 				echo '</tr>';
 				echo '</thead>';
-								
+					
 				if ( isset( $_REQUEST['pp_limit'] ) )
 					$limit = $_REQUEST['pp_limit'];
 				else
@@ -1169,9 +1169,10 @@ if ( !function_exists( 'add_pigeonpack_subscriber' ) ) {
 		
 		$message = '';
 		$new_subscriber = true;
-		$double_optin = false;
 		
 		if ( 'pending' === $status ) {
+			
+			$double_optin = get_post_meta( $list_id, '_pigeonpack_double_optin_settings', true );
 				
 			if ( isset( $double_optin['enabled'] ) && 'on' === $double_optin['enabled'] ) {
 				
@@ -1406,7 +1407,7 @@ if ( !function_exists( 'subscriber_row' ) ) {
 		if ( !empty( $subscriber ) ) {
 	
 			$subscriber_meta = maybe_unserialize( $subscriber['subscriber_meta'] );
-					
+		
 			$output .= '<td><input type="checkbox" name="pigeonpack_list_delete[]" value="' . $subscriber['id'] . '" /></td>';
 			$output .= '<td><input type="button" name="edit_subscriber" subscriber_id="' . $subscriber['id'] . '" class="edit-subscriber button button-primary button-small" value="' . __( 'Edit', 'pigeonpack' ) . '" /></td>';
 			
@@ -1528,8 +1529,6 @@ if ( !function_exists( 'wp_ajax_update_pigeonpack_subscriber' ) ) {
 			die();
 		
 		$subscriber_meta = array();
-		
-		error_log( $_REQUEST );
 		
 		foreach ( $_REQUEST['data'] as $data ) {
 		

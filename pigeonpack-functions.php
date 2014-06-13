@@ -39,7 +39,7 @@ if ( !function_exists( 'pigeonpack_campaign_scheduler' ) ) {
 		
 		//we want to schedule an event to happen right now, to send out the first batch of emails
 		//we do not want to call the pigeonpack_mail function directly, it can cause a delay when publish a post.
-		wp_schedule_single_event( current_time( 'timestamp', 1 ), 'scheduled_pigeonpack_mail', array( $campaign_id, $posts, 0 ) );
+		wp_schedule_single_event( current_time( 'timestamp', 1 ), 'scheduled_pigeonpack_mail', array( $campaign_id, $posts, 0, null ) );
 	
     }   
 	
@@ -134,15 +134,22 @@ if ( !function_exists( 'pigeonpack_wp_post_campaign_init' ) ) {
 		$post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
 		
 		$type = get_post_meta( $campaign_id, '_pigeonpack_wp_post_type', true );
+		
+		// Change type if we're updating an existing campaign
+		foreach( $post_campaigns as $post_campaign ) {
+		
+			if ( $campaign_id === $post_campaign['id'] )
+				$post_campaign['type'] = $type;
+			
+		}
 	
 		$new_campaign = array(
-							'id'	=> $campaign_id,
-							'type'	=> $type,
-							);
+			'id'	=> $campaign_id,
+			'type'	=> $type,
+		);
 		
-		if ( $i = array_search( $new_campaign, $post_campaigns ) ) //update the type for existing campaigns
-			$post_campaigns[$i]['type'] = $type;
-		else //add new campaigns
+		//only add NEW campaigns				
+		if ( !in_array( $new_campaign, $post_campaigns ) )
 			$post_campaigns[] = $new_campaign;
 		
 		//update with modified array
@@ -226,7 +233,7 @@ if ( !function_exists( 'pigeonpack_wp_post_campaign_init' ) ) {
 			
 			// if a previous schedule already exists for this campaign, we want to unschedule it and schedule the new event
 			if ( !empty( $previous_schedule) && $next_schedule = wp_next_scheduled( 'scheduled_wp_post_digest_campaign', $previous_schedule[1] ) )
-				if ( $previous_schedule[0] === $next_schedule ) //double check that the schedules are the same before removing it
+				if ( $previous_schedule[0] === $next_schedule ) //doubel check that the schedules are the same before removing it
 					wp_unschedule_event( $previous_schedule[0], 'scheduled_wp_post_digest_campaign', $previous_schedule[1] );
 			
 			//wp_schedule_single_event( $schedule, 'scheduled_wp_post_digest_campaign', array( $campaign->ID, $schedule ) );
@@ -242,51 +249,51 @@ if ( !function_exists( 'pigeonpack_wp_post_campaign_init' ) ) {
 }
 
 if ( !function_exists( 'remove_pigeonpack_wp_post_campaign' ) ) {
-
-	/**
-	 * Removes campaign from pigeonpack_wp_post_campaigns option in WordPress options table
-	 *
-	 * @since 0.0.1
-	 *
-	 * @param int $campaign_id ID of campaign being initialized
-	 */
-	function remove_pigeonpack_wp_post_campaign( $campaign_id ) {
-	
-		if ( $wp_post_type = get_post_meta( $campaign_id, '_pigeonpack_wp_post_type', true ) ) {
-						
-			$post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
-			
-			// If the current campaign is listed as a wp_post campaign, unset it and update the option
-			if ( $i = array_search( array( 'id' => $campaign_id, 'type' => $wp_post_type ), $post_campaigns ) ) {
-				
-				unset( $post_campaigns[$i] );			
-				update_option( 'pigeonpack_wp_post_campaigns', $post_campaigns );
-			
-			}
-		
-		}
-		
-	}
-	
+ 
+        /**
+         * Removes campaign from pigeonpack_wp_post_campaigns option in WordPress options table
+         *
+         * @since 0.0.1
+         *
+         * @param int $campaign_id ID of campaign being initialized
+         */
+        function remove_pigeonpack_wp_post_campaign( $campaign_id ) {
+        
+                if ( $wp_post_type = get_post_meta( $campaign_id, '_pigeonpack_wp_post_type', true ) ) {
+                                                
+                        $post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
+                        
+                        // If the current campaign is listed as a wp_post campaign, unset it and update the option
+                        if ( $i = array_search( array( 'id' => $campaign_id, 'type' => $wp_post_type ), $post_campaigns ) ) {
+                                
+                                unset( $post_campaigns[$i] );                   
+                                update_option( 'pigeonpack_wp_post_campaigns', $post_campaigns );
+                        
+                        }
+                
+                }
+                
+        }
+        
 }
-
+ 
 if ( !function_exists( 'remove_pigeonpack_wp_post_digest_schedule' ) ) {
-
-	/**
-	 * Removes digest campaign schedule
-	 *
-	 * @since 0.0.1
-	 *
-	 * @param int $campaign_id ID of campaign being initialized
-	 */
-	function remove_pigeonpack_wp_post_digest_schedule( $campaign_id ) {
-				
-		$previous_schedule = get_post_meta( $campaign_id, '_scheduled_event', true );
-		wp_unschedule_event( $previous_schedule[0], 'scheduled_wp_post_digest_campaign', $previous_schedule[1] );
-		delete_post_meta( $campaign_id, '_scheduled_event' );
-		
-	}
-	
+ 
+        /**
+         * Removes digest campaign schedule
+         *
+         * @since 0.0.1
+         *
+         * @param int $campaign_id ID of campaign being initialized
+         */
+        function remove_pigeonpack_wp_post_digest_schedule( $campaign_id ) {
+                                
+                $previous_schedule = get_post_meta( $campaign_id, '_scheduled_event', true );
+                wp_unschedule_event( $previous_schedule[0], 'scheduled_wp_post_digest_campaign', $previous_schedule[1] );
+                delete_post_meta( $campaign_id, '_scheduled_event' );
+                
+        }
+        
 }
 
 if ( !function_exists( 'do_pigeonpack_wp_post_campaigns' ) ) {
@@ -647,7 +654,7 @@ if ( !function_exists( 'pigeonpack_unmerge_misc' ) ) {
 	 * @param string $subject Email subject to be merged
 	 * @param string $message Email body to be merged
 	 * @param string $footer Email footer to be merged
-	 * @param array $list_info Email footer to be merged
+	 * @param array $list_info Email list info to be merged
 	 * @return array Merged subject, merged body, and merged footer
 	 */
 	function pigeonpack_unmerge_misc( $subject, $message, $footer, $list_info ) {
@@ -759,7 +766,7 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 	 * @param array $posts if WordPress post campaign, which posts are included in this campaign
 	 * @param int $offset The offset of which subscribers need to be processed
 	 */
-	function pigeonpack_mail( $campaign, $posts = array(), $offset = 0 ) {
+	function pigeonpack_mail( $campaign, $posts = array(), $offset = 0, $recipients_arr = array() ) {
 		
 		$campaign = get_post( $campaign );
 	
@@ -774,7 +781,8 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 		$from_email = get_post_meta( $campaign->ID, '_pigeonpack_from_email', true );
 		$from_email = ( $from_email ) ? $from_email : $pigeonpack_settings['from_email'];
 		
-		$recipients = get_post_meta( $campaign->ID, '_pigeonpack_recipients', true );
+		if ( empty( $recipients_arr ) )
+			$recipients_arr = get_post_meta( $campaign->ID, '_pigeonpack_recipients', true );
 		
 		$headers[] = 'From: ' . $from_name . ' <' . $from_email . '>';
 		$headers = apply_filters( 'pre_subscriber_loop_pigeonpack_headers', $headers );
@@ -782,66 +790,71 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 		$subject = $campaign->post_title;
 		$message =  apply_filters( 'the_content', $campaign->post_content );
 		$footer = apply_filters( 'default_pigeonpack_mail_footer', '{{REMINDER}}{{REQUIRED_FOOTER_CONTENT}}{{UNSUBSCRIBE_URL}}' );
-		
-		list( $subject, $message, $footer ) = pigeonpack_unmerge_misc( $subject, $message, $footer, extract_pigeonpack_list_id( $recipients ) );
-		
-		if ( !empty( $posts ) ) {
-		
-			//just need to double check and make sure a post wasn't moved to an excluded category
-			foreach ( $posts as $key => $post_id ) {
+					
+		if ( !is_array( $recipients_arr ) )
+			$recipients_arr = array( $recipients_arr );
 			
-				if ( pigeonpack_exclude_post( $campaign->ID, $post_id ) )
-					unset( $posts[$key] );
+		foreach( $recipients_arr as $recipients ) {
 			
+			list( $subject, $message, $footer ) = pigeonpack_unmerge_misc( $subject, $message, $footer, extract_pigeonpack_list_id( $recipients ) );
+			
+			if ( !empty( $posts ) ) {
+			
+				//just need to double check and make sure a post wasn't moved to an excluded category
+				foreach ( $posts as $key => $post_id ) {
+				
+					if ( pigeonpack_exclude_post( $campaign->ID, $post_id ) )
+						unset( $posts[$key] );
+				
+				}
+				
+				list( $subject, $message ) = pigeonpack_unmerge_postdata( $subject, $message, $posts );
+				
 			}
+						
+			$args = array(
+						'limit' 	=> $pigeonpack_settings['emails_per_cycle'],
+						'offset' 	=> $offset,
+					);
+			$subscribers = get_pigeonpack_subscriber_by_type( $recipients, $args );
 			
-			list( $subject, $message ) = pigeonpack_unmerge_postdata( $subject, $message, $posts );
+			if ( !empty( $subscribers ) ) {
+					
+				// If we're using an SMTP server, set it up now...
+				if ( isset( $pigeonpack_settings['smtp_enable'] ) && 'smtp' === $pigeonpack_settings['smtp_enable'] )
+					add_action( 'phpmailer_init', 'pigeonpack_phpmailer_init' );
+					
+				foreach ( $subscribers as $subscriber ) {
+					
+					list( $email, $merged_subject, $merged_message, $merged_footer ) = pigeonpack_unmerge_subscriber( $subscriber, $subject, $message, $footer );
+					
+					$content_type = 'content-type: ' . pigeonpack_subscriber_content_type( $subscriber );
+					
+					$body = $merged_message . $merged_footer;
+					
+					if ( 'content-type: text/plain' === $content_type ) {
+						
+						require_once( PIGEON_PACK_PLUGIN_PATH . '/includes/html2txt.php' );
+						
+						$body = convert_html_to_text( $body );
+						
+					}
+					
+					$subscriber_headers = apply_filters( 'subscriber_loop_pigeonpack_headers', array_merge( $headers, array( $content_type ) ), $subscriber );
 			
-		}
-					
-		$args = array(
-					'limit' 	=> $pigeonpack_settings['emails_per_cycle'],
-					'offset' 	=> $offset,
-				);
-				
-		$subscribers = get_pigeonpack_subscriber_by_type( $recipients, $args );
-		
-		if ( !empty( $subscribers ) ) {
-				
-			// If we're using an SMTP server, set it up now...
-			if ( isset( $pigeonpack_settings['smtp_enable'] ) && 'smtp' === $pigeonpack_settings['smtp_enable'] )
-				add_action( 'phpmailer_init', 'pigeonpack_phpmailer_init' );
-				
-			foreach ( $subscribers as $subscriber ) {
-				
-				list( $email, $merged_subject, $merged_message, $merged_footer ) = pigeonpack_unmerge_subscriber( $subscriber, $subject, $message, $footer );
-				
-				$content_type = 'content-type: ' . pigeonpack_subscriber_content_type( $subscriber );
-				
-				$body = $merged_message . $merged_footer;
-				
-				if ( 'content-type: text/plain' === $content_type ) {
-					
-					require_once( PIGEON_PACK_PLUGIN_PATH . '/includes/html2txt.php' );
-					
-					$body = convert_html_to_text( $body );
+					wp_mail( $email, strip_tags( $merged_subject ), $body, $subscriber_headers );
 					
 				}
 				
-				$subscriber_headers = apply_filters( 'subscriber_loop_pigeonpack_headers', array_merge( $headers, array( $content_type ) ), $subscriber );
-				
-				wp_mail( $email, strip_tags( $merged_subject ), $body, $subscriber_headers );
+				//schedule the next event for this campaign...
+				wp_schedule_single_event( current_time( 'timestamp', 1 ) + ( $pigeonpack_settings['email_cycle'] * MINUTE_IN_SECONDS ), 'scheduled_pigeonpack_mail', array( $campaign->ID, $posts, $offset + $pigeonpack_settings['emails_per_cycle'], $recipients ) );
 				
 			}
-			
-			//schedule the next event for this campaign...
-			$offset += $pigeonpack_settings['emails_per_cycle'];
-			wp_schedule_single_event( current_time( 'timestamp', 1 ) + ( $pigeonpack_settings['email_cycle'] * MINUTE_IN_SECONDS ), 'scheduled_pigeonpack_mail', array( $campaign->ID, $posts, $offset ) );
 			
 		}
 		
 	}
-	add_action( 'scheduled_pigeonpack_mail', 'pigeonpack_mail', 10, 3 ); //wp_schedule_single_event action
+	add_action( 'scheduled_pigeonpack_mail', 'pigeonpack_mail', 10, 4 ); //wp_schedule_single_event action
 	
 }
 

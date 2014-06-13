@@ -1290,7 +1290,7 @@ if ( !function_exists( 'update_pigeonpack_subscriber' ) ) {
 		if ( empty( $result ) ) //subscriber doesn't exist
 			return false;
 			
-		if ( isset( $subscriber_meta['pigeonpack_email_format'] ) ) {
+		if ( !empty( $subscriber_meta['pigeonpack_email_format'] ) ) {
 			
 			$format = $subscriber_meta['pigeonpack_email_format'];
 			unset( $subscriber_meta['pigeonpack_email_format'] ); // We don't want to include this setting in the subscriber_meta column
@@ -1308,11 +1308,16 @@ if ( !function_exists( 'update_pigeonpack_subscriber' ) ) {
 							);
 		
 		$return = $wpdb->update( $wpdb->prefix . 'pigeonpack_subscribers', $update_subscriber, array( 'id' => $subscriber_id ) );
-					
-		if ( $return )
-			return $subscriber_id;
-		else
-			return false;
+		
+		if ( $return ) {
+
+			//Need to generate a new hash too, incase they changed their email address		
+			$hash = pigeonpack_hash( $subscriber_meta['M0'] );
+			return update_pigeonpack_subscriber_hash( $subscriber_id, $hash );
+
+		}
+		
+		return false;
 		
 	}
 

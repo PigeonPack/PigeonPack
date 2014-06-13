@@ -426,8 +426,7 @@ if ( !function_exists( 'pigeonpack_campaign_meta_box' ) ) {
 						<th><label for="recipients"><?php _e( 'Campaign Recipients', 'pigeonpack' ); ?></label></th>
 						<td>
 							<select id='recipients' name='recipients[]' multiple="multiple">
-								<?php pigeonpack_dropdown_roles( $recipients ); ?>
-								<?php pigeonpack_dropdown_lists( $recipients ); ?>
+								<?php pigeonpack_dropdown_recipients( $recipients ); ?>
 							</select>
 						</td>
 					</tr>
@@ -555,7 +554,7 @@ if ( !function_exists( 'save_pigeonpack_campaign_meta' ) ) {
 	
 }
 
-if ( !function_exists( 'pigeonpack_dropdown_roles' ) ) { 
+if ( !function_exists( 'pigeonpack_dropdown_recipients' ) ) { 
 	
 	/**
 	 * Helper Function for listing roles (modified version of WordPress wp_dropdown_roles)
@@ -565,7 +564,7 @@ if ( !function_exists( 'pigeonpack_dropdown_roles' ) ) {
 	 * @param int|string ID of currently selected list option
 	 * @return string HTML formated <option> block of WordPress roles
 	 */
-    function pigeonpack_dropdown_roles( $selected = false ) { 
+    function pigeonpack_dropdown_recipients( $selected = false ) { 
 		
 		$p = '';
 		$r = '';
@@ -585,31 +584,10 @@ if ( !function_exists( 'pigeonpack_dropdown_roles' ) ) {
 				
 		}
 		
-		echo $p . $r;
-		
-    }   
-	
-}
-
-if ( !function_exists( 'pigeonpack_dropdown_lists' ) ) { 
-	
-	/**
-	 * Helper Function for listing Pigeon Pack Lists
-	 *
-	 * @since 0.0.1
-	 *
-	 * @param int|string ID of currently selected list option
-	 * @return string HTML formated <option> block of Pigedon Pack lists
-	 */
-    function pigeonpack_dropdown_lists( $selected = false ) { 
-		
-		$p = '';
-		$r = '';
-	
 		$args = array(
-					'posts_per_page'	=> -1,
-					'post_type'			=> 'pigeonpack_list'
-				);
+			'posts_per_page' 	=> -1,
+			'post_type' 		=> 'pigeonpack_list'
+		);
 		$lists = get_posts( $args );
 	
 		foreach ( $lists as $list ) {
@@ -624,7 +602,7 @@ if ( !function_exists( 'pigeonpack_dropdown_lists' ) ) {
 		}
 		
 		echo $p . $r;
-	
+		
     }   
 	
 }

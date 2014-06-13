@@ -1172,7 +1172,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 				switch( $_REQUEST['pigeonpack'] ) {
 				
 					case 'subscribe':
-						process_pigeonpack_subscribe( $_REQUEST );
+						process_pigeonpack_double_optin_subscribe( $_REQUEST );
 						break;
 						
 					case 'unsubscribe':

@@ -502,8 +502,7 @@ if ( !function_exists( 'save_pigeonpack_campaign_meta' ) ) {
 		if ( !empty( $_REQUEST['recipients'] ) )
 			update_post_meta( $post_id, '_pigeonpack_recipients', $_REQUEST['recipients'] );
 			
-		if ( !empty( $_REQUEST['wp_post_type'] ) )
-			update_post_meta( $post_id, '_pigeonpack_wp_post_type', $_REQUEST['wp_post_type'] );
+		if ( !empty( $_REQUEST['wp_post_type'] ) ) {
 			
 			if ( ( $current_wp_post_type = get_post_meta( $post_id, '_pigeonpack_wp_post_type', true ) )
 				&& $current_wp_post_type !== $_REQUEST['wp_post_type'] ) {

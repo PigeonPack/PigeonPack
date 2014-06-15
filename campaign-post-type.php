@@ -158,8 +158,7 @@ if ( !function_exists( 'pigeonpack_human_readable_recipients' ) ) {
 	 */	
 	function pigeonpack_human_readable_recipients( $recipients_arr ) {
 	
-		$string = '';
-		
+		$string = array();
 
 		if ( !is_array( $recipients_arr ) )
 			$recipients_arr = array( $recipients_arr );
@@ -200,6 +199,7 @@ if ( !function_exists( 'add_pigeonpack_campaigns_metaboxes' ) ) {
 	function add_pigeonpack_campaigns_metaboxes() {
 		
 		add_meta_box( 'pigeonpack_campaign_meta_box', __( 'Pigeon Pack Campaign Options', 'pigeonpack' ), 'pigeonpack_campaign_meta_box', 'pigeonpack_campaign', 'normal', 'high' );
+		add_meta_box( 'pigeonpack_campaign_replacement_args_meta_box', __( 'Pigeon Pack Replacement Arguments', 'pigeonpack' ), 'pigeonpack_campaign_replacement_args_meta_box', 'pigeonpack_campaign', 'normal', 'high' );
 		
 		do_action( 'add_pigeonpack_campaigns_metaboxes' );
 		
@@ -455,6 +455,84 @@ if ( !function_exists( 'pigeonpack_campaign_meta_box' ) ) {
 	
 }
 
+if ( !function_exists( 'pigeonpack_campaign_replacement_args_meta_box' ) ) {
+		
+	/**
+	 * Called by add_meta_box function call
+	 *
+	 * Outputs metabox for campaign
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param object $post WordPress post object
+	 */			
+	function pigeonpack_campaign_replacement_args_meta_box( $post ) {
+				
+		?>
+		
+		<div id="pigeonpack_campaign_replacement_args_metabox">
+		
+			<table id="pigeonpack_campaign_replacement_args_table" class="pigeonpack_table">
+				
+				<tbody>
+					
+					<tr>
+						<th><?php _e( '{{POST_LOOP}}...{{POST_END_LOOP}}', 'pigeonpack' ); ?></th>
+						<td>
+						
+						</td>
+					</tr>
+					<tr>
+						<th><?php _e( '{{POST_TITLE}}', 'pigeonpack' ); ?></th>
+						<td>
+						
+						</td>
+					</tr>
+					<tr>
+						<th><?php _e( '{{POST_CONTENT}}', 'pigeonpack' ); ?></th>
+						<td>
+						
+						</td>
+					</tr>
+					<tr>
+						<th><?php _e( '{{POST_EXCERPT}}', 'pigeonpack' ); ?></th>
+						<td>
+						
+						</td>
+					</tr>
+					<tr>
+						<th><?php _e( '{{POST_AUTHOR}}', 'pigeonpack' ); ?></th>
+						<td>
+						
+						</td>
+					</tr>
+					<tr>
+						<th><?php _e( '{{POST_DATE}}', 'pigeonpack' ); ?></th>
+						<td>
+						
+						</td>
+					</tr>
+					<tr>
+						<th><?php _e( '{{POST_URL}}', 'pigeonpack' ); ?></th>
+						<td>
+						
+						</td>
+					</tr>
+				
+				</tbody>
+			
+			</table>
+			
+			<?php wp_nonce_field( plugin_basename( __FILE__ ), 'pigeonpack_edit_nonce' ); ?>
+		
+		</div>
+		
+		<?php	
+		
+	}
+	
+}
+
 if ( !function_exists( 'save_pigeonpack_campaign_meta' ) ) {
 		
 	/**
@@ -467,7 +545,7 @@ if ( !function_exists( 'save_pigeonpack_campaign_meta' ) ) {
 	 *
 	 * @param int $post_id WordPress post ID
 	 */			
-	function save_pigeonpack_campaign_meta( $post_id ) {
+	function save_pigeonpack_campaign_meta( $post_id, $post, $update ) {
 	
 		if ( !empty( $_REQUEST['post_type'] ) && 'pigeonpack_campaign' !== $_REQUEST['post_type'] )
 			return;
@@ -549,8 +627,42 @@ if ( !function_exists( 'save_pigeonpack_campaign_meta' ) ) {
 		if ( !empty( $_REQUEST['pigeonpack_from_email'] ) )
 			update_post_meta( $post_id, '_pigeonpack_from_email', $_REQUEST['pigeonpack_from_email'] );
 			
+		//If this campaign is published, we need to initialize the campaign 	
+		if ( 'publish' === $post->post_status ) {
+						
+			switch ( $_REQUEST['campaign_type'] ) {
+				
+				case ( 'wp_post' ):
+					pigeonpack_wp_post_campaign_init( $post->ID );
+					break;
+			
+				case ( 'single_campaign' ):
+				default:
+					pigeonpack_campaign_scheduler( $post->ID );
+					break;
+				
+			}
+			
+			do_action( 'pigeonpack_campaign_status_published', $post->ID );
+		
+		//If this campaign has been unpublished, we need to uninitialize the campaign	
+		} else if ( 'publish' !== $post->post_status ) {
+			
+			if ( 'wp_post' === $campaign_type ) {
+				
+				remove_pigeonpack_wp_post_campaign( $post->ID );
+				
+				if ( 'digest' === $_REQUEST['wp_post_type'] )
+					remove_pigeonpack_wp_post_digest_schedule( $post->ID );
+					
+			}
+			
+			do_action( 'pigeonpack_campaign_status_unpublished', $post->ID );
+			
+		}
+			
 	}
-	add_action( 'save_post', 'save_pigeonpack_campaign_meta' );
+	add_action( 'save_post_pigeonpack_campaign', 'save_pigeonpack_campaign_meta', 10, 3 );
 	
 }
 
@@ -640,12 +752,16 @@ if ( !function_exists( 'unset_pigeonpack_wp_post_campaigns_option_after_delete_p
 		do_action( 'pigeonpack_campaign_deleted', $campaign_id );
 		
 		$post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
-		foreach( $post_campaigns as $campaign ) {
-		
-			if ( $post_id !== $campaign['id'] )
-				$new_post_campaigns[] = $campaign;
+		if ( !empty( $post_campaigns ) ) {
+			foreach( $post_campaigns as $campaign ) {
+			
+				if ( $post_id !== $campaign['id'] )
+					$new_post_campaigns[] = $campaign;
+			}
+			update_option( 'pigeonpack_wp_post_campaigns', $new_post_campaigns );
+		} else {
+			delete_option( 'pigeonpack_wp_post_campaigns' );
 		}
-		update_option( 'pigeonpack_wp_post_campaigns', $new_post_campaigns );
 		
 	}
 	add_action( 'after_delete_post', 'unset_pigeonpack_wp_post_campaigns_option_after_delete_post' );

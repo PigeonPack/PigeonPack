@@ -128,8 +128,8 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			if ( in_array( $hook_suffix, array( 'pigeon-pack_page_pigeonpack-settings', 'pigeon-pack_page_pigeonpack-help' ) )
 				|| ( isset( $post_type ) && in_array( $post_type, array( 'pigeonpack_campaign', 'pigeonpack_list' ) ) ) ) {
 					
-				wp_enqueue_style( 'pigeonpack_admin_style', PIGEON_PACK_PLUGIN_URL . '/css/pigeonpack-admin'.$suffix.'.css', false, PIGEON_PACK_VERSION );
-				wp_enqueue_style( 'jquery-ui-smoothness', PIGEON_PACK_PLUGIN_URL . '/css/smoothness/jquery-ui-1.10.0.custom.min.css', false, PIGEON_PACK_VERSION );
+				wp_enqueue_style( 'pigeonpack_admin_style', PIGEON_PACK_PLUGIN_URL . '/css/admin'.$suffix.'.css', false, PIGEON_PACK_VERSION );
+				wp_enqueue_style( 'jquery-ui-smoothness', PIGEON_PACK_PLUGIN_URL . '/css/smoothness/jquery-ui-1.10.0.custom.'.$suffix.'.css', false, PIGEON_PACK_VERSION );
 			
 			}
 			
@@ -172,7 +172,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			if ( isset( $post_type ) && 'pigeonpack_list' === $post_type ) {
 				
 				wp_enqueue_script( 'jquery-ui-datepicker' );
-				wp_enqueue_script( 'pigeonpack_list_script', PIGEON_PACK_PLUGIN_URL . '/js/pigeonpack-list'.$suffix.'.js', array( 'jquery' ), PIGEON_PACK_VERSION );
+				wp_enqueue_script( 'pigeonpack_list_script', PIGEON_PACK_PLUGIN_URL . '/js/list'.$suffix.'.js', array( 'jquery' ), PIGEON_PACK_VERSION );
 				$args = array(
 							'plugin_url' => PIGEON_PACK_PLUGIN_URL,
 						);
@@ -180,11 +180,11 @@ if ( !class_exists( 'PigeonPack' ) ) {
 				
 			} else if ( isset( $post_type ) && 'pigeonpack_campaign' === $post_type ) {
 				
-				wp_enqueue_script( 'pigeonpack_campaign_script', PIGEON_PACK_PLUGIN_URL . '/js/pigeonpack-campaign'.$suffix.'.js', array( 'jquery' ), PIGEON_PACK_VERSION );
+				wp_enqueue_script( 'pigeonpack_campaign_script', PIGEON_PACK_PLUGIN_URL . '/js/campaign'.$suffix.'.js', array( 'jquery' ), PIGEON_PACK_VERSION );
 				
 			} else if ( 'pigeon-pack_page_pigeonpack-settings' == $hook_suffix ) {
 			
-				wp_enqueue_script( 'pigeonpack_settings_script', PIGEON_PACK_PLUGIN_URL . '/js/pigeonpack-settings'.$suffix.'.js', array( 'jquery' ), PIGEON_PACK_VERSION );
+				wp_enqueue_script( 'pigeonpack_settings_script', PIGEON_PACK_PLUGIN_URL . '/js/settings'.$suffix.'.js', array( 'jquery' ), PIGEON_PACK_VERSION );
 				
 			}
 			
@@ -780,6 +780,8 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		 * @since 0.0.1
 		 */
 		function upgrade() {
+		
+			//wp_print_r( _get_cron_array(), false );
 			
 			$pigeonpack_settings = $this->get_pigeonpack_settings();
 			
@@ -1104,49 +1106,17 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 			
 			if ( 'publish' === $new_status && 'publish' !== $old_status ) {
 				
-				if ( 'pigeonpack_campaign' === $post->post_type ) {
-					
-					$campaign_type = get_post_meta( $post->ID, '_pigeonpack_campaign_type', true );
-					
-					switch ( $campaign_type ) {
-						
-						case ( 'wp_post' ):
-							pigeonpack_wp_post_campaign_init( $post->ID );
-							break;
-					
-						case ( 'single_campaign' ):
-						default:
-							pigeonpack_campaign_scheduler( $post->ID );
-							break;
-							
-						
-					}
-					
-				} else if ( 'post' === $post->post_type ) {
-				
+				if ( 'post' === $post->post_type ) {
+
 					do_pigeonpack_wp_post_campaigns( $post->ID );
 					
 				}
 				
-			} else if ( 'publish' !== $new_status && 'publish' === $old_status ) {
-			
-				// If a campaign is changed to unpublished status, we need to kill any future schedules
-				if ( 'pigeonpack_campaign' === $post->post_type ) {
-					
-					$campaign_type = get_post_meta( $post->ID, '_pigeonpack_campaign_type', true );
-					
-					if ( 'wp_post' === $campaign_type ) {
-						
-						remove_pigeonpack_wp_post_campaign( $post->ID );
-						
-						$current_wp_post_type = get_post_meta( $post->ID, '_pigeonpack_wp_post_type', true );
-						
-						if ( 'digest' === $current_wp_post_type )
-							remove_pigeonpack_wp_post_digest_schedule( $post->ID );
-							
-					}
-							
-					do_action( 'pigeonpack_campaign_status_unpublished', $post->ID );
+			} else if ( 'publish' !== $new_status ) {
+				
+				if ( 'post' === $post->post_type ) {
+
+					do_pigeonpack_remove_wp_post_from_digest_campaigns( $post->ID );
 					
 				}
 				
@@ -1167,7 +1137,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		
 			if ( isset( $_REQUEST['pigeonpack'] ) ) {
 				
-				require_once( 'pigeonpack-processing.php' );
+				require_once( PIGEON_PACK_PLUGIN_PATH . '/processing.php' );
 			
 				switch( $_REQUEST['pigeonpack'] ) {
 				

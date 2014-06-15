@@ -18,7 +18,7 @@ Special Thanks:
 Yusuke Kamiyamane - http://p.yusukekamiyamane.com/ - http://www.iconfinder.com/search/?q=iconset%3Afugue
 Turbomilk - http://graphicriver.net/free/web-icon-set/ - http://www.turbomilk.com/ - http://www.iconfinder.com/search/?q=iconset%3Awebset
 Minifiers:
-http://www.minifyjs.com/javascript-compressor/
+http://www.jsmini.com/
 http://www.minifycss.com/css-compressor/
 */
 
@@ -37,7 +37,7 @@ define( 'PIGEON_PACK_REL_DIR', dirname( plugin_basename( __FILE__ ) ) );
  */
 function pigeonpack_plugins_loaded() {
 
-	require_once( 'pigeonpack-class.php' );
+	require_once( PIGEON_PACK_PLUGIN_PATH . '/class.php' );
 
 	// Instantiate the Pigeon Pack class
 	if ( class_exists( 'PigeonPack' ) ) {
@@ -46,11 +46,11 @@ function pigeonpack_plugins_loaded() {
 		
 		$dl_plugin_pigeonpack = new PigeonPack();
 		
-		require_once( 'pigeonpack-functions.php' );
-		require_once( 'pigeonpack-campaign-post-type.php' );
-		require_once( 'pigeonpack-list-post-type.php' );
-		require_once( 'pigeonpack-shortcodes.php' );
-		require_once( 'pigeonpack-widgets.php' );
+		require_once( PIGEON_PACK_PLUGIN_PATH . '/functions.php' );
+		require_once( PIGEON_PACK_PLUGIN_PATH . '/campaign-post-type.php' );
+		require_once( PIGEON_PACK_PLUGIN_PATH . '/list-post-type.php' );
+		require_once( PIGEON_PACK_PLUGIN_PATH . '/shortcodes.php' );
+		require_once( PIGEON_PACK_PLUGIN_PATH . '/widgets.php' );
 					
 		$pigeonpack_shortcodes = new PigeonPack_Shortcodes();
 			

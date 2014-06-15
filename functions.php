@@ -131,16 +131,18 @@ if ( !function_exists( 'pigeonpack_wp_post_campaign_init' ) ) {
 	 */
 	function pigeonpack_wp_post_campaign_init( $campaign_id ) {
 		
-		$post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
+		$post_campaigns = (array)get_option( 'pigeonpack_wp_post_campaigns' );
 		
 		$type = get_post_meta( $campaign_id, '_pigeonpack_wp_post_type', true );
 		
-		// Change type if we're updating an existing campaign
-		foreach( $post_campaigns as $post_campaign ) {
-		
-			if ( $campaign_id === $post_campaign['id'] )
-				$post_campaign['type'] = $type;
+		if ( !empty( $post_campaigns ) ) {
+			// Change type if we're updating an existing campaign
+			foreach( $post_campaigns as $post_campaign ) {
 			
+				if ( $campaign_id === $post_campaign['id'] )
+					$post_campaign['type'] = $type;
+				
+			}
 		}
 	
 		$new_campaign = array(
@@ -229,7 +231,7 @@ if ( !function_exists( 'pigeonpack_wp_post_campaign_init' ) ) {
 			$schedule = strtotime( get_gmt_from_date( date_i18n( 'Y-m-d H:i:s', $schedule ) ) );
 	
 			//get the post meta with the event schedule details
-			$previous_schedule = get_post_meta( $campaign_id, '_scheduled_event', true );
+			$previous_schedule = get_post_meta( $campaign_id, '_pigeonpack_scheduled_event', true );
 			
 			// if a previous schedule already exists for this campaign, we want to unschedule it and schedule the new event
 			if ( !empty( $previous_schedule) && $next_schedule = wp_next_scheduled( 'scheduled_wp_post_digest_campaign', $previous_schedule[1] ) )
@@ -240,7 +242,7 @@ if ( !function_exists( 'pigeonpack_wp_post_campaign_init' ) ) {
 			wp_schedule_single_event( $schedule, 'scheduled_wp_post_digest_campaign', array( $campaign_id, $schedule ) );
 			
 			//update the post meta with the event schedule details for next update/publish
-			update_post_meta( $campaign_id, '_scheduled_event', array( $schedule, array( $campaign_id, $schedule ) ) );
+			update_post_meta( $campaign_id, '_pigeonpack_scheduled_event', array( $schedule, array( $campaign_id, $schedule ) ) );
 			
 		}
 		
@@ -250,49 +252,51 @@ if ( !function_exists( 'pigeonpack_wp_post_campaign_init' ) ) {
 
 if ( !function_exists( 'remove_pigeonpack_wp_post_campaign' ) ) {
  
-        /**
-         * Removes campaign from pigeonpack_wp_post_campaigns option in WordPress options table
-         *
-         * @since 0.0.1
-         *
-         * @param int $campaign_id ID of campaign being initialized
-         */
-        function remove_pigeonpack_wp_post_campaign( $campaign_id ) {
-        
-                if ( $wp_post_type = get_post_meta( $campaign_id, '_pigeonpack_wp_post_type', true ) ) {
-                                                
-                        $post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
+    /**
+     * Removes campaign from pigeonpack_wp_post_campaigns option in WordPress options table
+     *
+     * @since 0.0.1
+     *
+     * @param int $campaign_id ID of campaign being initialized
+     */
+    function remove_pigeonpack_wp_post_campaign( $campaign_id ) {
+    
+        if ( $wp_post_type = get_post_meta( $campaign_id, '_pigeonpack_wp_post_type', true ) ) {
+                                        
+            $post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
+            
+            if ( !empty( $post_campaigns ) ) {
+                // If the current campaign is listed as a wp_post campaign, unset it and update the option
+                if ( $i = array_search( array( 'id' => $campaign_id, 'type' => $wp_post_type ), $post_campaigns ) ) {
                         
-                        // If the current campaign is listed as a wp_post campaign, unset it and update the option
-                        if ( $i = array_search( array( 'id' => $campaign_id, 'type' => $wp_post_type ), $post_campaigns ) ) {
-                                
-                                unset( $post_campaigns[$i] );                   
-                                update_option( 'pigeonpack_wp_post_campaigns', $post_campaigns );
-                        
-                        }
+                    unset( $post_campaigns[$i] );                   
+                    update_option( 'pigeonpack_wp_post_campaigns', $post_campaigns );
                 
                 }
-                
+            }
+        
         }
+            
+    }
         
 }
  
 if ( !function_exists( 'remove_pigeonpack_wp_post_digest_schedule' ) ) {
  
-        /**
-         * Removes digest campaign schedule
-         *
-         * @since 0.0.1
-         *
-         * @param int $campaign_id ID of campaign being initialized
-         */
-        function remove_pigeonpack_wp_post_digest_schedule( $campaign_id ) {
-                                
-                $previous_schedule = get_post_meta( $campaign_id, '_scheduled_event', true );
-                wp_unschedule_event( $previous_schedule[0], 'scheduled_wp_post_digest_campaign', $previous_schedule[1] );
-                delete_post_meta( $campaign_id, '_scheduled_event' );
-                
-        }
+    /**
+     * Removes digest campaign schedule
+     *
+     * @since 0.0.1
+     *
+     * @param int $campaign_id ID of campaign being initialized
+     */
+    function remove_pigeonpack_wp_post_digest_schedule( $campaign_id ) {
+                            
+        $previous_schedule = get_post_meta( $campaign_id, '_pigeonpack_scheduled_event', true );
+        wp_unschedule_event( $previous_schedule[0], 'scheduled_wp_post_digest_campaign', $previous_schedule[1] );
+        delete_post_meta( $campaign_id, '_pigeonpack_scheduled_event' );
+            
+    }
         
 }
 
@@ -315,25 +319,75 @@ if ( !function_exists( 'do_pigeonpack_wp_post_campaigns' ) ) {
 	
 		$post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
 		
-		foreach( $post_campaigns as $campaign ) {
-			
-			if ( pigeonpack_exclude_post( $campaign['id'], $post_id ) )
-				continue;
+		if ( !empty( $post_campaigns ) ) {
+		
+			foreach( $post_campaigns as $campaign ) {
 				
-			if ( 'individual' === $campaign['type'] ) {
-								
-				//process the next campaign for this post
-				pigeonpack_campaign_scheduler( $campaign['id'], array( $post_id ) );
-			
-			} else if ( 'digest' === $campaign['type'] ) { 
-			
-				$digest_posts = get_post_meta( $campaign['id'], '_digest_posts', true );
-
-				// We don't want duplicates
-				if ( !in_array( $post_id, (array)$digest_posts ) )
-					$digest_posts[] = $post_id;
+				if ( pigeonpack_exclude_post( $campaign['id'], $post_id ) )
+					continue;
 					
-				update_post_meta( $campaign['id'], '_digest_posts', $digest_posts );
+				if ( 'individual' === $campaign['type'] ) {
+									
+					//process the next campaign for this post
+					pigeonpack_campaign_scheduler( $campaign['id'], array( $post_id ) );
+				
+				} else if ( 'digest' === $campaign['type'] ) { 
+				
+					$digest_posts = get_post_meta( $campaign['id'], '_pigeonpack_digest_posts', true );
+					
+					if ( empty( $digest_posts ) ) 
+						$digest_posts = array();
+
+					// We don't want duplicates
+					if ( !in_array( $post_id, $digest_posts ) )
+						$digest_posts[] = $post_id;
+						
+					error_log( count( $digest_posts ) );
+						
+					update_post_meta( $campaign['id'], '_pigeonpack_digest_posts', $digest_posts );
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+}
+
+if ( !function_exists( 'do_pigeonpack_remove_wp_post_from_digest_campaigns' ) ) {
+	
+	/**
+	 * Runs through Pigeon Pack post campaigns and removes the post from any digest campaigns as necessary
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param int $post_id ID of post being processed
+	 */
+	function do_pigeonpack_remove_wp_post_from_digest_campaigns( $post_id ) {
+	
+		$post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
+		
+		if ( !empty( $post_campaigns ) ) {
+		
+			foreach( $post_campaigns as $campaign ) {
+				
+				if ( 'digest' === $campaign['type'] ) { 
+				
+					$digest_posts = get_post_meta( $campaign['id'], '_pigeonpack_digest_posts', true );
+	
+					if ( !empty( $digest_posts ) && is_array( $digest_posts ) ) {
+					
+						// We don't want duplicates
+						if ( $key = array_search( $post_id, $digest_posts ) )
+							unset( $digest_posts[$key] );
+							
+						update_post_meta( $campaign['id'], '_pigeonpack_digest_posts', $digest_posts );
+						
+					}
+					
+				}
 				
 			}
 			
@@ -390,9 +444,9 @@ if ( !function_exists( 'get_pigeonpack_subscriber_by_type' ) ) {
 	function get_pigeonpack_subscriber_by_type( $list_type, $args = array() ) {
 		
 		$defaults = array( 
-						'limit'		=> 100,
-						'offset'	=> 0,
-						);
+			'limit'		=> 100,
+			'offset'	=> 0,
+		);
 					
 		extract( wp_parse_args( $args, $defaults ) );
 	
@@ -401,10 +455,10 @@ if ( !function_exists( 'get_pigeonpack_subscriber_by_type' ) ) {
 			//if a user unsubsribes, we do not want to get their info
 			//this is tracked with the _pigeonpack_subscription meta
 			$args = array(
-						'role'		=> substr( $list_type, 1 ),
-						'number'	=> $limit,
-						'offset'	=> $offset,
-					);
+				'role'		=> substr( $list_type, 1 ),
+				'number'	=> $limit,
+				'offset'	=> $offset,
+			);
 					
 			add_action( 'pre_user_query', 'pigeonpack_pre_user_query', 1 );
 			
@@ -813,9 +867,9 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 			}
 						
 			$args = array(
-						'limit' 	=> $pigeonpack_settings['emails_per_cycle'],
-						'offset' 	=> $offset,
-					);
+				'limit' 	=> $pigeonpack_settings['emails_per_cycle'],
+				'offset' 	=> $offset,
+			);
 			$subscribers = get_pigeonpack_subscriber_by_type( $recipients, $args );
 			
 			if ( !empty( $subscribers ) ) {
@@ -910,13 +964,13 @@ if ( !function_exists( 'pigeonpack_wp_post_digest_scheduler' ) ) {
 	 */
 	function pigeonpack_wp_post_digest_scheduler( $campaign_id, $schedule ) {
 		
-		$posts = get_post_meta( $campaign_id, '_digest_posts', true );
+		$posts = get_post_meta( $campaign_id, '_pigeonpack_digest_posts', true );
 		
 		//schedule email campaign for this digest...
 		if ( !empty( $posts ) ) {
 			
 			pigeonpack_campaign_scheduler( $campaign_id, $posts );
-			delete_post_meta( $campaign_id, '_digest_posts' ); //we don't want to resend these posts, so remove them from the scheduler
+			delete_post_meta( $campaign_id, '_pigeonpack_digest_posts' ); //we don't want to resend these posts, so remove them from the scheduler
 			
 		}
 	
@@ -975,7 +1029,7 @@ if ( !function_exists( 'pigeonpack_wp_post_digest_scheduler' ) ) {
 		wp_schedule_single_event( $schedule, 'scheduled_wp_post_digest_campaign', array( $campaign_id, $schedule ) );
 		
 		//update the post meta with the event schedule details for next update/publish
-		update_post_meta( $campaign_id, '_scheduled_event', array( $schedule, array( $campaign_id, $schedule ) ) );
+		update_post_meta( $campaign_id, '_pigeonpack_scheduled_event', array( $schedule, array( $campaign_id, $schedule ) ) );
 	
 	}
 	add_action( 'scheduled_wp_post_digest_campaign', 'pigeonpack_wp_post_digest_scheduler', 10, 2 ); //wp_schedule_single_event action
@@ -999,6 +1053,7 @@ if ( !function_exists( 'pigeonpack_phpmailer_init' ) ) {
 		$phpmailer->IsSMTP(); //Set PHP Mailer to use SMTP
 		$phpmailer->Host = $pigeonpack_settings['smtp_server'];
 		$phpmailer->Port = $pigeonpack_settings['smtp_port'];
+		
 		if ( 'none' !== $pigeonpack_settings['smtp_authentication'] ) {
 			
 			$phpmailer->Username = !empty( $pigeonpack_settings['smtp_username'] ) ? $pigeonpack_settings['smtp_username'] : '';
@@ -1057,15 +1112,15 @@ if ( !function_exists( 'pigeonpack_day_string' ) ) {
 	
 		//Sunday is day 0 and day 7;
 		$day_strings = array( 
-							__( 'Sunday', 'pigeonpack' ),	
-							__( 'Monday', 'pigeonpack' ),
-							__( 'Tuesday', 'pigeonpack' ), 
-							__( 'Wendesday', 'pigeonpack' ), 
-							__( 'Thursday', 'pigeonpack' ), 
-							__( 'Friday', 'pigeonpack' ), 
-							__( 'Saturday', 'pigeonpack' ), 
-							__( 'Sunday', 'pigeonpack' ),
-						);
+			__( 'Sunday', 'pigeonpack' ),	
+			__( 'Monday', 'pigeonpack' ),
+			__( 'Tuesday', 'pigeonpack' ), 
+			__( 'Wendesday', 'pigeonpack' ), 
+			__( 'Thursday', 'pigeonpack' ), 
+			__( 'Friday', 'pigeonpack' ), 
+			__( 'Saturday', 'pigeonpack' ), 
+			__( 'Sunday', 'pigeonpack' ),
+		);
 		
 		return $day_strings[$day_number];
 		

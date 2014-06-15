@@ -7,6 +7,7 @@ $pigeonpack_campaign(document).ready(function($) {
 		if ( 'wp_post' === $( this ).val() ) {
 				
 			$( 'tr.wp_post_options' ).show();
+			$( 'tr.clude_cats' ).show();
 			
 			if ( 'digest' === $( 'select#wp_post_type' ).val() ) {
 			
@@ -17,6 +18,7 @@ $pigeonpack_campaign(document).ready(function($) {
 		} else {
 		
 			$( 'tr.wp_post_options' ).hide();
+			$( 'tr.clude_cats' ).hide();
 			$( 'tr.wp_post_digest_options' ).hide();
 			
 		}

@@ -13,7 +13,7 @@ The Pigeon Pack plugin is completely free! This plugin aims to solve one problem
 
 Features of this plugin include:
 * Single Email Campaigns
-* WordPress Post Campaigns (single or digets)
+* WordPress Post Campaigns (single or digest)
 * Email a specific role or create a list
 * Easy to use shortcodes and widgets for users to sign up for your emails from your website
 * Create custom fields for your lists

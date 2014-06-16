@@ -638,7 +638,7 @@ if ( !function_exists( 'pigeonpack_unmerge_postdata' ) ) {
 		
 		if ( !empty( $posts ) ) {
 			
-			 if ( 1 <= count( $posts ) && preg_match( '/{{POST_LOOP}}(.*){{POST_END_LOOP}}/is', $message, $matches ) ) {
+			 if ( 1 <= count( $posts ) && preg_match( '/{{POST_LOOP_START}}(.*){{POST_LOOP_END}}/is', $message, $matches ) ) {
 				//digest
 				
 				$digest_merge = $matches[1];	

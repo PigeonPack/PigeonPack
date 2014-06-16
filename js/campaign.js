@@ -1,6 +1,19 @@
 var $pigeonpack_campaign = jQuery.noConflict();
 
 $pigeonpack_campaign(document).ready(function($) {
+
+	$( '.pigeonpack-tooltip' ).tooltip({
+		show: {
+			effect: 'slide',
+			direction: 'right',
+		},
+		position: {
+			my: 'right',
+			at: 'left-5',
+			collision: 'none'
+		},
+		hide: false,
+	});
 	
 	$( 'select#campaign_type' ).live( 'change', function() {
 		

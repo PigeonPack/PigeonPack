@@ -22,7 +22,7 @@ Features of this plugin include:
 
 You can follow the development of this plugin at [GitHub](https://github.com/PigeonPack/PigeonPack)!
 
-Due to the complex nature of this plugin, we are unable to provide free support. We will respond to bug requests using the WordPress support forums, but if you have a feature request or need support, we ask that you sign up for a Premium Support membership where you will also get access to future Premium Pigeon Pack add-ons as well.
+Due to the complex nature of this plugin, we are unable to provide free support. We will respond to bugs using the WordPress support forums.
 
 Premium Pigeon Pack Add-ons (COMING SOON):
 * Analytics - Learn more about what your subscribers are doing!
@@ -34,11 +34,7 @@ Premium Pigeon Pack Add-ons (COMING SOON):
 * Notifications - Receive notifications whenever someone subscribers or unsubscribers from your list.
 * Amazon SES - Built-in functionality to work directly with the Amazon Simple Email Server service.
 
-Contribute to the Pigeon Pack plugin with new features, bug fixes or translations, we'll give you a discount off a Premium Support membership!
-
-Please visit the Pigeon Pack website for access to [support and premium membership add-ons](http://getpigeonpack.com/)!
-
-Sign up for the Pigeon Pack affiliate program and start earning cash today whenever you refer a user who subscribes to the Premium Support membership!
+Please visit the Pigeon Pack website for access to [support and premium membership add-ons](http://pigeonpack.com/)!
 
 == Installation ==
 

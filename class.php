@@ -129,7 +129,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 				|| ( isset( $post_type ) && in_array( $post_type, array( 'pigeonpack_campaign', 'pigeonpack_list' ) ) ) ) {
 					
 				wp_enqueue_style( 'pigeonpack_admin_style', PIGEON_PACK_PLUGIN_URL . '/css/admin'.$suffix.'.css', false, PIGEON_PACK_VERSION );
-				wp_enqueue_style( 'jquery-ui-smoothness', PIGEON_PACK_PLUGIN_URL . '/css/smoothness/jquery-ui-1.10.0.custom.'.$suffix.'.css', false, PIGEON_PACK_VERSION );
+				wp_enqueue_style( 'jquery-ui-smoothness', PIGEON_PACK_PLUGIN_URL . '/css/smoothness/jquery-ui-1.10.0.custom'.$suffix.'.css', false, PIGEON_PACK_VERSION );
 			
 			}
 			
@@ -180,11 +180,12 @@ if ( !class_exists( 'PigeonPack' ) ) {
 				
 			} else if ( isset( $post_type ) && 'pigeonpack_campaign' === $post_type ) {
 				
-				wp_enqueue_script( 'pigeonpack_campaign_script', PIGEON_PACK_PLUGIN_URL . '/js/campaign'.$suffix.'.js', array( 'jquery' ), PIGEON_PACK_VERSION );
+				wp_enqueue_script( 'pigeonpack_campaign_script', PIGEON_PACK_PLUGIN_URL . '/js/campaign'.$suffix.'.js', array( 'jquery', 'jquery-ui-tooltip', 'jquery-effects-slide' ), PIGEON_PACK_VERSION );
 				
 			} else if ( 'pigeon-pack_page_pigeonpack-settings' == $hook_suffix ) {
 			
-				wp_enqueue_script( 'pigeonpack_settings_script', PIGEON_PACK_PLUGIN_URL . '/js/settings'.$suffix.'.js', array( 'jquery' ), PIGEON_PACK_VERSION );
+				$dep = array( 'jquery-ui-tooltip' );
+				wp_enqueue_script( 'pigeonpack_settings_script', PIGEON_PACK_PLUGIN_URL . '/js/settings'.$suffix.'.js', array( 'jquery', 'jquery-ui-tooltip' ), PIGEON_PACK_VERSION );
 				
 			}
 			
@@ -359,6 +360,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
             
                 <form id="pigeonpack" method="post" action="" enctype="multipart/form-data" encoding="multipart/form-data">
                     
+					<!--
                     <div id="api-key" class="postbox">
                     
                         <div class="handlediv" title="Click to toggle"><br /></div>
@@ -388,6 +390,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
                         </div>
                         
                     </div>
+					-->
                     
                     <div id="modules" class="postbox">
                     

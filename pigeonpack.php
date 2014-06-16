@@ -8,11 +8,11 @@
  
 /*
 Plugin Name: Pigeon Pack
-Plugin URI: http://getpigeonpack.com/
+Plugin URI: http://pigeonpack.com/
 Description: Easy and affordable email marketing, newsletters, and campaigns; built right in your WordPress dashboard, no third parties needed!
 Author: layotte
 Version: 0.0.1
-Author URI: http://getpigeonpack.com/
+Author URI: http://pigeonpack.com/
 Tags: email, marketing, email marketing, newsletters, email newsletters, campaigns, email campaigns, widget, form, mailing lists
 Special Thanks: 
 Yusuke Kamiyamane - http://p.yusukekamiyamane.com/ - http://www.iconfinder.com/search/?q=iconset%3Afugue
@@ -25,7 +25,7 @@ http://www.minifycss.com/css-compressor/
 //Define global variables...
 define( 'PIGEON_PACK_VERSION' , '0.0.1' );
 define( 'PIGEON_PACK_DB_VERSION', '0.0.1' );
-define( 'PIGEON_PACK_API_URL', 'http://getpigeonpack.com/api' );
+define( 'PIGEON_PACK_API_URL', 'http://pigeonpack.com/api' );
 define( 'PIGEON_PACK_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PIGEON_PACK_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'PIGEON_PACK_REL_DIR', dirname( plugin_basename( __FILE__ ) ) );

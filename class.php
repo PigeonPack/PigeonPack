@@ -20,11 +20,11 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		 *
 		 * @since 0.0.1
 		 * @uses add_action() Calls 'admin_init' hook on $this->upgrade
-		 * @uses add_action() Calls 'admin_enqueue_scripts' hook on $this->pigeonpack_admin_wp_enqueue_scripts
-		 * @uses add_action() Calls 'admin_print_styles' hook on $this->pigeonpack_admin_wp_print_styles
-		 * @uses add_action() Calls 'admin_menu' hook on $this->pigeonpack_admin_menu
-		 * @uses add_action() Calls 'wp_ajax_verify' hook on $this->pigeonpack_api_ajax_verify
-		 * @uses add_action() Calls 'transition_post_status' hook on $this->pigeonpack_transition_post_status
+		 * @uses add_action() Calls 'admin_enqueue_scripts' hook on $this->admin_wp_enqueue_scripts
+		 * @uses add_action() Calls 'admin_print_styles' hook on $this->admin_wp_print_styles
+		 * @uses add_action() Calls 'admin_menu' hook on $this->admin_menu
+		 * @uses add_action() Calls 'wp_ajax_verify' hook on $this->api_ajax_verify
+		 * @uses add_action() Calls 'transition_post_status' hook on $this->transition_post_status
 		 */
 		function PigeonPack() {
 			
@@ -32,30 +32,31 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			
 			add_action( 'admin_init', array( $this, 'upgrade' ) );
 			
-			add_action( 'admin_enqueue_scripts', array( $this, 'pigeonpack_admin_wp_enqueue_scripts' ) );
-			add_action( 'admin_print_styles', array( $this, 'pigeonpack_admin_wp_print_styles' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'pigeonpack_wp_enqueue_scripts' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'admin_wp_enqueue_scripts' ) );
+			add_action( 'admin_print_styles', array( $this, 'admin_wp_print_styles' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ) );
 					
-			add_action( 'admin_menu', array( $this, 'pigeonpack_admin_menu' ) );
+			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 			
-			add_action( 'wp_ajax_verify', array( $this, 'pigeonpack_api_ajax_verify' ) );
+			add_action( 'wp_ajax_verify', array( $this, 'api_ajax_verify' ) );
 			
-			add_action( 'transition_post_status', array( $this, 'pigeonpack_transition_post_status' ), 100, 3 );
+			add_action( 'transition_post_status', array( $this, 'transition_post_status' ), 100, 3 );
+			add_action( 'after_delete_post', array( $this, 'after_delete_post' ) );
 			
-			add_action( 'wp', array( $this, 'process_pigeonpack_requests' ) );
+			add_action( 'wp', array( $this, 'process_requests' ) );
 	
 			//Add opt-in/opt-out options to profile.php
-			add_action( 'show_user_profile', array( $this, 'pigeonpack_show_user_profile' ) );
-			add_action( 'edit_user_profile', array( $this, 'pigeonpack_show_user_profile' ) );
-			add_action( 'personal_options_update', array( $this, 'pigeonpack_profile_update' ) );
-			add_action( 'edit_user_profile_update', array( $this, 'pigeonpack_profile_update' ) );
+			add_action( 'show_user_profile', array( $this, 'show_user_profile' ) );
+			add_action( 'edit_user_profile', array( $this, 'show_user_profile' ) );
+			add_action( 'personal_options_update', array( $this, 'profile_update' ) );
+			add_action( 'edit_user_profile_update', array( $this, 'profile_update' ) );
 			
 			//Premium Plugin Filters
 			/*
 			if ( !empty( $pigeonpack_settings['api_key'] ) ) {
 					
-				add_filter( 'plugins_api', array( $this, 'pigeonpack_plugins_api' ), 10, 3 );
-				add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'pigeonpack_update_plugins' ) );
+				add_filter( 'plugins_api', array( $this, 'plugins_api' ), 10, 3 );
+				add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'update_plugins' ) );
 			
 				delete_option( 'pigeonpack_api_error_received' );
 				delete_option( 'pigeonpack_api_error_message' );
@@ -81,7 +82,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		 * @uses add_submenu_page() Creates Help submenu to Pigeon Pack menu
 		 * @uses do_action() To call 'pigeonpack_admin_menu' for future addons
 		 */
-		function pigeonpack_admin_menu() {
+		function admin_menu() {
 			
 			add_menu_page( __( 'Pigeon Pack', 'pigeonpack' ), __( 'Pigeon Pack', 'pidgenpack' ), apply_filters( 'manage_pigeonpack_settings', 'manage_pigeonpack_settings' ), 'pigeon-pack', array( $this, 'pigeonpack_settings_page' ), PIGEON_PACK_PLUGIN_URL . '/images/pigeon-16x16.png' );
 			
@@ -100,7 +101,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		 * @uses $hook_suffix to determine which page we are looking at, so we only load the CSS on the proper page(s)
 		 * @uses wp_enqueue_style to enqueue the necessary pigeon pack style sheets
 		 */
-		function pigeonpack_admin_wp_print_styles() {
+		function admin_wp_print_styles() {
 		
 			global $hook_suffix;
 			
@@ -146,7 +147,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		 * @param $hook_suffix passed through by filter used to determine which page we are looking at
 		 *        so we only load the CSS on the proper page(s)
 		 */
-		function pigeonpack_admin_wp_enqueue_scripts( $hook_suffix ) {
+		function admin_wp_enqueue_scripts( $hook_suffix ) {
 		
 			$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 			
@@ -201,7 +202,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		 * @uses wp_enqueue_script() To load Pigeon Pack jQuery script
 		 * @uses wp_localize_script() To load WordPress' default AJAX script, used in Pigeon Pack's jQuery script
 		 */
-		function pigeonpack_wp_enqueue_scripts() {
+		function wp_enqueue_scripts() {
 		
 			$pigeonpack_settings = $this->get_pigeonpack_settings();
 					
@@ -272,7 +273,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		 * @since 0.0.1
 		 * @uses do_action() To call 'pigeonpack_settings_page' for future addons
 		 */
-		function pigeonpack_settings_page() {
+		function settings_page() {
 			
 			// Get the user options
 			$pigeonpack_settings = $this->get_pigeonpack_settings();
@@ -599,7 +600,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		 * @since 0.0.1
 		 * @uses do_action() To call 'pigeonpack_help_page' for future addons
 		 */
-		function pigeonpack_help_page() {
+		function help_page() {
 			
 			?>
 			<div id="pigeonpack_help_page" class=wrap>
@@ -923,7 +924,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		 *
 		 * @since 0.0.1
 		 */
-		function pigeonpack_api_ajax_verify() {
+		function api_ajax_verify() {
 		
 			check_ajax_referer( 'verify' );
 			
@@ -936,7 +937,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 				);
 					
 				// Send request for detailed information
-				$response = $this->pigeonpack_api_request( $args );
+				$response = $this->api_request( $args );
 				
 				die( $response->response );
 		
@@ -957,7 +958,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		 * @param string $action Action to take on the API
 		 * @param array $args Array of arguments to pass to the API
 		 */
-		function pigeonpack_plugins_api( $false, $action, $args ) {
+		function plugins_api( $false, $action, $args ) {
 		
 			$plugin_slug = 'pigeonpack';
 			
@@ -972,7 +973,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 			);
 				
 			// Send request for detailed information
-			$response = $this->pigeonpack_api_request( $args );
+			$response = $this->api_request( $args );
 				
 			return $response;
 			
@@ -985,7 +986,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		 * 
 		 * @param object $transient WordPress transient object
 		 */
-		function pigeonpack_update_plugins( $transient ) {
+		function update_plugins( $transient ) {
 			
 			$plugin_slug = 'pigeonpack';
 			
@@ -1005,7 +1006,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 			);
 			
 			// Send request checking for an update
-			$response = $this->pigeonpack_api_request( $args );
+			$response = $this->api_request( $args );
 				
 			// If there is a new version, modify the transient
 			if( version_compare( $response->new_version, $transient->checked[$plugin_path], '>' ) )
@@ -1023,7 +1024,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		 *
 		 * @param array $args Array of arguments to pass to the API request
 		 */
-		function pigeonpack_api_request( $args ) {
+		function api_request( $args ) {
 			
 			$pigeonpack_settings = get_pigeonpack_settings();
 			
@@ -1078,7 +1079,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		 *
 		 * @since 0.0.1
 		 */
-		function pigeonpack_notification() {
+		function notification() {
 			
 			if ( isset( $_REQUEST['remove_pigeonpack_api_error_message'] ) ) {
 				
@@ -1096,9 +1097,8 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		/**
 		 * Action from 'transition_post_status' to determine if new post has been published.
 		 *
-		 * If post status is 'publish' determine post type and process as necessary
-		 * Campaigns get scheduled
-		 * Posts get added to digests (if digest campaigns exist)
+		 * If post status is 'publish' it gets sent and/or added to digests (if digest campaigns exist)
+		 * If post status is not 'publish' it gets removed from digests (if digest campaigns exist);
 		 *
 		 * @since 0.0.1
 		 * @uses do_action() to call the 'pigeonpack_campaign_status_unpublished' 
@@ -1107,25 +1107,38 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		 * @param string $old_status Post transition's old status
 		 * @param object $post WordPress post object
 		 */
-		function pigeonpack_transition_post_status( $new_status, $old_status, $post ) {
+		function transition_post_status( $new_status, $old_status, $post ) {
+		
+			if ( 'post' !== $post->post_type )
+				return;
 			
 			if ( 'publish' === $new_status && 'publish' !== $old_status ) {
-				
-				if ( 'post' === $post->post_type ) {
-
-					do_pigeonpack_wp_post_campaigns( $post->ID );
-					
-				}
+				error_log( 'publish' );
+				do_pigeonpack_wp_post_campaigns( $post->ID );
 				
 			} else if ( 'publish' !== $new_status ) {
-				
-				if ( 'post' === $post->post_type ) {
-
-					do_pigeonpack_remove_wp_post_from_digest_campaigns( $post->ID );
-					
-				}
+				error_log( '!publish' );
+				do_pigeonpack_remove_wp_post_from_digest_campaigns( $post->ID );
 				
 			}
+			
+		}
+		
+		/**
+		 * Called by after_delete_post action
+		 *
+		 * If post is deleted it gets removed from digests (if digest campaigns exist);
+		 *
+		 * @since 1.0.3
+		 *
+		 * @param int $campaign_id WordPress Post ID
+		 */	
+		function after_delete_post( $post_id ) {
+	
+			if ( 'post' !== get_post_type( $post_id ) )
+				return;
+			error_log( 'delete' );
+			do_pigeonpack_remove_wp_post_from_digest_campaigns( $post->ID );
 			
 		}
 		
@@ -1138,7 +1151,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		 *
 		 * @since 0.0.1
 		 */
-		function process_pigeonpack_requests() {
+		function process_requests() {
 		
 			if ( isset( $_REQUEST['pigeonpack'] ) ) {
 				
@@ -1169,7 +1182,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		 *
 		 * @param object $user User object passed through action hook
 		 */
-		function pigeonpack_show_user_profile( $user ) {
+		function show_user_profile( $user ) {
 			
 			?>
             
@@ -1199,7 +1212,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		 *
 		 * @param int $user_id User ID passed through action hook
 		 */
-		function pigeonpack_profile_update( $user_id ) {
+		function profile_update( $user_id ) {
 			
 			if ( !current_user_can( 'edit_user', $user_id ) )
 				return false;

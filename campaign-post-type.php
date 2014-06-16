@@ -703,6 +703,9 @@ if ( !function_exists( 'unset_pigeonpack_wp_post_campaigns_option_after_delete_p
 	 * @param int $campaign_id WordPress Post ID
 	 */	
 	function unset_pigeonpack_wp_post_campaigns_option_after_delete_post( $campaign_id ) {
+
+		if ( 'pigeonpack_campaign' !== get_post_type( $campaign_id ) )
+			return;
 		
 		if ( !( $campaign_id = absint( $campaign_id ) )  )
 			return false;
@@ -724,14 +727,18 @@ if ( !function_exists( 'unset_pigeonpack_wp_post_campaigns_option_after_delete_p
 		
 		$post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
 		if ( !empty( $post_campaigns ) ) {
-			foreach( $post_campaigns as $campaign ) {
-			
-				if ( $post_id !== $campaign['id'] )
-					$new_post_campaigns[] = $campaign;
+
+			if ( $key = array_search( $campaign_id, $post_campaigns ) ) {
+
+				unset( $post_campaigns[$key] );
+				update_option( 'pigeonpack_wp_post_campaigns', $post_campaigns );
+
 			}
-			update_option( 'pigeonpack_wp_post_campaigns', $new_post_campaigns );
+
 		} else {
+
 			delete_option( 'pigeonpack_wp_post_campaigns' );
+
 		}
 		
 	}

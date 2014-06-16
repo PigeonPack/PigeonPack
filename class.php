@@ -1100,7 +1100,7 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		 * If post status is not 'publish' it gets removed from digests (if digest campaigns exist);
 		 *
 		 * @since 0.0.1
-		 * @uses do_action() to call the 'pigeonpack_campaign_status_unpublished' 
+		 * @uses do_action() to call the 'pigeonpack_transition_post_status_trash_to_publish' hook
 		 * 
 		 * @param string $new_status Post transition's new status
 		 * @param string $old_status Post transition's old status
@@ -1110,13 +1110,27 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		
 			if ( 'post' !== $post->post_type )
 				return;
-							
-			if ( 'publish' === $new_status && 'publish' !== $old_status ) {
-
-				do_pigeonpack_wp_post_campaigns( $post->ID );
+			
+			if ( 'publish' === $new_status ) {
+			
+				switch ( $old_status ) {
+					
+					case 'trash':
+						do_action( 'pigeonpack_transition_post_status_trash_to_publish', $post );
+						return;
+						break;
+						
+					case 'draft':
+					case 'pending':
+					case 'future':
+					default;
+						do_pigeonpack_wp_post_campaigns( $post->ID );
+						break;
+					
+				}
 				
-			} else if ( 'publish' !== $new_status ) {
-
+			} else {
+			
 				do_pigeonpack_remove_wp_post_from_digest_campaigns( $post->ID );
 				
 			}

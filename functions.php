@@ -266,13 +266,15 @@ if ( !function_exists( 'remove_pigeonpack_wp_post_campaign' ) ) {
             $post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
             
             if ( !empty( $post_campaigns ) ) {
+            
                 // If the current campaign is listed as a wp_post campaign, unset it and update the option
-                if ( $i = array_search( array( 'id' => $campaign_id, 'type' => $wp_post_type ), $post_campaigns ) ) {
+                if ( false !== $i = array_search( array( 'id' => $campaign_id, 'type' => $wp_post_type ), $post_campaigns ) ) {
                         
                     unset( $post_campaigns[$i] );                   
                     update_option( 'pigeonpack_wp_post_campaigns', $post_campaigns );
                 
                 }
+                
             }
         
         }
@@ -379,10 +381,9 @@ if ( !function_exists( 'do_pigeonpack_remove_wp_post_from_digest_campaigns' ) ) 
 	
 					if ( !empty( $digest_posts ) && is_array( $digest_posts ) ) {
 					
-						// We don't want duplicates
-						if ( $key = array_search( $post_id, $digest_posts ) )
+						if ( false !== $key = array_search( $post_id, $digest_posts ) )
 							unset( $digest_posts[$key] );
-							
+												
 						update_post_meta( $campaign['id'], '_pigeonpack_digest_posts', $digest_posts );
 						
 					}
@@ -733,6 +734,12 @@ if ( !function_exists( 'pigeonpack_unmerge_misc' ) ) {
 				list( $merged_subject, $merged_message, $merged_footer ) = str_ireplace( '{{LIST_NAME}}', get_the_title( $list_info['id'] ), array( $merged_subject, $merged_message, $merged_footer  ) );
 				
 				$required_footer = get_post_meta( $list_info['id'], '_pigeonpack_required_footer_settings', true );
+				
+				//If the required settings are sent of the list, use the Pigeon Pack defaults!
+				$required_footer['company'] = empty( $required_footer['company'] ) ? $pigeonpack_settings['company'] : $required_footer['company'];
+				$required_footer['address'] = empty( $required_footer['address'] ) ? $pigeonpack_settings['address'] : $required_footer['address'];
+				$required_footer['reminder'] = empty( $required_footer['reminder'] ) ? $pigeonpack_settings['reminder'] : $required_footer['reminder'];
+				
 				$required_footer_string = '<p id="required-address-info">'
 										. __( 'Our mailing address is:', 'pigeonpack' ) . '<br />' 
 										. $required_footer['company'] . '<br />'

@@ -41,7 +41,6 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			add_action( 'wp_ajax_verify', array( $this, 'api_ajax_verify' ) );
 			
 			add_action( 'transition_post_status', array( $this, 'transition_post_status' ), 100, 3 );
-			add_action( 'after_delete_post', array( $this, 'after_delete_post' ) );
 			
 			add_action( 'wp', array( $this, 'process_requests' ) );
 	
@@ -1111,34 +1110,16 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 		
 			if ( 'post' !== $post->post_type )
 				return;
-			
+							
 			if ( 'publish' === $new_status && 'publish' !== $old_status ) {
-				error_log( 'publish' );
+
 				do_pigeonpack_wp_post_campaigns( $post->ID );
 				
 			} else if ( 'publish' !== $new_status ) {
-				error_log( '!publish' );
+
 				do_pigeonpack_remove_wp_post_from_digest_campaigns( $post->ID );
 				
 			}
-			
-		}
-		
-		/**
-		 * Called by after_delete_post action
-		 *
-		 * If post is deleted it gets removed from digests (if digest campaigns exist);
-		 *
-		 * @since 1.0.3
-		 *
-		 * @param int $campaign_id WordPress Post ID
-		 */	
-		function after_delete_post( $post_id ) {
-	
-			if ( 'post' !== get_post_type( $post_id ) )
-				return;
-			error_log( 'delete' );
-			do_pigeonpack_remove_wp_post_from_digest_campaigns( $post->ID );
 			
 		}
 		

@@ -728,7 +728,7 @@ if ( !function_exists( 'unset_pigeonpack_wp_post_campaigns_option_after_delete_p
 		$post_campaigns = get_option( 'pigeonpack_wp_post_campaigns' );
 		if ( !empty( $post_campaigns ) ) {
 
-			if ( $key = array_search( $campaign_id, $post_campaigns ) ) {
+			if ( false !== $key = array_search( $campaign_id, $post_campaigns ) ) {
 
 				unset( $post_campaigns[$key] );
 				update_option( 'pigeonpack_wp_post_campaigns', $post_campaigns );

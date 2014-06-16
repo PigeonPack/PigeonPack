@@ -715,9 +715,9 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
                     <?php _e( 'Every web host and SMTP provider has limits on the numbers of messages that can be sent from their systems. Please check with your web host or SMTP provider to verify their email limit policy. This is important to ensure you setup the plugin properly to prevent your customers from missing emails.', 'pigeonpack' ); ?>
                     </p>
                     <p>
-                    <?php _e( 'Here are some web hosts and their default sending limits (as of March 2013):', 'pigeonpack' ); ?>
+                    <?php _e( 'Here are some web hosts and their default sending limits (as of June 2014):', 'pigeonpack' ); ?>
                     <ol>
-                    	<li><a href="http://www.linode.com/?r=b17583e04c00a2298c4351247a5eceb12e5203c0">Linode</a> - <?php _e( 'Unlimited (VPS*) - What the Pigeon Pack servers run on!', 'pigeonpack' ); ?></li>
+                    	<li><a href="https://www.digitalocean.com/?refcode=3655e259ce29">Digital Ocean</a> - <?php _e( 'Unlimited (VPS*) - What the Pigeon Pack servers run on!', 'pigeonpack' ); ?></li>
                     	<li><a href="http://www.dreamhost.com/r.cgi?1434131">Dreamhost</a> - <?php _e( '200 emails every 60 minutes (shared web servers) or Unlimited (VPS* or Dedicated servers)', 'pigeonpack' ); ?></li>
                         <li><a href="http://www.bluehost.com/track/leenkme">Bluehost</a> - <?php _e( '500 emails every 60 minutes', 'pigeonpack' ); ?></li>
                     	<li><a href="http://asmallorange.com/?a_aid=leenkme">A Small Orange</a> - <?php _e( '500 emails every 60 minutes (shared web servers) or Unlimited (VPS*)', 'pigeonpack' ); ?></li>

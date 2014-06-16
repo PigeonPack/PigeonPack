@@ -40,7 +40,7 @@ if ( !function_exists( 'create_campaign_post_type' ) ) {
 			'labels' 				=> $labels,
 			'description' 			=> __( 'Pigeon Pack Campaigns', 'pigeonpack' ),
 			'public'				=> true,
-			'publicly_queryable' 	=> false,
+			'publicly_queryable' 	=> false, //Set this to TRUE to enable Previews
 			'exclude_fromsearch' 	=> true,
 			'show_ui' 				=> true,
 			'show_in_nav_menus'		=> false,
@@ -54,10 +54,10 @@ if ( !function_exists( 'create_campaign_post_type' ) ) {
 			'has_archive' 			=> true,
 			'rewrite' 				=> array( 'slug' => 'campaign' ),
 			'menu_icon'				=> PIGEON_PACK_PLUGIN_URL . '/images/campaigns-16x16.png',
-			);
+		);
 	
 		register_post_type( 'pigeonpack_campaign', $args );
-		
+				
 	}
 	add_action( 'init', 'create_campaign_post_type' );
 	

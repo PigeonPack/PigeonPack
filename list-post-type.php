@@ -54,7 +54,7 @@ if ( !function_exists ( 'create_list_post_type' ) ) {
 			'has_archive' 			=> true,
 			'rewrite' 				=> array( 'slug' => 'list' ),
 			'menu_icon'				=> PIGEON_PACK_PLUGIN_URL . '/images/lists-16x16.png',
-			);
+		);
 	
 		register_post_type( 'pigeonpack_list', $args );
 		

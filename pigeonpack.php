@@ -91,4 +91,4 @@ function pigeonpack_flush_rewrite_rules() {
     }
     
 }
-add_action( 'init', 'pigeonpack_flush_rewrite_rules' );
+add_action( 'init', 'pigeonpack_flush_rewrite_rules', 4815162342 );

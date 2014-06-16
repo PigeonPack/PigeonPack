@@ -344,8 +344,6 @@ if ( !function_exists( 'do_pigeonpack_wp_post_campaigns' ) ) {
 					if ( !in_array( $post_id, $digest_posts ) )
 						$digest_posts[] = $post_id;
 						
-					error_log( count( $digest_posts ) );
-						
 					update_post_meta( $campaign['id'], '_pigeonpack_digest_posts', $digest_posts );
 					
 				}

@@ -51,6 +51,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			add_action( 'edit_user_profile_update', array( $this, 'pigeonpack_profile_update' ) );
 			
 			//Premium Plugin Filters
+			/*
 			if ( !empty( $pigeonpack_settings['api_key'] ) ) {
 					
 				add_filter( 'plugins_api', array( $this, 'pigeonpack_plugins_api' ), 10, 3 );
@@ -67,6 +68,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 				add_action( 'admin_notices', array( $this, 'pigeonpack_notification' ) );
 				
 			}
+			*/
 			
 		}
 		

@@ -9,7 +9,7 @@
 /*
 Plugin Name: Pigeon Pack
 Plugin URI: http://pigeonpack.com/
-Description: Easy and affordable email marketing, newsletters, and campaigns; built right in your WordPress dashboard, no third parties needed!
+Description: Free and easy email marketing, newsletters, and campaigns; built into your WordPress dashboard!
 Author: layotte
 Version: 1.0.2
 Author URI: http://pigeonpack.com/

@@ -5,7 +5,7 @@ Requires at least: 3.4
 Tested up to: 3.9
 Stable tag: 1.0.2
 
-Easy email marketing, newsletters, and campaigns; built right in your WordPress dashboard, no third parties needed!
+Free and easy email marketing, newsletters, and campaigns; built into your WordPress dashboard!
 
 == Description ==
 
@@ -49,7 +49,7 @@ Pigeon Pack enables you to own and operate your own email campaign manager. You 
 
 = Email Sending Limits =
 
-Every web host and SMTP provider has limits on the numbers of messages that can be sent from their systems. Please check with your web host or SMTP provider to verify their email limit policy. This is important to ensure you setup the plugin properly to prevent your customers from missing emails. If you anticipate sending large amount of email campaigns, there are services out there that you can use with Pigeon Pack, such as Amazon's Simple Email Server (SES). Amazon SES lets you send bulk and transactional email to customers in a quick and cost-effective manner.
+Every web host and SMTP provider has limits on the numbers of messages that can be sent from their systems. Please check with your web host or SMTP provider to verify their email limit policy. This is important to ensure you setup the plugin properly to prevent your customers from missing emails. If you anticipate sending large amount of email campaigns, there are services out there that you can use with Pigeon Pack, such as Amazon's Simple Email Service (SES). Amazon SES lets you send bulk and transactional email to customers in a quick and cost-effective manner.
 
 = What are the minimum requirements for Pigeon pack? =
 

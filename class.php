@@ -65,7 +65,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			
 				update_option( 'pigeonpack_api_error_received', true );
 				update_option( 'pigeonpack_api_error_message', __( 'Please enter your Pigeon Pack API key in the <a href="/wp-admin/admin.php?page=pigeonpack-settings">Pigeon Pack Settings</a> to get access to premium support and addons.', 'pigeonpack' ) );
-				add_action( 'admin_notices', array( $this, 'pigeonpack_notification' ) );
+				add_action( 'admin_notices', array( $this, 'notification' ) );
 				
 			}
 			*/
@@ -83,11 +83,11 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		 */
 		function admin_menu() {
 			
-			add_menu_page( __( 'Pigeon Pack', 'pigeonpack' ), __( 'Pigeon Pack', 'pidgenpack' ), apply_filters( 'manage_pigeonpack_settings', 'manage_pigeonpack_settings' ), 'pigeon-pack', array( $this, 'pigeonpack_settings_page' ), PIGEON_PACK_PLUGIN_URL . '/images/pigeon-16x16.png' );
+			add_menu_page( __( 'Pigeon Pack', 'pigeonpack' ), __( 'Pigeon Pack', 'pidgenpack' ), apply_filters( 'manage_pigeonpack_settings', 'manage_pigeonpack_settings' ), 'pigeon-pack', array( $this, 'settings_page' ), PIGEON_PACK_PLUGIN_URL . '/images/pigeon-16x16.png' );
 			
-			add_submenu_page( 'pigeon-pack', __( 'Settings', 'pigeonpack' ), __( 'Settings', 'pigeonpack' ), apply_filters( 'manage_pigeonpack_settings', 'manage_pigeonpack_settings' ), 'pigeonpack-settings', array( $this, 'pigeonpack_settings_page' ) );
+			add_submenu_page( 'pigeon-pack', __( 'Settings', 'pigeonpack' ), __( 'Settings', 'pigeonpack' ), apply_filters( 'manage_pigeonpack_settings', 'manage_pigeonpack_settings' ), 'pigeonpack-settings', array( $this, 'settings_page' ) );
 			
-			add_submenu_page( 'pigeon-pack', __( 'Help', 'pigeonpack' ), __( 'Help', 'pigeonpack' ), apply_filters( 'manage_pigeonpack_settings', 'manage_pigeonpack_settings' ), 'pigeonpack-help', array( $this, 'pigeonpack_help_page' ) );
+			add_submenu_page( 'pigeon-pack', __( 'Help', 'pigeonpack' ), __( 'Help', 'pigeonpack' ), apply_filters( 'manage_pigeonpack_settings', 'manage_pigeonpack_settings' ), 'pigeonpack-help', array( $this, 'help_page' ) );
 			
 			do_action( 'pigeonpack_admin_menu' );
 			
@@ -717,20 +717,25 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
                     <?php _e( 'Every web host and SMTP provider has limits on the numbers of messages that can be sent from their systems. Please check with your web host or SMTP provider to verify their email limit policy. This is important to ensure you setup the plugin properly to prevent your customers from missing emails.', 'pigeonpack' ); ?>
                     </p>
                     <p>
+                    <?php _e( 'For best results, we recommend using one of these Dedicated SMTP Providers:', 'pigeonpack' ); ?>
+                    <ul>
+                    	<li><a href="http://aws.amazon.com/ses/">Amazon Simple Email Service (SES)</a></li>
+                    	<li><a href="http://sendgrid.com/">SendGrid</a></li>
+                    	<li><a href="https://elasticemail.com">Elastic Email</a></li>
+                    </ul>
+                    </p>
+                    <p>
                     <?php _e( 'Here are some web hosts and their default sending limits (as of June 2014):', 'pigeonpack' ); ?>
-                    <ol>
+                    <ul>
                     	<li><a href="https://www.digitalocean.com/?refcode=3655e259ce29">Digital Ocean</a> - <?php _e( 'Unlimited (VPS*) - What the Pigeon Pack servers run on!', 'pigeonpack' ); ?></li>
                     	<li><a href="http://www.dreamhost.com/r.cgi?1434131">Dreamhost</a> - <?php _e( '200 emails every 60 minutes (shared web servers) or Unlimited (VPS* or Dedicated servers)', 'pigeonpack' ); ?></li>
                         <li><a href="http://www.bluehost.com/track/leenkme">Bluehost</a> - <?php _e( '500 emails every 60 minutes', 'pigeonpack' ); ?></li>
                     	<li><a href="http://asmallorange.com/?a_aid=leenkme">A Small Orange</a> - <?php _e( '500 emails every 60 minutes (shared web servers) or Unlimited (VPS*)', 'pigeonpack' ); ?></li>
                     	<li><a href="http://www.1and1.com/">1and1</a> - <?php _e( '300 emails every 5 minutes', 'pigeonpack' ); ?></li>
-                    </ol>    
+                    </ul>    
                     </p>                
                     <p><?php _e( 'As a best practice, please set the number of emails to less than the maximum allowed.', 'pigeonpack' ); ?></p>
                     <p><?php _e( '* VPS (Virtual Private Server) or dedicated server solutions require significant more skill to setup than your typical shared web host servers.', 'pigeonpack' ); ?></p>
-                    <p>
-                    <?php _e( 'If you need a simpler solution and your web host does not support bulk emails, we recommend <a href="http://aws.amazon.com/ses/">Amazon Simple Email Server (SES)</a>. Amazon SES lets you send bulk and transactional email to customers in a quick and cost-effective manner.', 'pigeonpack' ); ?>
-                    </p>
                     </div>
                     
                 </div>

@@ -28,5 +28,5 @@ span.subfield label{font-size:.9em;font-style:italic;width:125px;display:inline-
 span.subfield input[type=radio]{margin-right:5px;}
 th.required,td.required{color:#C00;font-weight:700;}
 input.error{border:1px solid #C00;}
-pre.pigeonpack-shortcode-examples{white-space:0;word-wrap:break-word;}
+pre.pigeonpack-shortcode-examples { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; display: block; width: 100%; overflow-x: auto; }
 #list_field_types,div#update_subscriber_button{display:none;}

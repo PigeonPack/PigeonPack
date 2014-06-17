@@ -88,7 +88,7 @@ if ( !class_exists( 'pigeonpack_form_widget' ) ) {
 			$instance 						= $old_instance;
 			$instance['title'] 				= strip_tags( $new_instance['title'] );
 			$instance['list_id'] 			= $new_instance['list_id'];
-			$instance['required_only'] 		= ( "on" == $new_instance['required_only'] ) ? "on" : "off";
+			$instance['required_only'] 		= ( 'on' == $new_instance['required_only'] ) ? 'on' : 'off';
 		
 			return $instance;
 		
@@ -107,10 +107,10 @@ if ( !class_exists( 'pigeonpack_form_widget' ) ) {
 			
 			//Defaults
 			$defaults = array( 
-							'title'					=> '',
-							'list_id'				=> 0,
-						);
-			
+				'title' 		=> '',
+				'list_id' 		=> 0,
+				'required_only' => 'off',
+			);
 			extract( wp_parse_args( (array)$instance, $defaults ) );
 	 
 			?>

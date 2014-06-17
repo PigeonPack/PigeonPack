@@ -478,21 +478,22 @@ if ( !function_exists( 'pigeonpack_campaign_merge_vars_meta_box' ) ) {
 		
 			<ul id="pigeonpack_campaign_merge_vars_list" class="pigeonpack_list">
 				
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "The Subscriber's Email Address", 'pigeonpack' ); ?>"><?php _e( '{{EMAIL}} or {{MERGE0}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "The Subscriber's First Name", 'pigeonpack' ); ?>"><?php _e( '{{FNAME}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "The Subscriber's Last Name", 'pigeonpack' ); ?>"><?php _e( '{{LNAME}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "The Subscriber's Display Name", 'pigeonpack' ); ?>"><?php _e( '{{DNAME}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "The Subscriber's Nickname", 'pigeonpack' ); ?>"><?php _e( '{{NNAME}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "The Subscriber's Website", 'pigeonpack' ); ?>"><?php _e( '{{SITE}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "The Subscriber's Username", 'pigeonpack' ); ?>"><?php _e( '{{USERNAME}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "Custom MERGE variables, set in individual Pigeon Pack Lists", 'pigeonpack' ); ?>"><?php _e( 'Custom {{MERGE#}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The subscriber or WordPress user's email address", 'pigeonpack' ); ?>"><?php _e( '{{EMAIL}} or {{MERGE0}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The WordPress user's first name", 'pigeonpack' ); ?>"><?php _e( '{{FNAME}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The WordPress user's last name", 'pigeonpack' ); ?>"><?php _e( '{{LNAME}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The WordPress user's display name", 'pigeonpack' ); ?>"><?php _e( '{{DNAME}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The WordPress user's nicename", 'pigeonpack' ); ?>"><?php _e( '{{NNAME}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The WordPress user's website", 'pigeonpack' ); ?>"><?php _e( '{{SITE}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The WordPress user's username", 'pigeonpack' ); ?>"><?php _e( '{{USERNAME}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The date the campaign is being sent", 'pigeonpack' ); ?>"><?php _e( '{{DATE}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "Custom MERGE variables, set in your Pigeon Pack List", 'pigeonpack' ); ?>"><?php _e( 'Custom {{MERGE#}}', 'pigeonpack' ); ?></span></li>
 				<li><span class="pigeonpack-tooltip" title="<?php _e( "Used in WordPress Post Digest Campaigns. To signify the start and end of the post loop.", 'pigeonpack' ); ?>"><?php _e( '{{POST_LOOP_START}}...{{POST_LOOP_END}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "The Post's Title", 'pigeonpack' ); ?>"><?php _e( '{{POST_TITLE}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "The Post's Full Content", 'pigeonpack' ); ?>"><?php _e( '{{POST_CONTENT}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "The Post's Excerpt", 'pigeonpack' ); ?>"><?php _e( '{{POST_EXCERPT}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "The Post's Author Name", 'pigeonpack' ); ?>"><?php _e( '{{POST_AUTHOR}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "The Post's Publish Date", 'pigeonpack' ); ?>"><?php _e( '{{POST_DATE}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "The Post's Permalink", 'pigeonpack' ); ?>"><?php _e( '{{POST_URL}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's title", 'pigeonpack' ); ?>"><?php _e( '{{POST_TITLE}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's full content", 'pigeonpack' ); ?>"><?php _e( '{{POST_CONTENT}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's excerpt", 'pigeonpack' ); ?>"><?php _e( '{{POST_EXCERPT}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's author name", 'pigeonpack' ); ?>"><?php _e( '{{POST_AUTHOR}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's publish date", 'pigeonpack' ); ?>"><?php _e( '{{POST_DATE}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's permalink", 'pigeonpack' ); ?>"><?php _e( '{{POST_URL}}', 'pigeonpack' ); ?></span></li>
 			
 			</ul>
 		

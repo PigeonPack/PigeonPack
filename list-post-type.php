@@ -608,6 +608,10 @@ if ( !function_exists( 'pigeonpack_double_optin_box' ) ) {
                     <th><?php _e( 'Message', 'pigeonpack' ); ?></th>
                     <td>
                     <textarea id="pigeonpack_double_optin_message" class="large-text" name="pigeonpack_double_optin_message" cols="50" rows="6"><?php echo htmlspecialchars( stripslashes( $double_optin['message'] ) ); ?></textarea>
+                    <p class="description">
+                    	{{LIST_NAME}} - <?php _e( 'The name of this list.', 'pigeonpack' ); ?><br />
+                    	{{OPTIN_URL}} - <?php _e( 'The URL the subscriber needs to click to finish the double opt-in.', 'pigeonpack' ); ?>
+                    </p>
                     </td>
                 </tr>
                 

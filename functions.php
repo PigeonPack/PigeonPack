@@ -1086,8 +1086,23 @@ if ( !function_exists( 'pigeonpack_hash' ) ) {
 	 */
 	function pigeonpack_hash( $str ) {
 	
-		$hash = md5( microtime( true ) . uniqid() . $str ); //Remove the period from microtime, cause it's ugly
-		return apply_filters( 'it_exchange_generate_unique_hash', $hash );
+		global $wpdb;
+		
+		$hash = md5( microtime( true ) . uniqid() . $str );
+		
+		$hash_count = $wpdb->get_var( $wpdb->prepare( 
+			'
+				SELECT COUNT(*) 
+				FROM ' . $wpdb->prefix . 'pigeonpack_subscribers 
+				WHERE `subscriber_hash` = %s
+			', 
+			$hash
+		) );
+		
+		if ( !empty( $hash_count ) )
+			$hash = pigeonpack_hash( $str );
+		
+		return $hash;
 		
 	}
 	

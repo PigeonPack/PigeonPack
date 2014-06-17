@@ -32,9 +32,9 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			
 			add_action( 'admin_init', array( $this, 'upgrade' ) );
 			
-			add_action( 'admin_enqueue_scripts', array( $this, 'admin_wp_enqueue_scripts' ) );
-			add_action( 'admin_print_styles', array( $this, 'admin_wp_print_styles' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'admin_wp_enqueue_scripts' ), 999 );
+			add_action( 'admin_print_styles', array( $this, 'admin_wp_print_styles' ), 999 );
+			add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ), 999 );
 					
 			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 			
@@ -173,8 +173,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			
 			if ( isset( $post_type ) && 'pigeonpack_list' === $post_type ) {
 				
-				wp_enqueue_script( 'jquery-ui-datepicker' );
-				wp_enqueue_script( 'pigeonpack_list_script', PIGEON_PACK_PLUGIN_URL . '/js/list'.$suffix.'.js', array( 'jquery' ), PIGEON_PACK_VERSION );
+				wp_enqueue_script( 'pigeonpack_list_script', PIGEON_PACK_PLUGIN_URL . '/js/list'.$suffix.'.js', array( 'jquery', 'jquery-ui-datepicker' ), PIGEON_PACK_VERSION, true );
 				$args = array(
 							'plugin_url' => PIGEON_PACK_PLUGIN_URL,
 						);
@@ -182,12 +181,12 @@ if ( !class_exists( 'PigeonPack' ) ) {
 				
 			} else if ( isset( $post_type ) && 'pigeonpack_campaign' === $post_type ) {
 				
-				wp_enqueue_script( 'pigeonpack_campaign_script', PIGEON_PACK_PLUGIN_URL . '/js/campaign'.$suffix.'.js', array( 'jquery', 'jquery-ui-tooltip', 'jquery-effects-slide' ), PIGEON_PACK_VERSION );
+				wp_enqueue_script( 'pigeonpack_campaign_script', PIGEON_PACK_PLUGIN_URL . '/js/campaign'.$suffix.'.js', array( 'jquery', 'jquery-ui-tooltip', 'jquery-effects-slide' ), PIGEON_PACK_VERSION, true );
 				
 			} else if ( 'pigeon-pack_page_pigeonpack-settings' == $hook_suffix ) {
 			
 				$dep = array( 'jquery-ui-tooltip' );
-				wp_enqueue_script( 'pigeonpack_settings_script', PIGEON_PACK_PLUGIN_URL . '/js/settings'.$suffix.'.js', array( 'jquery', 'jquery-ui-tooltip' ), PIGEON_PACK_VERSION );
+				wp_enqueue_script( 'pigeonpack_settings_script', PIGEON_PACK_PLUGIN_URL . '/js/settings'.$suffix.'.js', array( 'jquery', 'jquery-ui-tooltip' ), PIGEON_PACK_VERSION, true );
 				
 			}
 			
@@ -219,10 +218,10 @@ if ( !class_exists( 'PigeonPack' ) ) {
 					
 			}
 			
-			wp_enqueue_script( 'pigeonpack_script', PIGEON_PACK_PLUGIN_URL . '/js/pigeonpack' . $suffix . '.js', array( 'jquery' ), PIGEON_PACK_VERSION );
+			wp_enqueue_script( 'pigeonpack_script', PIGEON_PACK_PLUGIN_URL . '/js/pigeonpack' . $suffix . '.js', array( 'jquery' ), PIGEON_PACK_VERSION, true );
 			$args = array(
-						'ajax_url'	=> admin_url( 'admin-ajax.php' ),
-						);
+				'ajax_url'	=> admin_url( 'admin-ajax.php' ),
+			);
 			wp_localize_script( 'pigeonpack_script', 'pigeonpack_ajax_object', $args );
 			
 		}

@@ -26,7 +26,7 @@ if ( !function_exists( 'pigeonpack_verify_list_id' ) ) {
 	
 		if ( !$list_id = absint( $list_id ) || !get_post( $list_id ) ) { //verify we get a valid integer and valid post ID
 
-			$error = '<h3>' . __( 'Invalid List ID', 'pigeonpack' ) . '</h3>';
+			$error  = '<h3>' . __( 'Invalid List ID', 'pigeonpack' ) . '</h3>';
 			$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 			$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 			
@@ -55,7 +55,7 @@ if ( !function_exists( 'pigeonpack_verify_role' ) ) {
 	
 		if ( !is_string( $role_name ) || !get_role( $role_name ) ) { //verify we get a valid integer and valid post ID
 
-			$error = '<h3>' . __( 'Invalid role name', 'pigeonpack' ) . '</h3>';
+			$error  = '<h3>' . __( 'Invalid role name', 'pigeonpack' ) . '</h3>';
 			$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 			$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 			
@@ -83,7 +83,7 @@ if ( !function_exists( 'pigeonpack_verify_subscriber_hash' ) ) {
 		
 		if ( !preg_match( '#^[0-9a-f]{32}$#i', $subscriber ) ) { //verify we get a valid 32 character md5 hash
 
-			$error = '<h3>' . __( 'Invalid Subscriber Format', 'pigeonpack' ) . '</h3>';
+			$error  = '<h3>' . __( 'Invalid Subscriber Format', 'pigeonpack' ) . '</h3>';
 			$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 			$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 			
@@ -127,7 +127,7 @@ if ( !function_exists( 'process_pigeonpack_double_optin_subscribe' ) ) {
 					
 					if ( $subscriber ) {
 					
-						$success = '<h3>' . __( 'Subscription Confirmed', 'pigeonpack' ) . '</h3>';
+						$success  = '<h3>' . __( 'Subscription Confirmed', 'pigeonpack' ) . '</h3>';
 						$success .= '<p>' . __( 'Your subscription to our list has been confirmed.', 'pigeonpack' ) . '</p>';
 						$success .= '<p>' . __( 'Thank you for subscribing!', 'pigeonpack' ) . '</p>';
 						
@@ -135,7 +135,7 @@ if ( !function_exists( 'process_pigeonpack_double_optin_subscribe' ) ) {
 						
 					} else {
 					
-						$error = '<h3>' . __( 'Error Processing Subscription', 'pigeonpack' ) . '</h3>';
+						$error  = '<h3>' . __( 'Error Processing Subscription', 'pigeonpack' ) . '</h3>';
 						$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 						$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 						
@@ -145,7 +145,7 @@ if ( !function_exists( 'process_pigeonpack_double_optin_subscribe' ) ) {
 				
 				} else { //Already subscribed
 		
-					$success = '<h3>' . __( 'Subscription Confirmed', 'pigeonpack' ) . '</h3>';
+					$success  = '<h3>' . __( 'Subscription Confirmed', 'pigeonpack' ) . '</h3>';
 					$success .= '<p>' . __( 'Your subscription to our list has been confirmed.', 'pigeonpack' ) . '</p>';
 					$success .= '<p>' . __( 'Thank you for subscribing!', 'pigeonpack' ) . '</p>';
 					
@@ -155,7 +155,7 @@ if ( !function_exists( 'process_pigeonpack_double_optin_subscribe' ) ) {
 			
 			} else {
 				
-				$error = '<h3>' . __( 'Missing Subscriber Details', 'pigeonpack' ) . '</h3>';
+				$error  = '<h3>' . __( 'Missing Subscriber Details', 'pigeonpack' ) . '</h3>';
 				$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 				$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 				
@@ -165,7 +165,7 @@ if ( !function_exists( 'process_pigeonpack_double_optin_subscribe' ) ) {
 			
 		} else {
 			
-			$error = '<h3>' . __( 'Missing List ID', 'pigeonpack' ) . '</h3>';
+			$error  = '<h3>' . __( 'Missing List ID', 'pigeonpack' ) . '</h3>';
 			$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 			$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 			
@@ -237,14 +237,14 @@ if ( !function_exists( 'process_pigeonpack_unsubscribe' ) ){
 				
 				if ( $subscriber ) {
 				
-					$success = '<h3>' . __( 'Unsubscribe Successful', 'pigeonpack' ) . '</h3>';
+					$success  = '<h3>' . __( 'Unsubscribe Successful', 'pigeonpack' ) . '</h3>';
 					$success .= '<p>' . __( 'You have been removed from this mailing list.', 'pigeonpack' ) . '</p>';
 					
 					wp_die( apply_filters( 'pigeonpack_processing_unsubscribe_success_message', $success ) . BACK_TO_SITE_LINK, $title );
 					
 				} else {
 				
-					$error = '<h3>' . __( 'Error Processing Subscription', 'pigeonpack' ) . '</h3>';
+					$error  = '<h3>' . __( 'Error Processing Subscription', 'pigeonpack' ) . '</h3>';
 					$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 					$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 					
@@ -256,7 +256,7 @@ if ( !function_exists( 'process_pigeonpack_unsubscribe' ) ){
 		
 		} else {
 			
-			$error = '<h3>' . __( 'Missing Subscriber', 'pigeonpack' ) . '</h3>';
+			$error  = '<h3>' . __( 'Missing Subscriber', 'pigeonpack' ) . '</h3>';
 			$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 			$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 			
@@ -284,7 +284,7 @@ if ( !function_exists( 'pigeonpack_unsubcribe_form' ) ){
 		
 		if ( !empty( $request['subscriber'] ) && pigeonpack_verify_subscriber_hash( $request['subscriber'] ) ) {
 						
-			$form = '<h3>' . __( 'Unsubscribe', 'pigeonpack' ) . '</h3>';
+			$form  = '<h3>' . __( 'Unsubscribe', 'pigeonpack' ) . '</h3>';
 			$form .= '<p>' . sprintf( __( 'Are you sure you want to unsubscribe %s from this mailing list?', 'pigeonpack' ), '<strong>' . $email . '</strong>' ) . '</p>';
 			$form .= '<a href="' . add_query_arg( array( 'verify' => 'yes', 'type' => $type ) ) . '">' . __( 'Yes, unsubscribe me!', 'pigeonpack' ) . '</a> | <a href="' . get_home_url() . '">' . __( 'No, get me outta here!', 'pigeonpack' ) . '</a>';
 			

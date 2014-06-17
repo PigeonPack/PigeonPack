@@ -1086,15 +1086,8 @@ if ( !function_exists( 'pigeonpack_hash' ) ) {
 	 */
 	function pigeonpack_hash( $str ) {
 	
-		if ( defined( SECURE_AUTH_SALT ) )
-			$salt[] = SECURE_AUTH_SALT;
-			
-		if ( defined( AUTH_SALT ) )
-			$salt[] = AUTH_SALT;
-		
-		$salt[] = get_bloginfo( 'name' );
-			
-		return md5( md5( implode( $salt ) ) . md5( $str ) ); // doesn't have to be too secure, just want a pretty random string
+		$hash = md5( microtime( true ) . uniqid() . $str ); //Remove the period from microtime, cause it's ugly
+		return apply_filters( 'it_exchange_generate_unique_hash', $hash );
 		
 	}
 	

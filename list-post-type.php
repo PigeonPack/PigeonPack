@@ -829,11 +829,8 @@ if ( !function_exists( 'save_pigeonpack_list_meta' ) ) {
 	 * @param int $list_id WordPress post ID
 	 */		
 	function save_pigeonpack_list_meta( $list_id ) {
-		
-		if ( isset( $_REQUEST['post_type'] ) && 'pigeonpack_list' !== $_REQUEST['post_type'] )
-			return;
-			
-		if ( !current_user_can( 'edit_list', $list_id ) )
+					
+		if ( !current_user_can( 'edit_pigeonpack_list', $list_id ) )
 			return;
 			
 		if ( !isset( $_REQUEST['pigeonpack_list_nonce'] ) || !wp_verify_nonce( $_REQUEST['pigeonpack_list_nonce'], 'update_pigeonpack_list' ) )
@@ -855,14 +852,17 @@ if ( !function_exists( 'save_pigeonpack_list_meta' ) ) {
 		if ( isset( $_REQUEST['pigeonpack_footer_reminder'] ) )
 			$required_footer['reminder'] = $_REQUEST['pigeonpack_footer_reminder'];
 		
-		update_post_meta( $list_id, '_pigeonpack_required_footer_settings', $required_footer );	
-		
-		unset( $required_footer );
+		if ( !empty( $double_optin ) ) {
+
+			update_post_meta( $list_id, '_pigeonpack_required_footer_settings', $required_footer );	
+			unset( $required_footer );
+
+		}
 		// End Required Footer Email Content //
 							
 		// Begin Double Opt-in Settings //
-		if ( isset( $_REQUEST['pigeonpack_double_optin_enabled'] ) )
-			$double_optin['enabled'] = $_REQUEST['pigeonpack_double_optin_enabled'];
+		if ( !empty( $_REQUEST['pigeonpack_double_optin_enabled'] ) )
+			$double_optin['enabled'] = 'on';
 		else
 			$double_optin['enabled'] = 'off'; //checkboxes aren't set if they aren't checked...
 								
@@ -877,10 +877,13 @@ if ( !function_exists( 'save_pigeonpack_list_meta' ) ) {
 			
 		if ( isset( $_REQUEST['pigeonpack_double_optin_message'] ) )
 			$double_optin['message'] = $_REQUEST['pigeonpack_double_optin_message'];
+		
+		if ( !empty( $double_optin ) ) {
+		
+			update_post_meta( $list_id, '_pigeonpack_double_optin_settings', $double_optin );	
+			unset( $double_optin );
 			
-		update_post_meta( $list_id, '_pigeonpack_double_optin_settings', $double_optin );	
-			
-		unset( $double_optin );
+		}
 		// End Double Opt-in Settings //
 		
 		// Begin Subscriber Fields //
@@ -1006,7 +1009,7 @@ if ( !function_exists( 'save_pigeonpack_list_meta' ) ) {
 		// End New Susbcriber //
 	
 	}
-	add_action( 'save_post', 'save_pigeonpack_list_meta' );
+	add_action( 'save_post_pigeonpack_list', 'save_pigeonpack_list_meta' );
 
 }
 
@@ -1173,12 +1176,12 @@ if ( !function_exists( 'add_pigeonpack_subscriber' ) ) {
 		
 		$message = '';
 		$new_subscriber = true;
-		
+				
 		if ( 'pending' === $status ) {
 			
 			$double_optin = get_post_meta( $list_id, '_pigeonpack_double_optin_settings', true );
-				
-			if ( isset( $double_optin['enabled'] ) && 'on' === $double_optin['enabled'] ) {
+		
+			if ( !empty( $double_optin['enabled'] ) && 'on' === $double_optin['enabled'] ) {
 				
 				$double_optin = true;
 			
@@ -1293,7 +1296,7 @@ if ( !function_exists( 'update_pigeonpack_subscriber' ) ) {
 			
 		if ( empty( $result ) ) //subscriber doesn't exist
 			return false;
-			
+						
 		if ( !empty( $subscriber_meta['pigeonpack_email_format'] ) ) {
 			
 			$format = $subscriber_meta['pigeonpack_email_format'];
@@ -1310,59 +1313,16 @@ if ( !function_exists( 'update_pigeonpack_subscriber' ) ) {
 								'subscriber_status'		=> $status ? $status : $result['subscriber_status'], //only update if $status is not false otehrwise use current setting
 								'message_preference'	=> $format,
 							);
-		
+							
+		if ( $result['email'] !== $subscriber_meta['M0'] ) //update subscriber_hash in case the email address changes
+			$update_subscriber['subscriber_hash'] = pigeonpack_hash( $subscriber_meta['M0'] );
+
 		$return = $wpdb->update( $wpdb->prefix . 'pigeonpack_subscribers', $update_subscriber, array( 'id' => $subscriber_id ) );
 		
-		if ( $return ) {
-
-			//Need to generate a new hash too, incase they changed their email address		
-			$hash = pigeonpack_hash( $subscriber_meta['M0'] );
-			return update_pigeonpack_subscriber_hash( $subscriber_id, $hash );
-
-		}
+		if ( $return ) 
+			return $return;
 		
 		return false;
-		
-	}
-
-}
-
-if ( !function_exists( 'update_pigeonpack_subscriber_hash' ) ) {
-			
-	/**
-	 * Updates existing subscriber's hash
-	 *
-	 * @since 0.0.1
-	 * @uses $wpdb WordPress datbase API
-	 * @link http://codex.wordpress.org/Class_Reference/wpdb
-	 *
-	 * @param int $subscriber_id Existing subscriber ID
-	 * @param string $subscriber_hash Susbcriber's hash
-	 * @return int|bool Subscriber ID or FALSE if failed
-	 */		
-	function update_pigeonpack_subscriber_hash( $subscriber_id, $subscriber_hash ) {
-	
-		global $wpdb;
-	
-		if ( !$subscriber_id = absint( $subscriber_id )  )
-			return false;
-			
-		$result = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . $wpdb->prefix . 'pigeonpack_subscribers WHERE id = %d', $subscriber_id ), ARRAY_A );
-			
-		if ( empty( $result ) ) //subscriber doesn't exist
-			return false;
-		
-		$update_subscriber = array(
-								'subscriber_modified'	=> date_i18n( 'Y-m-d H:i:s' ),
-								'subscriber_hash'		=> $subscriber_hash,
-							);
-		
-		$return = $wpdb->update( $wpdb->prefix . 'pigeonpack_subscribers', $update_subscriber, array( 'id' => $subscriber_id ) );
-					
-		if ( $return )
-			return $subscriber_id;
-		else
-			return false;
 		
 	}
 

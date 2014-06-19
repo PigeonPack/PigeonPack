@@ -38,6 +38,8 @@ $pigeonpack_list(document).ready(function($) {
 		};
 		
 		$.post( ajaxurl, data, function(response) {
+		
+			console.log( response );
 			
 			results = $.parseJSON( response );
 			

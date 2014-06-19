@@ -1176,6 +1176,7 @@ if ( !function_exists( 'add_pigeonpack_subscriber' ) ) {
 		
 		$message = '';
 		$new_subscriber = true;
+		$double_optin = false;
 				
 		if ( 'pending' === $status ) {
 			

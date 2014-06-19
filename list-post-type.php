@@ -4,6 +4,7 @@
  *
  * @package Pigeon Pack
  * @since 0.0.1
+ * @todo Add better error checking with $wpdb method calls
  */
 
 if ( !function_exists ( 'create_list_post_type' ) ) {
@@ -1321,7 +1322,7 @@ if ( !function_exists( 'update_pigeonpack_subscriber' ) ) {
 		$return = $wpdb->update( $wpdb->prefix . 'pigeonpack_subscribers', $update_subscriber, array( 'id' => $subscriber_id ) );
 		
 		if ( $return ) 
-			return $return;
+			return $subscriber_id;
 		
 		return false;
 		

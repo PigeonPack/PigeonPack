@@ -486,7 +486,7 @@ if ( !function_exists( 'pigeonpack_campaign_merge_vars_meta_box' ) ) {
 				<li><span class="pigeonpack-tooltip" title="<?php _e( "The WordPress user's website", 'pigeonpack' ); ?>"><?php _e( '{{SITE}}', 'pigeonpack' ); ?></span></li>
 				<li><span class="pigeonpack-tooltip" title="<?php _e( "The WordPress user's username", 'pigeonpack' ); ?>"><?php _e( '{{USERNAME}}', 'pigeonpack' ); ?></span></li>
 				<li><span class="pigeonpack-tooltip" title="<?php _e( "The date the campaign is being sent", 'pigeonpack' ); ?>"><?php _e( '{{DATE}}', 'pigeonpack' ); ?></span></li>
-				<li><span class="pigeonpack-tooltip" title="<?php _e( "Custom MERGE variables, set in your Pigeon Pack List", 'pigeonpack' ); ?>"><?php _e( 'Custom {{MERGE#}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "Custom merge variables are set in your individual Pigeon Pack Lists", 'pigeonpack' ); ?>"><?php _e( '{{CUSTOM}} or {{MERGE#}}', 'pigeonpack' ); ?></span></li>
 				<li><span class="pigeonpack-tooltip" title="<?php _e( "Used in WordPress Post Digest Campaigns. To signify the start and end of the post loop.", 'pigeonpack' ); ?>"><?php _e( '{{POST_LOOP_START}}...{{POST_LOOP_END}}', 'pigeonpack' ); ?></span></li>
 				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's title", 'pigeonpack' ); ?>"><?php _e( '{{POST_TITLE}}', 'pigeonpack' ); ?></span></li>
 				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's full content", 'pigeonpack' ); ?>"><?php _e( '{{POST_CONTENT}}', 'pigeonpack' ); ?></span></li>

@@ -60,7 +60,7 @@ You must have:
 
 = How is Pigeon pack Licensed? =
 
-* Pigeon pack is GPL
+* Pigeon Pack is GPL
 
 == Changelog ==
 = 1.0.2 =

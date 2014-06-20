@@ -11,7 +11,7 @@ Plugin Name: Pigeon Pack
 Plugin URI: http://pigeonpack.com/
 Description: Free and easy email marketing, newsletters, and campaigns; built into your WordPress dashboard!
 Author: layotte
-Version: 1.0.3
+Version: 1.0.4
 Author URI: http://pigeonpack.com/
 Tags: email, marketing, email marketing, newsletters, email newsletters, campaigns, email campaigns, widget, form, mailing lists
 Special Thanks: 
@@ -23,7 +23,7 @@ http://www.minifycss.com/css-compressor/
 */
 
 //Define global variables...
-define( 'PIGEON_PACK_VERSION' , '1.0.3' );
+define( 'PIGEON_PACK_VERSION' , '1.0.4' );
 define( 'PIGEON_PACK_DB_VERSION', '1.0.0' );
 define( 'PIGEON_PACK_API_URL', 'http://pigeonpack.com/api' );
 define( 'PIGEON_PACK_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

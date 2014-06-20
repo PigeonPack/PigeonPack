@@ -3,7 +3,7 @@ Contributors: layotte
 Tags: email, campaign, newsletter, email marketing, widget, email newsletter, email widget, newsletter widget, widget
 Requires at least: 3.4
 Tested up to: 3.9
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 
 Free and easy email marketing, newsletters, and campaigns; built into your WordPress dashboard!
 
@@ -63,6 +63,12 @@ You must have:
 * Pigeon Pack is GPL
 
 == Changelog ==
+= 1.0.4 -
+* Setup better multi-part MIME support
+* Fixed typo in campaign save
+* Adding proper HTML error codes to wp_die statements
+* Fixed error in calling static method in shortcodes
+
 = 1.0.3 =
 * General typo and code fixes
 * Fixed update return variable

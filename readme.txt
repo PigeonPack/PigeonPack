@@ -3,7 +3,7 @@ Contributors: layotte
 Tags: email, campaign, newsletter, email marketing, widget, email newsletter, email widget, newsletter widget, widget
 Requires at least: 3.4
 Tested up to: 3.9
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 
 Free and easy email marketing, newsletters, and campaigns; built into your WordPress dashboard!
 
@@ -63,6 +63,24 @@ You must have:
 * Pigeon Pack is GPL
 
 == Changelog ==
+= 1.0.3 =
+* General typo and code fixes
+* Fixed update return variable
+* Fixed bug in adding new subscribers AJAX
+* Updating Pigeon Pack icon and Special Thanks
+* Redux of the hash functions
+* Change priority of script enqueues and default to in_footer when possible
+* Fixing tag lines
+* Undefined variable error in widgets
+* Updating Help Page and CSS, fixing misnamed functions
+* Updated {{MERGE}} tag helpers
+* Removing unused code
+* More robust post status transition checking
+* Do not add trash => publish posts to digest, but added an action hook to override this
+* Check against false in array_search calls
+* Use pigeonpack default settigns for footer info if none set in list
+* Renamed all functions in class.php to remove pigeonpack_ (not needed)
+
 = 1.0.2 =
 * Remove premium nag
 

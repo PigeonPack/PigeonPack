@@ -620,7 +620,7 @@ if ( !function_exists( 'save_pigeonpack_campaign_meta' ) ) {
 		//If this campaign has been unpublished, we need to uninitialize the campaign	
 		} else if ( 'publish' !== $post->post_status ) {
 			
-			if ( 'wp_post' === $campaign_type ) {
+			if ( 'wp_post' === $_REQUEST['campaign_type'] ) {
 				
 				remove_pigeonpack_wp_post_campaign( $post->ID );
 				

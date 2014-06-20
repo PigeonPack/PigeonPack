@@ -237,7 +237,7 @@ if ( ! class_exists( 'PigeonPack_Shortcodes' ) ) {
 		 *
 		 * @since 0.0.1
 		 */
-		function process_pigeonpack_form_submission() {
+		public static function process_pigeonpack_form_submission() {
 			
 			if ( isset( $_REQUEST['pigeonpack_user_optin'] ) ) {
 				// User Optin Form Submission

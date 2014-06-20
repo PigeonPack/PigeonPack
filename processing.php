@@ -30,7 +30,7 @@ if ( !function_exists( 'pigeonpack_verify_list_id' ) ) {
 			$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 			$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 			
-			wp_die( apply_filters( 'pigeonpack_processing_invalid_list_id', $error ) . BACK_TO_SITE_LINK, GENERIC_ERROR );
+			wp_die( apply_filters( 'pigeonpack_processing_invalid_list_id', $error ) . BACK_TO_SITE_LINK, GENERIC_ERROR, array( 'response' => '400' ) );
 
 		}
 		
@@ -59,7 +59,7 @@ if ( !function_exists( 'pigeonpack_verify_role' ) ) {
 			$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 			$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 			
-			wp_die( apply_filters( 'pigeonpack_processing_invalid_role_name', $error ) . BACK_TO_SITE_LINK, GENERIC_ERROR );
+			wp_die( apply_filters( 'pigeonpack_processing_invalid_role_name', $error ) . BACK_TO_SITE_LINK, GENERIC_ERROR, array( 'response' => '400' ) );
 			
 		}
 		
@@ -87,7 +87,7 @@ if ( !function_exists( 'pigeonpack_verify_subscriber_hash' ) ) {
 			$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 			$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 			
-			wp_die( apply_filters( 'pigeonpack_processing_invalid_susbcriber_hash', $error ) . BACK_TO_SITE_LINK, GENERIC_ERROR );
+			wp_die( apply_filters( 'pigeonpack_processing_invalid_susbcriber_hash', $error ) . BACK_TO_SITE_LINK, GENERIC_ERROR, array( 'response' => '400' ) );
 			
 		}
 		
@@ -131,7 +131,7 @@ if ( !function_exists( 'process_pigeonpack_double_optin_subscribe' ) ) {
 						$success .= '<p>' . __( 'Your subscription to our list has been confirmed.', 'pigeonpack' ) . '</p>';
 						$success .= '<p>' . __( 'Thank you for subscribing!', 'pigeonpack' ) . '</p>';
 						
-						wp_die( apply_filters( 'pigeonpack_double_optin_success_message', $success ) . BACK_TO_SITE_LINK, $title );
+						wp_die( apply_filters( 'pigeonpack_double_optin_success_message', $success ) . BACK_TO_SITE_LINK, $title, array( 'response' => '200' ) );
 						
 					} else {
 					
@@ -139,7 +139,7 @@ if ( !function_exists( 'process_pigeonpack_double_optin_subscribe' ) ) {
 						$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 						$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 						
-						wp_die( apply_filters( 'pigeonpack_double_optin_unknown_error_message', $error ) . BACK_TO_SITE_LINK, $title );
+						wp_die( apply_filters( 'pigeonpack_double_optin_unknown_error_message', $error ) . BACK_TO_SITE_LINK, $title, array( 'response' => '400' ) );
 						
 					}
 				
@@ -149,7 +149,7 @@ if ( !function_exists( 'process_pigeonpack_double_optin_subscribe' ) ) {
 					$success .= '<p>' . __( 'Your subscription to our list has been confirmed.', 'pigeonpack' ) . '</p>';
 					$success .= '<p>' . __( 'Thank you for subscribing!', 'pigeonpack' ) . '</p>';
 					
-					wp_die( apply_filters( 'pigeonpack_double_optin_already_subscribed_message', $success ) . BACK_TO_SITE_LINK, $title );
+					wp_die( apply_filters( 'pigeonpack_double_optin_already_subscribed_message', $success ) . BACK_TO_SITE_LINK, $title, array( 'response' => '200' ) );
 					
 				}
 			
@@ -159,7 +159,7 @@ if ( !function_exists( 'process_pigeonpack_double_optin_subscribe' ) ) {
 				$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 				$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 				
-				wp_die( apply_filters( 'pigeonpack_double_optin_missing_subscriber_details_message', $error ) . BACK_TO_SITE_LINK, $title );
+				wp_die( apply_filters( 'pigeonpack_double_optin_missing_subscriber_details_message', $error ) . BACK_TO_SITE_LINK, $title, array( 'response' => '400' ) );
 				
 			}
 			
@@ -169,7 +169,7 @@ if ( !function_exists( 'process_pigeonpack_double_optin_subscribe' ) ) {
 			$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 			$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 			
-			wp_die( apply_filters( 'pigeonpack_double_optin_missing_list_id_message', $error ) . BACK_TO_SITE_LINK, $title );
+			wp_die( apply_filters( 'pigeonpack_double_optin_missing_list_id_message', $error ) . BACK_TO_SITE_LINK, $title, array( 'response' => '400' ) );
 			
 		}
 					
@@ -218,13 +218,13 @@ if ( !function_exists( 'process_pigeonpack_unsubscribe' ) ){
 				$success = '<h3>' . __( 'Unsubscribe Successful', 'pigeonpack' ) . '</h3>';
 				$success .= '<p>' . __( 'You have been removed from this mailing list.', 'pigeonpack' ) . '</p>';
 				
-				wp_die( apply_filters( 'pigeonpack_processing_unsubscribe_already_unsubscribed', $success ) . BACK_TO_SITE_LINK, $title );
+				wp_die( apply_filters( 'pigeonpack_processing_unsubscribe_already_unsubscribed', $success ) . BACK_TO_SITE_LINK, $title, array( 'response' => '200' ) );
 				
 			}
 			
 			if ( !isset( $request['verify'] ) ) {
 			
-				wp_die( pigeonpack_unsubcribe_form( $request, $subscriber['email'], $type ) . BACK_TO_SITE_LINK, $title );
+				wp_die( pigeonpack_unsubcribe_form( $request, $subscriber['email'], $type ) . BACK_TO_SITE_LINK, $title, array( 'response' => '200' ) );
 				
 			}
 			
@@ -240,7 +240,7 @@ if ( !function_exists( 'process_pigeonpack_unsubscribe' ) ){
 					$success  = '<h3>' . __( 'Unsubscribe Successful', 'pigeonpack' ) . '</h3>';
 					$success .= '<p>' . __( 'You have been removed from this mailing list.', 'pigeonpack' ) . '</p>';
 					
-					wp_die( apply_filters( 'pigeonpack_processing_unsubscribe_success_message', $success ) . BACK_TO_SITE_LINK, $title );
+					wp_die( apply_filters( 'pigeonpack_processing_unsubscribe_success_message', $success ) . BACK_TO_SITE_LINK, $title, array( 'response' => '200' ) );
 					
 				} else {
 				
@@ -248,7 +248,7 @@ if ( !function_exists( 'process_pigeonpack_unsubscribe' ) ){
 					$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 					$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 					
-					wp_die( apply_filters( 'pigeonpack_processing_unsubscribe_unknown_error_message', $error ) . BACK_TO_SITE_LINK, $title );
+					wp_die( apply_filters( 'pigeonpack_processing_unsubscribe_unknown_error_message', $error ) . BACK_TO_SITE_LINK, $title, array( 'response' => '400' ) );
 					
 				}
 				
@@ -260,7 +260,7 @@ if ( !function_exists( 'process_pigeonpack_unsubscribe' ) ){
 			$error .= '<p>' . __( 'Please try again.', 'pigeonpack' ) . '</p>';
 			$error .= '<p>' . __( 'If you continue to have this problem, contact us immediately.', 'pigeonpack' ) . '</p>';
 			
-			wp_die( apply_filters( 'pigeonpack_processing_unsubscribe_missing_subscriber', $error ) . BACK_TO_SITE_LINK, UNSUBSCRIBE_ERROR );
+			wp_die( apply_filters( 'pigeonpack_processing_unsubscribe_missing_subscriber', $error ) . BACK_TO_SITE_LINK, UNSUBSCRIBE_ERROR, array( 'response' => '400' ) );
 
 		}
 					

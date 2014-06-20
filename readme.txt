@@ -23,8 +23,6 @@ Features of this plugin include:
 
 You can follow the development of this plugin at [GitHub](https://github.com/PigeonPack/PigeonPack)!
 
-Due to the complex nature of this plugin, we are unable to provide free support. We will respond to bugs using the WordPress support forums.
-
 Premium Pigeon Pack Add-ons (COMING SOON):
 
 * Analytics - Learn more about what your subscribers are doing!

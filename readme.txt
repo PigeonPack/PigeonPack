@@ -12,6 +12,7 @@ Free and easy email marketing, newsletters, and campaigns; built into your WordP
 The Pigeon Pack plugin is completely free! This plugin aims to solve one problem, putting the power of email marketing, newsletters, and campaigns in the hands of YOU. Now you do not need to pay for a third party like MailChimp or Constant Contact to reach out to your customers. You have full control and power over your own lists and you can bring them anywhere at any time. The Pigeon Pack plugin is GPL and free to use on any WordPress website. 
 
 Features of this plugin include:
+
 * Single Email Campaigns
 * WordPress Post Campaigns (single or digest)
 * Email a specific role or create a list
@@ -25,6 +26,7 @@ You can follow the development of this plugin at [GitHub](https://github.com/Pig
 Due to the complex nature of this plugin, we are unable to provide free support. We will respond to bugs using the WordPress support forums.
 
 Premium Pigeon Pack Add-ons (COMING SOON):
+
 * Analytics - Learn more about what your subscribers are doing!
 * Autoresponders (Events) - Send a series of messages to new subscribers.
 * RSS Campaigns - Import the RSS feed from another site to send to your subscribers.

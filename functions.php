@@ -78,6 +78,8 @@ if ( !function_exists( 'pigeonpack_double_optin_mail' ) ) {
 	 */
 	function pigeonpack_double_optin_mail( $list_id, $subscriber_id ) {
 		
+		global $alt_body;
+		
 		$list = get_post( $list_id );
 		$subscriber = get_pigeonpack_subscriber( $subscriber_id );
 	
@@ -94,12 +96,17 @@ if ( !function_exists( 'pigeonpack_double_optin_mail' ) ) {
 		list( $email, $subject, $message, $footer ) = pigeonpack_unmerge_subscriber( $subscriber, $subject, $message, '' );
 		
 		$content_type = 'content-type: ' . pigeonpack_subscriber_content_type( $subscriber );
+			
+		require_once( PIGEON_PACK_PLUGIN_PATH . '/includes/html2txt.php' );
+		$alt_body = convert_html_to_text( $message );
 		
-		if ( 'content-type: text/plain' === $content_type ) {
+		if ( 'content-type: text/html' ) {
+					
+			add_action( 'phpmailer_init', 'pigeonpack_phpmailer_multipart_init' );
 			
-			require_once( PIGEON_PACK_PLUGIN_PATH . '/includes/html2txt.php' );
+		} else if ( 'content-type: text/plain' === $content_type ) {
 			
-			$message = convert_html_to_text( $message );
+			$message = $alt_body;
 			
 		}
 		
@@ -827,6 +834,7 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 	 */
 	function pigeonpack_mail( $campaign, $posts = array(), $offset = 0, $recipients_arr = array() ) {
 		
+		global $alt_body;
 		$campaign = get_post( $campaign );
 	
 		//just incase the campaign was set to draft, stop processing here
@@ -852,7 +860,13 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 					
 		if ( !is_array( $recipients_arr ) )
 			$recipients_arr = array( $recipients_arr );
+					
+		// If we're using an SMTP server, set it up now...
+		if ( isset( $pigeonpack_settings['smtp_enable'] ) && 'smtp' === $pigeonpack_settings['smtp_enable'] )
+			add_action( 'phpmailer_init', 'pigeonpack_phpmailer_init' );
 			
+		require_once( PIGEON_PACK_PLUGIN_PATH . '/includes/html2txt.php' );
+		
 		foreach( $recipients_arr as $recipients ) {
 			
 			list( $subject, $message, $footer ) = pigeonpack_unmerge_misc( $subject, $message, $footer, extract_pigeonpack_list_id( $recipients ) );
@@ -879,26 +893,25 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 			
 			if ( !empty( $subscribers ) ) {
 					
-				// If we're using an SMTP server, set it up now...
-				if ( isset( $pigeonpack_settings['smtp_enable'] ) && 'smtp' === $pigeonpack_settings['smtp_enable'] )
-					add_action( 'phpmailer_init', 'pigeonpack_phpmailer_init' );
-					
 				foreach ( $subscribers as $subscriber ) {
 					
 					list( $email, $merged_subject, $merged_message, $merged_footer ) = pigeonpack_unmerge_subscriber( $subscriber, $subject, $message, $footer );
 					
+					$body = $merged_message . $merged_footer;
+					$alt_body = convert_html_to_text( $body );
+					
 					$content_type = 'content-type: ' . pigeonpack_subscriber_content_type( $subscriber );
 					
-					$body = $merged_message . $merged_footer;
+					if ( 'content-type: text/html' ) {
 					
-					if ( 'content-type: text/plain' === $content_type ) {
+						add_action( 'phpmailer_init', 'pigeonpack_phpmailer_multipart_init' );
 						
-						require_once( PIGEON_PACK_PLUGIN_PATH . '/includes/html2txt.php' );
+					} else if ( 'content-type: text/plain' === $content_type ) {
 						
-						$body = convert_html_to_text( $body );
+						$message = $alt_body;
 						
 					}
-					
+										
 					$subscriber_headers = apply_filters( 'subscriber_loop_pigeonpack_headers', array_merge( $headers, array( $content_type ) ), $subscriber );
 			
 					wp_mail( $email, strip_tags( $merged_subject ), $body, $subscriber_headers );
@@ -1067,6 +1080,27 @@ if ( !function_exists( 'pigeonpack_phpmailer_init' ) ) {
 		}
 		
 		$phpmailer->SMTPSecure = 'none' === $pigeonpack_settings['smtp_encryption'] ? '' : $pigeonpack_settings['smtp_encryption'];
+		
+	}
+	
+}
+
+if ( !function_exists( 'pigeonpack_phpmailer_multipart_init' ) ) {
+
+	/**
+	 * If HTML, setup multipart messaging
+	 *
+	 * @since 0.0.1
+	 * @uses PHPMailer
+	 *
+	 * @param object $phpmailer reference initialized by WordPress
+	 */
+	function pigeonpack_phpmailer_multipart_init( &$phpmailer ) {
+		
+		global $alt_body;
+		
+		$phpmailer->IsHTML( true );
+		$phpmailer->AltBody = $alt_body;
 		
 	}
 	

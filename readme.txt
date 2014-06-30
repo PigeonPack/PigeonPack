@@ -63,7 +63,10 @@ You must have:
 * Pigeon Pack is GPL
 
 == Changelog ==
-= 1.0.4 -
+= 1.0.5 =
+* Updated Pigeon mascot
+
+= 1.0.4 =
 * Setup better multi-part MIME support
 * Fixed typo in campaign save
 * Adding proper HTML error codes to wp_die statements

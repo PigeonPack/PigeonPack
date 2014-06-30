@@ -16,6 +16,7 @@ Author URI: http://pigeonpack.com/
 Tags: email, marketing, email marketing, newsletters, email newsletters, campaigns, email campaigns, widget, form, mailing lists
 Special Thanks: 
 Yusuke Kamiyamane - http://p.yusukekamiyamane.com/ - http://www.iconfinder.com/search/?q=iconset%3Afugue
+Bocian - http://openclipart.org/collection/collection-detail/bocian/6230
 Moini - http://openclipart.org/collection/collection-detail/Moini/7245
 Minifiers:
 http://www.minifyjs.com/javascript-compressor/

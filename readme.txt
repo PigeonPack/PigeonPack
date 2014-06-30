@@ -3,7 +3,7 @@ Contributors: layotte
 Tags: email, campaign, newsletter, email marketing, widget, email newsletter, email widget, newsletter widget, widget
 Requires at least: 3.4
 Tested up to: 3.9
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 
 Free and easy email marketing, newsletters, and campaigns; built into your WordPress dashboard!
 

@@ -1117,19 +1117,20 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 			
 			if ( 'publish' === $new_status ) {
 			
+				do_action( 'pigeonpack_transition_post_status_' . $old_status . '_to_publish', $post );
+
 				switch ( $old_status ) {
-					
+				
+					case 'publish':
 					case 'trash':
-						do_action( 'pigeonpack_transition_post_status_trash_to_publish', $post );
 						return;
-						break;
 						
 					case 'draft':
 					case 'pending':
 					case 'future':
-					default;
+					default:
 						do_pigeonpack_wp_post_campaigns( $post->ID );
-						break;
+						return;
 					
 				}
 				

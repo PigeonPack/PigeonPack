@@ -14,6 +14,8 @@ Author: layotte
 Version: 1.0.6
 Author URI: http://pigeonpack.com/
 Tags: email, marketing, email marketing, newsletters, email newsletters, campaigns, email campaigns, widget, form, mailing lists
+Text Domain: pigeonpack
+Domain Path: /i18n
 Special Thanks: 
 Yusuke Kamiyamane - http://p.yusukekamiyamane.com/ - http://www.iconfinder.com/search/?q=iconset%3Afugue
 Bocian - http://openclipart.org/collection/collection-detail/bocian/6230

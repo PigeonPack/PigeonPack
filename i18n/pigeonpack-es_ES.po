@@ -1,0 +1,1251 @@
+# Copyright (C) 2014 Pigeon Pack
+# This file is distributed under the same license as the Pigeon Pack package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Pigeon Pack 1.0.7\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/pigeon-pack\n"
+"POT-Creation-Date: 2014-08-12 13:24:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-08-18 14:17+0100\n"
+"Last-Translator: jelena kovacevic <jecajeca260@gmail.com>\n"
+"Language-Team: English <support@pigeonpack.com>\n"
+"X-Generator: Poedit 1.5.5\n"
+
+#: campaign-post-type.php:24 campaign-post-type.php:41
+msgid "Pigeon Pack Campaigns"
+msgstr "Campañas Pigeon Pack"
+
+#: campaign-post-type.php:25
+msgid "Campaign"
+msgstr "Campaña"
+
+#: campaign-post-type.php:26 campaign-post-type.php:27
+msgid "Add New Campaign"
+msgstr "Añadir nueva Campaña"
+
+#: campaign-post-type.php:28
+msgid "Edit Campaign"
+msgstr "Editar Campaña"
+
+#: campaign-post-type.php:29
+msgid "New Campaign"
+msgstr "Nueva Campaña"
+
+#: campaign-post-type.php:30
+msgid "View Campaign"
+msgstr "Ver Campaña"
+
+#: campaign-post-type.php:31
+msgid "Search Campaigns"
+msgstr "Buscar Campañas"
+
+#: campaign-post-type.php:32
+msgid "No campaigns found"
+msgstr "No se encontraron Campañas"
+
+#: campaign-post-type.php:33
+msgid "No campaigns found in trash"
+msgstr "No se han encontrado Campañas en la basura"
+
+#: campaign-post-type.php:35
+msgid "Campaigns"
+msgstr "Campañas"
+
+#: campaign-post-type.php:79 campaign-post-type.php:262
+msgid "Campaign Type"
+msgstr "Tipo Campaña"
+
+#: campaign-post-type.php:80
+msgid "Recipients"
+msgstr "Destinatarios"
+
+#: campaign-post-type.php:135 campaign-post-type.php:265
+msgid "Single Campaign"
+msgstr "Campaña Individual"
+
+#: campaign-post-type.php:138
+msgid "WordPress Post"
+msgstr "Publicación WordPress"
+
+#: campaign-post-type.php:201
+msgid "Pigeon Pack Campaign Options"
+msgstr "Opciones Campaña Pigeon Pack"
+
+#: campaign-post-type.php:202
+msgid "Pigeon Pack Merge Variables"
+msgstr "Variables Pigeon Pack Merge"
+
+#: campaign-post-type.php:266
+msgid "WordPress Post Campaign"
+msgstr "Campaña Publicación WordPress"
+
+#: campaign-post-type.php:279
+msgid "WordPress Post Campaign Type"
+msgstr "Tipo Campaña Publicación WordPress"
+
+#: campaign-post-type.php:282
+msgid "Each Post"
+msgstr "Cada Publicación"
+
+#: campaign-post-type.php:283
+msgid "Digest"
+msgstr "Compendio"
+
+#: campaign-post-type.php:296
+msgid "WordPress Post Digest Frequency"
+msgstr "Frecuencia Mensaje Compendio WordPress"
+
+#: campaign-post-type.php:301
+msgid "Daily"
+msgstr "Diario"
+
+#: campaign-post-type.php:302
+msgid "Weekly"
+msgstr "Semanal"
+
+#: campaign-post-type.php:303
+msgid "Monthly"
+msgstr "Mensual"
+
+#: campaign-post-type.php:332
+msgid "on"
+msgstr "En"
+
+#: campaign-post-type.php:346
+msgid "on the"
+msgstr "El"
+
+#: campaign-post-type.php:356
+msgid "last"
+msgstr "Último"
+
+#: campaign-post-type.php:359
+msgid "day of the month"
+msgstr "día del mes"
+
+#: campaign-post-type.php:363
+msgid "at"
+msgstr "En"
+
+#: campaign-post-type.php:401
+msgid "Allowed Categories"
+msgstr "Categorías Permitidas"
+
+#: campaign-post-type.php:403
+msgid "Include"
+msgstr "Incluir"
+
+#: campaign-post-type.php:403
+msgid "Exclude"
+msgstr "Excluir"
+
+#: campaign-post-type.php:407
+msgid "All Categories"
+msgstr "Todas las Categorías"
+
+#: campaign-post-type.php:421
+msgid ""
+"To \"deselect\" hold the SHIFT key on your keyboard while you click the "
+"category."
+msgstr ""
+"Para \"anular la selección\" mantenga pulsada la tecla SHIFT en el teclado "
+"mientras hace clic en la categoría."
+
+#: campaign-post-type.php:426
+msgid "Campaign Recipients"
+msgstr "Destinatarios Campaña"
+
+#: campaign-post-type.php:435 class.php:407 list-post-type.php:588
+msgid "From Name"
+msgstr "De Nombre"
+
+#: campaign-post-type.php:440
+msgid "Reply-to Email"
+msgstr "Email para Contestación"
+
+#: campaign-post-type.php:476
+msgid ""
+"Copy and paste these variables into your email campaign to generate dynamic "
+"content for your subscribers."
+msgstr ""
+"Copia y pegar estas variables en su Campaña de correo electrónico para "
+"generar contenido dinámico para sus suscriptores."
+
+#: campaign-post-type.php:481
+msgid "The subscriber or WordPress user's email address"
+msgstr "El suscriptor o dirección de correo electrónico WordPress  del usuario"
+
+#: campaign-post-type.php:481
+msgid "{{EMAIL}} or {{MERGE0}}"
+msgstr "{{EMAIL}} o {{MERGE0}}"
+
+#: campaign-post-type.php:482
+msgid "The WordPress user's first name"
+msgstr "Nombre del usuario de WordPress"
+
+#: campaign-post-type.php:482
+msgid "{{FNAME}}"
+msgstr "{{FNAME}}"
+
+#: campaign-post-type.php:483
+msgid "The WordPress user's last name"
+msgstr "El apellido del usuario de WordPress"
+
+#: campaign-post-type.php:483
+msgid "{{LNAME}}"
+msgstr "{{ LNAME}}"
+
+#: campaign-post-type.php:484
+msgid "The WordPress user's display name"
+msgstr "Nombre para mostrar del usuario de WordPress"
+
+#: campaign-post-type.php:484
+msgid "{{DNAME}}"
+msgstr "{{DNAME}}"
+
+#: campaign-post-type.php:485
+msgid "The WordPress user's nicename"
+msgstr "Nombre agradable del usuario de WordPress"
+
+#: campaign-post-type.php:485
+msgid "{{NNAME}}"
+msgstr "{{NNAME}}"
+
+#: campaign-post-type.php:486
+msgid "The WordPress user's website"
+msgstr "Sitio web  del usuario de WordPress"
+
+#: campaign-post-type.php:486
+msgid "{{SITE}}"
+msgstr "{{SITE}}"
+
+#: campaign-post-type.php:487
+msgid "The WordPress user's username"
+msgstr "Nombre de usuario del usuario de WordPress"
+
+#: campaign-post-type.php:487
+msgid "{{USERNAME}}"
+msgstr "{{usuario}}"
+
+#: campaign-post-type.php:488
+msgid "The date the campaign is being sent"
+msgstr "La fecha en que se está enviando la Campaña"
+
+#: campaign-post-type.php:488
+msgid "{{DATE}}"
+msgstr "{{FECHA}}"
+
+#: campaign-post-type.php:489
+msgid "Custom merge variables are set in your individual Pigeon Pack Lists"
+msgstr ""
+"Variables merge personalizadas se establecen en sus Listas Individuales "
+"Pigeon Pack"
+
+#: campaign-post-type.php:489
+msgid "{{CUSTOM}} or {{MERGE#}}"
+msgstr "{{CUSTOM}} o {{MERGE #}}"
+
+#: campaign-post-type.php:490
+msgid ""
+"Used in WordPress Post Digest Campaigns. To signify the start and end of the "
+"post loop."
+msgstr ""
+"Utilizado en Campañas Publicación Compendio WordPress. Para significar el "
+"inicio y el final del bucle del mensaje."
+
+#: campaign-post-type.php:490
+msgid "{{POST_LOOP_START}}...{{POST_LOOP_END}}"
+msgstr "{{POST_LOOP_START}} ... {{POST_LOOP_END}}"
+
+#: campaign-post-type.php:491
+msgid "The post's title"
+msgstr "El título del mensaje"
+
+#: campaign-post-type.php:491
+msgid "{{POST_TITLE}}"
+msgstr "{{POST_TITLE}}"
+
+#: campaign-post-type.php:492
+msgid "The post's full content"
+msgstr "Contenido completo del mensaje"
+
+#: campaign-post-type.php:492
+msgid "{{POST_CONTENT}}"
+msgstr "{{POST_CONTENT}}"
+
+#: campaign-post-type.php:493
+msgid "The post's excerpt"
+msgstr "Extracto del mensaje"
+
+#: campaign-post-type.php:493
+msgid "{{POST_EXCERPT}}"
+msgstr "{{POST_EXCERPT}}"
+
+#: campaign-post-type.php:494
+msgid "The post's author name"
+msgstr "El nombre del autor del mensaje"
+
+#: campaign-post-type.php:494
+msgid "{{POST_AUTHOR}}"
+msgstr "{{post_author}}"
+
+#: campaign-post-type.php:495
+msgid "The post's publish date"
+msgstr "La fecha de publicación del mensaje"
+
+#: campaign-post-type.php:495
+msgid "{{POST_DATE}}"
+msgstr "{{POST_DATE}}"
+
+#: campaign-post-type.php:496
+msgid "The post's permalink"
+msgstr "Permalink del mensaje"
+
+#: campaign-post-type.php:496
+msgid "{{POST_URL}}"
+msgstr "{{POST_URL}}"
+
+#: campaign-post-type.php:663 campaign-post-type.php:665
+#: campaign-post-type.php:667
+msgid "Role"
+msgstr "Rol"
+
+#: campaign-post-type.php:680 campaign-post-type.php:682
+#: campaign-post-type.php:684 list-post-type.php:26
+msgid "List"
+msgstr "Lista"
+
+#. #-#-#-#-#  pigeon-pack.pot (Pigeon Pack 1.0.6)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: class.php:86
+msgid "Pigeon Pack"
+msgstr "Paquete Pigeon"
+
+#: class.php:88
+msgid "Settings"
+msgstr "Ajustes"
+
+#: class.php:90
+msgid "Help"
+msgstr "Ayuda"
+
+#: class.php:258
+msgid "You are receiving this email because you opted in at our website %s."
+msgstr ""
+"Usted está recibiendo este correo electrónico porque lo ha solicitado en "
+"nuestra página web% s"
+
+#: class.php:286
+msgid "ERROR: Unable to save settings."
+msgstr "ERROR: Imposible guardar la configuración."
+
+#: class.php:348
+msgid "Pigeon Pack Settings Updated."
+msgstr "Configuración Pigeon Pack Actualizada."
+
+#: class.php:356
+msgid "Pigeon Pack Settings"
+msgstr "Configuración Pigeon Pack"
+
+#: class.php:369
+msgid "Pigeon Pack API Key"
+msgstr "Claves API Pigeon Pack"
+
+#: class.php:376
+msgid "API Key"
+msgstr "Clve API"
+
+#: class.php:380
+msgid "Verify Pigeon Pack API"
+msgstr "Comprobación API Pigeon Pack"
+
+#: class.php:388 class.php:435 class.php:481 class.php:576
+msgid "Save Settings"
+msgstr "Guardar configuración"
+
+#: class.php:400
+msgid "Pigeon Pack General Options"
+msgstr "Opciones Generales Pigeon Pack"
+
+#: class.php:414 list-post-type.php:595
+msgid "From Email"
+msgstr "De Email"
+
+#: class.php:421
+msgid "CSS Style"
+msgstr "Estilo CSS"
+
+#: class.php:424
+msgid "Default"
+msgstr "Predeterminado"
+
+#: class.php:425
+msgid "None"
+msgstr "Ninguno"
+
+#: class.php:446
+msgid "Pigeon Pack Required Footer Content"
+msgstr "Contenido Obligatorio Pie de página Pigeon Pack"
+
+#: class.php:450 list-post-type.php:656
+msgid ""
+"Enter the contact information and physical mailing address for the owner of "
+"this list. It's required by law."
+msgstr ""
+"Escriba la información de contacto y dirección postal para el propietario "
+"del esta lista. Es requerido por la ley."
+
+#: class.php:455 list-post-type.php:661
+msgid "Company/Organization"
+msgstr "Empresa / Organización"
+
+#: class.php:462 list-post-type.php:668 list-post-type.php:792
+msgid "Address"
+msgstr "Dirección"
+
+#: class.php:469 list-post-type.php:675
+msgid "Permission Reminder"
+msgstr "Recordatorio Permiso"
+
+#: class.php:473 list-post-type.php:679
+msgid ""
+"Recipients forget signing up to lists all the time. To prevent false spam "
+"reports, let's briefly remind your recipients how they got on your list."
+msgstr ""
+"Los destinatarios olvidan suscribirse a listas todo el tiempo. Para evitar "
+"falsos informes de spam, recordemos brevemente a los destinatarios cómo "
+"llegaron a su lista."
+
+#: class.php:492
+msgid "SMTP Options"
+msgstr "Opciones SMTP"
+
+#: class.php:499
+msgid "Use SMTP Server?"
+msgstr "¿Usar SMTP Server?"
+
+#: class.php:501
+msgid "Use built-in wp_mail() function to send emails."
+msgstr ""
+"Utilice la función incorporada wp_mail () para enviar correos electrónicos."
+
+#: class.php:503
+msgid "Use SMTP server to send emails."
+msgstr "Usar servidor SMTP para enviar mensajes de correo electrónico."
+
+#: class.php:515
+msgid "SMTP Server"
+msgstr "SMTP Server"
+
+#: class.php:522
+msgid "SMTP Port"
+msgstr "Puerto SMTP"
+
+#: class.php:529
+msgid "Encryption"
+msgstr "Codificación"
+
+#: class.php:531
+msgid "No encryption"
+msgstr "Sin cifrado"
+
+#: class.php:532
+msgid "Use SSL encryption"
+msgstr "Usar SSL cifrado"
+
+#: class.php:533
+msgid "Use TLS encryption"
+msgstr "Usar TLS cifrado"
+
+#: class.php:538
+msgid "Authentication"
+msgstr "Autenticación"
+
+#: class.php:540
+msgid "No authentication"
+msgstr "Sin autenticación"
+
+#: class.php:541
+msgid "Yes, use SMTP authentication"
+msgstr "Sí, usar autenticación SMTP"
+
+#: class.php:546
+msgid "SMTP Username"
+msgstr "Nombre de usuario SMTP"
+
+#: class.php:553
+msgid "SMTP Password"
+msgstr "Contraseña SMTP"
+
+#: class.php:560
+msgid "Emails per cycle"
+msgstr "Correos electrónicos por ciclo"
+
+#: class.php:562
+msgid "emails"
+msgstr "correos electrónicos"
+
+#: class.php:562
+msgid "Verify these settings with your web host or SMTP provider."
+msgstr ""
+"Verificar estos valores con su proveedor de alojamiento web o proveedor de "
+"SMTP."
+
+#: class.php:567
+msgid "Email cycle"
+msgstr "ciclo Email"
+
+#: class.php:569
+msgid "minutes"
+msgstr "minutos"
+
+#: class.php:608
+msgid "Pigeon Pack Help"
+msgstr "Ayuda Pigeon Pack"
+
+#: class.php:618
+msgid "Susbcribe Form"
+msgstr "Formulario Suscribirse"
+
+#: class.php:628
+msgid "Subscribe Form"
+msgstr "Formulario Suscribirse"
+
+#: class.php:630
+msgid "Displays a subscribe form on your website."
+msgstr "Muestra un formulario de suscripción en su página web."
+
+#: class.php:633
+msgid "Required Arguments"
+msgstr "Argumentos obligatorios"
+
+#: class.php:634
+msgid "Integer ID of Pigeon Pack List (a.k.a WordPress Post ID)"
+msgstr ""
+"ID Entero de Lista Pigeon Pack (también conocido como ID Publicación "
+"WordPress)"
+
+#: class.php:636 class.php:681
+msgid "Default Arguments"
+msgstr "Argumentos por defecto"
+
+#: class.php:641 class.php:685
+msgid "Optional Arguments"
+msgstr "Argumentos opcionales"
+
+#: class.php:642 class.php:643 class.php:686 class.php:687
+#: list-post-type.php:772
+msgid "Text"
+msgstr "Texto"
+
+#: class.php:644
+msgid "whether to only show the list's required fields"
+msgstr "si sólo mostrar de la lista de campos requeridos"
+
+#: class.php:646 class.php:689
+msgid "Examples"
+msgstr "Ejemplos"
+
+#: class.php:666 class.php:676
+msgid "User Opt-In Form"
+msgstr "Formulario de suscripción del usuario"
+
+#: class.php:678
+msgid ""
+"Displays a checkbox form on your website, for WordPress users to opt-in."
+msgstr ""
+"Muestra un formulario con casilla de verificación en su sitio web, para que "
+"los usuarios de WordPress se suscriban."
+
+#: class.php:682 class.php:1193 shortcodes.php:192
+msgid "Yes, I want to receive email updates"
+msgstr "Sí, quiero recibir alertas de actualización por email"
+
+#: class.php:683 class.php:1197 shortcodes.php:193
+msgid ""
+"Unchecking this box will stop you from receiving emails based on your user "
+"profile with this site, this will not unsubscribe you from any other lists "
+"you subscribed to manually."
+msgstr ""
+"Desmarcar esta casilla le parará de recibir mensajes de correo electrónico "
+"en base a su perfil de usuario con este sitio, esto no le dará de baja de "
+"cualquier otra lista a la que usted se haya suscrito manualmente."
+
+#: class.php:691
+msgid "Sign me up for email updates"
+msgstr "Darse de alta en actualizaciones por email"
+
+#: class.php:711
+msgid "Email Limits"
+msgstr "Límites correo electrónico"
+
+#: class.php:716
+msgid ""
+"Every web host and SMTP provider has limits on the numbers of messages that "
+"can be sent from their systems. Please check with your web host or SMTP "
+"provider to verify their email limit policy. This is important to ensure you "
+"setup the plugin properly to prevent your customers from missing emails."
+msgstr ""
+"Cada alojamiento web y proveedor de SMTP tienen límites en el número de "
+"mensajes que se pueden enviar desde sus sistemas. Por favor, consulte con su "
+"proveedor de alojamiento web o proveedor de SMTP para verificar su política "
+"de límite de correo electrónico. Esto es importante para asegurarse de que "
+"la configuración del plug-in sea correcta para evitar que sus clientes "
+"pierdan correos electrónicos."
+
+#: class.php:719
+msgid ""
+"For best results, we recommend using one of these Dedicated SMTP Providers:"
+msgstr ""
+"CPara obtener los mejores resultados, se recomienda utilizar uno de estos "
+"proveedores SMTP:"
+
+#: class.php:727
+msgid ""
+"Here are some web hosts and their default sending limits (as of June 2014):"
+msgstr ""
+"Aquí hay algunos servidores de Internet y sus límites de envío por defecto "
+"(a junio de 2014):"
+
+#: class.php:729
+msgid "Unlimited (VPS*) - What the Pigeon Pack servers run on!"
+msgstr "Ilimitado (VPS *) – ¡En lo que los servidores Pigeon Pack se ejecutan!"
+
+#: class.php:730
+msgid ""
+"200 emails every 60 minutes (shared web servers) or Unlimited (VPS* or "
+"Dedicated servers)"
+msgstr ""
+"200 mensajes de correo electrónico cada 60 minutos (servidores web "
+"compartidos) o ilimitados (VPS * o servidores dedicados)"
+
+#: class.php:731
+msgid "500 emails every 60 minutes"
+msgstr "500 mensajes de correo electrónico cada 60 minutos"
+
+#: class.php:732
+msgid "500 emails every 60 minutes (shared web servers) or Unlimited (VPS*)"
+msgstr ""
+"500 mensajes de correo electrónico cada 60 minutos (servidores web "
+"compartidos) o Ilimitados  VPS *)"
+
+#: class.php:733
+msgid "300 emails every 5 minutes"
+msgstr "300 correos cada 5 minutos"
+
+#: class.php:736
+msgid ""
+"As a best practice, please set the number of emails to less than the maximum "
+"allowed."
+msgstr ""
+"Como mejor práctica, por favor, defina el número de mensajes de correo "
+"electrónico a menos que el máximo permitido."
+
+#: class.php:737
+msgid ""
+"* VPS (Virtual Private Server) or dedicated server solutions require "
+"significant more skill to setup than your typical shared web host servers."
+msgstr ""
+"* VPS (Virtual Private Server) o soluciones de servidores dedicados "
+"requieren significativamente más habilidad para configuración de sus "
+"servidores de alojamiento web compartido típicos."
+
+#: class.php:746
+msgid "SPAM Laws"
+msgstr "Leyes SPAM"
+
+#: class.php:751
+msgid ""
+"%s enables you to own and operate your own email campaign manager. You have "
+"full control and ownership over your email lists, campaigns, autoresponders, "
+"and more. Due to this, you are also required to follow the SPAM laws, "
+"guidelines and recommendations for your country. The plugin is setup to meet "
+"compliance with current laws, however, you have the responsibility to know "
+"the laws and make sure you are using the plugin appropriately. For more "
+"information about the SPAM laws in your country, see the list below or "
+"google \"SPAM LAWS\" for your country."
+msgstr ""
+"%s le permite poseer y operar su propio gestor de Campaña de correo "
+"electrónico. Usted tiene el control total y la propiedad de su listas de "
+"correo electrónico, Campañas, respuestas automáticas, y más. Debido a esto, "
+"también está obligado a seguir las leyes, directrices y recomendaciones SPAM "
+"para su país. El plugin está configurado para satisfacer el cumplimiento de "
+"las leyes actuales, sin embargo, usted tiene la responsabilidad de conocer "
+"las leyes y asegurarse de que está utilizando el plugin apropiadamente. Para "
+"obtener más información acerca de las leyes de SPAM en su país, consulte la "
+"siguiente lista o google \" leyes spam\" para su país."
+
+#: class.php:756
+msgid "United States - CAN-SPAM Act"
+msgstr "Ley CAN-SPAM Estados Unidos"
+
+#: class.php:757
+msgid "Canada - C-28"
+msgstr "Canadá -C-28"
+
+#: class.php:758
+msgid "Australia"
+msgstr "Australia"
+
+#: class.php:758
+msgid "Spam Act 2003, Act No. 129 of 2003 as amended."
+msgstr "Ley spam de 2003, la Ley No. 129 de 2003 en su versión modificada."
+
+#: class.php:759
+msgid ""
+"EU - Article 13 of DIRECTIVE 2002/58/EC OF THE EUROPEAN PARLIAMENT AND OF "
+"THE COUNCIL of 12 July 2002"
+msgstr ""
+"UE - Artículo 13 de la Directiva 2002/58 / CE DEL PARLAMENTO EUROPEO Y DEL "
+"CONSEJO del 12 de julio, 2002"
+
+#: class.php:760
+msgid "UK - The Privacy and Electronic Communications Regulations"
+msgstr ""
+"Reino Unido – Reglamentos para privacidad y comunicaciones electrónicas"
+
+#: class.php:761
+msgid "Austria - Telecommunications Act 2003"
+msgstr "Austria - Ley de Telecomunicaciones 2003"
+
+#: class.php:762
+msgid "Belgium - Etat des lieux en juillet 2003, July 4, 2003"
+msgstr "Bélgica - Etat des lieux en juillet 2003, 04 de julio , 2003"
+
+#: class.php:763
+msgid ""
+"Cyprus - Section 06 of the Regulation of Electronic Communications and "
+"Postal Services Law of 2004"
+msgstr ""
+"Chipre - Sección 06 del Reglamento de las Comunicaciones Electrónicas y "
+"Servicios Postales Ley de 2004"
+
+#: class.php:764
+msgid "Czech Republic"
+msgstr "República Checa"
+
+#: class.php:764
+msgid "Act No. 480/2004 Coll., on Certain Information Society Services"
+msgstr "Ley N º 480/2004 Coll, Información sobre Servicios de la Sociedad."
+
+#: class.php:765
+msgid "Estonia - Information Society Service Act"
+msgstr "Estonia – Ley Servicios Información de la Sociedad"
+
+#: class.php:766
+msgid "France - CNIL Guidelines on email marketing."
+msgstr "Francia- Directrices CNIL en marketing por correo electrónico"
+
+#: class.php:767
+msgid ""
+"Germany - Art. 7 German Unfair Competition Law (Gesetz gegen Unlauteren "
+"Wettbewerb)"
+msgstr ""
+"Alemania.- Art. 7 Ley Alemana de Competencia Desleal (Gesetz gegen "
+"unlauteren Wettbewerb)"
+
+#: class.php:768
+msgid "Italy - Personal Data Protection Code (legislative decree no. 196/2003)"
+msgstr ""
+"Italia - Código de Protección de Datos de Carácter Personal (decreto "
+"legislativo 196/2003)"
+
+#: class.php:769
+msgid "Netherlands"
+msgstr "Holanda"
+
+#: class.php:769
+msgid ""
+"Article 11.7 of the Dutch Telecommunications Act and Dutch Data Protection "
+"Act."
+msgstr ""
+"Artículo 11.7 de la Ley Holandesa Ley de Telecomunicaciones y Ley holandesa "
+"de Protección de Datos."
+
+#: class.php:770
+msgid "Sweden"
+msgstr "Suecia"
+
+#: class.php:770
+msgid ""
+"Swedish Code of Statutes, SFS 1995:450 & Swedish Code of Statutes, SFS "
+"1998:204."
+msgstr ""
+"Código de Estatutos Sueco, SFS 1995:450 y Código de Leyes de Suecia, SFS "
+"1998:204"
+
+#: class.php:949
+msgid "Please fill in your API key."
+msgstr "Por favor, introduzca su clave de API."
+
+#: class.php:1096
+msgid "Dismiss"
+msgstr "Descartar"
+
+#: class.php:1189 shortcodes.php:206
+msgid "Subscription Options"
+msgstr "Opciones Suscripción"
+
+#: functions.php:575 functions.php:606
+msgid "Unsubscribe from this list"
+msgstr "Darse de baja de esta lista"
+
+#: functions.php:749 functions.php:762
+msgid "Our mailing address is:"
+msgstr "Nuestra dirección postal es:"
+
+#: functions.php:1158 functions.php:1162 functions.php:1169
+msgid "Sunday"
+msgstr "Domingo"
+
+#: functions.php:1163
+msgid "Monday"
+msgstr "Lunes"
+
+#: functions.php:1164
+msgid "Tuesday"
+msgstr "Martes"
+
+#: functions.php:1165
+msgid "Wendesday"
+msgstr "Miércoles"
+
+#: functions.php:1166
+msgid "Thursday"
+msgstr "Jueves"
+
+#: functions.php:1167
+msgid "Friday"
+msgstr "Viernes"
+
+#: functions.php:1168
+msgid "Saturday"
+msgstr "Sábado"
+
+#: list-post-type.php:25
+msgid "Pigeon Pack Lists"
+msgstr "Listas Pigeon Pack"
+
+#: list-post-type.php:27 list-post-type.php:28
+msgid "Add New List"
+msgstr "Añadir Nueva Lista"
+
+#: list-post-type.php:29
+msgid "Edit List"
+msgstr "Editar Lista"
+
+#: list-post-type.php:30
+msgid "New List"
+msgstr "Lista Nueva"
+
+#: list-post-type.php:31
+msgid "View List"
+msgstr "Ver lista"
+
+#: list-post-type.php:32
+msgid "Search Lists"
+msgstr "Buscar Listas"
+
+#: list-post-type.php:33
+msgid "No lists found"
+msgstr "No hay listas encontradas"
+
+#: list-post-type.php:34
+msgid "No lists found in trash"
+msgstr "No se han encontrado listas en la basura"
+
+#: list-post-type.php:36
+msgid "Lists"
+msgstr "Listas"
+
+#: list-post-type.php:42
+msgid "Email Lists"
+msgstr "Listas de correo electrónico"
+
+#: list-post-type.php:79 list-post-type.php:201
+msgid "Add New Subscriber"
+msgstr "Agregar Nuevo Suscriptor"
+
+#: list-post-type.php:80
+msgid "Pigeon Pack Subscribers"
+msgstr "Suscriptores Pigeon Pack"
+
+#: list-post-type.php:81
+msgid "Pigeon Pack Subscriber Fields & {{MERGE}} Tags"
+msgstr "Campos Suscriptor y Etiquetas {{MERGE}} Pigeon Pack"
+
+#: list-post-type.php:82
+msgid "Pigeon Pack List Options"
+msgstr "Opciones Lista Pigeon Pack"
+
+#: list-post-type.php:83
+msgid "Required Email Footer Content"
+msgstr "Contenido Obligatorio de pie de página de correo electrónico"
+
+#: list-post-type.php:84
+msgid "Double Opt-In Options"
+msgstr "Opciones de Doble Opt-In"
+
+#: list-post-type.php:161 shortcodes.php:117
+msgid "Street Address"
+msgstr "Dirección"
+
+#: list-post-type.php:162 shortcodes.php:118
+msgid "Address Line 2"
+msgstr "Dirección Línea 2"
+
+#: list-post-type.php:163 shortcodes.php:119
+msgid "City"
+msgstr "Ciudad"
+
+#: list-post-type.php:164 shortcodes.php:120
+msgid "State/Province/Region"
+msgstr "Estado / Provincia / Región"
+
+#: list-post-type.php:165 shortcodes.php:121
+msgid "Postal / Zip Code"
+msgstr "Código Postal"
+
+#: list-post-type.php:166 shortcodes.php:122
+msgid "Country"
+msgstr "País"
+
+#: list-post-type.php:185 shortcodes.php:138
+msgid "Email Format"
+msgstr "Formato de Correo Electrónico"
+
+#: list-post-type.php:190 shortcodes.php:143
+msgid "Plain Text"
+msgstr "Texto sin formato"
+
+#: list-post-type.php:205
+msgid "Update Subscriber"
+msgstr "Actualizar suscriptor"
+
+#: list-post-type.php:206
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: list-post-type.php:246 list-post-type.php:375
+msgid "Delete"
+msgstr "Borrar"
+
+#: list-post-type.php:255
+msgid "Date Added"
+msgstr "Fecha de Alta"
+
+#: list-post-type.php:256
+msgid "Last Modified"
+msgstr "Última Vez Modificado"
+
+#: list-post-type.php:257
+msgid "Status"
+msgstr "Estado"
+
+#: list-post-type.php:297
+msgid "No Subscribers for this list"
+msgstr "No hay suscriptores de esta lista"
+
+#: list-post-type.php:313
+msgid "Previous"
+msgstr "Anterior"
+
+#: list-post-type.php:321
+msgid "Next"
+msgstr "Siguiente"
+
+#: list-post-type.php:340
+msgid "Delete Subscriber(s)"
+msgstr "Eliminar Suscriptor (es)"
+
+#: list-post-type.php:371
+msgid "Field Label"
+msgstr "Etiqueta de campo"
+
+#: list-post-type.php:372
+msgid "Field Type"
+msgstr "Tipo de campo"
+
+#: list-post-type.php:373
+msgid "Require?"
+msgstr "¿Requerido?"
+
+#: list-post-type.php:374
+msgid "Merge Tag"
+msgstr "Etiqueta Merge"
+
+#: list-post-type.php:425
+msgid "ALWAYS"
+msgstr "SIEMPRE"
+
+#: list-post-type.php:477
+msgid "add a field"
+msgstr "Añada  un campo"
+
+#: list-post-type.php:533
+msgid "Subscribers can set their preferred email format."
+msgstr ""
+"Los Suscriptores pueden establecer su formato de correo electrónico "
+"preferido."
+
+#: list-post-type.php:566
+msgid "Please validate your email address"
+msgstr "Por favor valide su dirección de correo electrónico"
+
+#: list-post-type.php:567
+msgid ""
+"Please click the link below to validate your email and activate your email "
+"subscription to %s.\n"
+"\n"
+"%s\n"
+"\n"
+"Thank you."
+msgstr ""
+"Por favor, haga clic en el enlace de abajo para validar su correo "
+"electrónico y activar su suscripción de correo electrónico a %s. \n"
+"\n"
+"%s\n"
+"\n"
+"Gracias."
+
+#: list-post-type.php:581
+msgid "Enable Double Opt-In"
+msgstr "Habilitar Doble Opt-In"
+
+#: list-post-type.php:602
+msgid "Subject"
+msgstr "Asunto"
+
+#: list-post-type.php:609
+msgid "Message"
+msgstr "Mensaje"
+
+#: list-post-type.php:613
+msgid "The name of this list."
+msgstr "El nombre de esta lista."
+
+#: list-post-type.php:614
+msgid "The URL the subscriber needs to click to finish the double opt-in."
+msgstr ""
+"La URL donde el suscriptor tiene que hacer clic para terminar el doble opt-"
+"in."
+
+#: list-post-type.php:731
+msgid "Email Address"
+msgstr "Dirección de correo electrónico"
+
+#: list-post-type.php:739
+msgid "First Name"
+msgstr "Nombre"
+
+#: list-post-type.php:746
+msgid "Last Name"
+msgstr "Apellido"
+
+#: list-post-type.php:776
+msgid "Number"
+msgstr "Número"
+
+#: list-post-type.php:780
+msgid "Radio Button"
+msgstr "Botón Radio"
+
+#: list-post-type.php:784
+msgid "Drop Down"
+msgstr "Desplegable"
+
+#: list-post-type.php:788
+msgid "Date"
+msgstr "Fecha"
+
+#: list-post-type.php:796
+msgid "Zip Code (US Only)"
+msgstr "Código postal (sólo en EEUU)"
+
+#: list-post-type.php:800
+msgid "Phone"
+msgstr "Telefono"
+
+#: list-post-type.php:804
+msgid "Website"
+msgstr "Sitio Web"
+
+#: list-post-type.php:1242
+msgid "Almost finished..."
+msgstr "Casi terminado ..."
+
+#: list-post-type.php:1243
+msgid "We need to confirm your email address."
+msgstr "Tenemos que confirmar su dirección de correo electrónico."
+
+#: list-post-type.php:1244
+msgid ""
+"To complete the subscription process, please click the link in the email we "
+"just sent you."
+msgstr ""
+"Para completar el proceso de suscripción, por favor haga clic en el enlace "
+"del correo electrónico que le enviamos."
+
+#: list-post-type.php:1249 processing.php:130 processing.php:148
+msgid "Subscription Confirmed"
+msgstr "Suscripción confirmada"
+
+#: list-post-type.php:1250 processing.php:131 processing.php:149
+msgid "Your subscription to our list has been confirmed."
+msgstr "Su subscripción a nuestra lista ha sido confirmada."
+
+#: list-post-type.php:1251 processing.php:132 processing.php:150
+msgid "Thank you for subscribing!"
+msgstr "¡Gracias por suscribirse!"
+
+#: list-post-type.php:1256 processing.php:138 processing.php:247
+msgid "Error Processing Subscription"
+msgstr "Error al Procesar Suscripción"
+
+#: list-post-type.php:1257 processing.php:30 processing.php:59
+#: processing.php:87 processing.php:139 processing.php:159 processing.php:169
+#: processing.php:248 processing.php:260
+msgid "Please try again."
+msgstr "Por favor, inténtelo de nuevo."
+
+#: list-post-type.php:1258 processing.php:31 processing.php:60
+#: processing.php:88 processing.php:140 processing.php:160 processing.php:170
+#: processing.php:249 processing.php:261
+msgid "If you continue to have this problem, contact us immediately."
+msgstr ""
+"Si continúa teniendo este problema, póngase en contacto con nosotros "
+"inmediatamente."
+
+#: list-post-type.php:1383
+msgid "Edit"
+msgstr "Editar"
+
+#: processing.php:9
+msgid "Continue to our website"
+msgstr "Continuar a nuestro sitio web"
+
+#: processing.php:10
+msgid "Error Processing Request"
+msgstr "Error Procesando su Solicitud"
+
+#: processing.php:11
+msgid "Error Processing Subscription Request"
+msgstr "Error Procesando Solicitud Suscripción"
+
+#: processing.php:12
+msgid "Error Processing Unsubscribe Request"
+msgstr "Error Procesando Solicitud de Baja"
+
+#: processing.php:29
+msgid "Invalid List ID"
+msgstr "ID Lista No Válida"
+
+#: processing.php:58
+msgid "Invalid role name"
+msgstr "Nombre de rol no válido"
+
+#: processing.php:86
+msgid "Invalid Subscriber Format"
+msgstr "Formato de suscriptor no válido"
+
+#: processing.php:158
+msgid "Missing Subscriber Details"
+msgstr "Detalles suscriptor faltantes"
+
+#: processing.php:168
+msgid "Missing List ID"
+msgstr "ID Lista Faltante"
+
+#: processing.php:218 processing.php:240
+msgid "Unsubscribe Successful"
+msgstr "Baja exitosa"
+
+#: processing.php:219 processing.php:241
+msgid "You have been removed from this mailing list."
+msgstr "Usted ha sido eliminado de esta lista de correo."
+
+#: processing.php:259
+msgid "Missing Subscriber"
+msgstr "Suscriptor Faltante"
+
+#: processing.php:287
+msgid "Unsubscribe"
+msgstr "Darse de Baja"
+
+#: processing.php:288
+msgid "Are you sure you want to unsubscribe %s from this mailing list?"
+msgstr "¿Seguro que desea darse de baja %s de esta lista de correo?"
+
+#: processing.php:289
+msgid "Yes, unsubscribe me!"
+msgstr "¡Sí, deme de baja!"
+
+#: processing.php:289
+msgid "No, get me outta here!"
+msgstr "¡No, sácame de aquí"
+
+#: processing.php:295
+msgid ""
+"Unable to process unsubscribe form, please try again or contact the site "
+"administrator."
+msgstr ""
+"No se puede procesar la forma de darse de baja, por favor vuelva a "
+"intentarlo o póngase en contacto con el administrador del sitio"
+
+#: shortcodes.php:154
+msgid "Subscribe"
+msgstr "Suscríbase"
+
+#: shortcodes.php:220
+msgid "Update Subscription Preferences"
+msgstr "Actualizar Preferencias de suscripción"
+
+#: widgets.php:41 widgets.php:42
+msgid "Pigeon Pack Subscriber Form"
+msgstr "Formulario suscriptor Pigeon Pack"
+
+#: widgets.php:119
+msgid "Title:"
+msgstr "Título:"
+
+#: widgets.php:124
+msgid "List ID:"
+msgstr "ID Lista:"
+
+#: widgets.php:126
+msgid "Select a List"
+msgstr "Seleccione una lista"
+
+#: widgets.php:146
+msgid "Only show required fields?"
+msgstr "¿Mostrar sólo los campos obligatorios?"
+
+#. #-#-#-#-#  pigeon-pack.pot (Pigeon Pack 1.0.6)  #-#-#-#-#
+#. Plugin URI of the plugin/theme
+#. #-#-#-#-#  pigeon-pack.pot (Pigeon Pack 1.0.6)  #-#-#-#-#
+#. Author URI of the plugin/theme
+msgid "http://pigeonpack.com/"
+msgstr "http://pigeonpack.com/"
+
+#. Description of the plugin/theme
+msgid ""
+"Free and easy email marketing, newsletters, and campaigns; built into your "
+"WordPress dashboard!"
+msgstr ""
+"Marketing de correo electrónico, boletines y  campañas gratuito y fácil "
+"¡integrado en su panel de WordPress!"
+
+#. Author of the plugin/theme
+msgid "layotte"
+msgstr "Layotte"
+
+#. Tags of the plugin/theme
+msgid ""
+"email, marketing, email marketing, newsletters, email newsletters, "
+"campaigns, email campaigns, widget, form, mailing lists"
+msgstr ""
+"email, marketing, marketing por correo electrónico, boletines de noticias, "
+"boletines por correo electrónico, Campañas, Campañas de correo electrónico, "
+"widgets, formulario, listas de correo"

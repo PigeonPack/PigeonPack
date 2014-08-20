@@ -63,6 +63,9 @@ You must have:
 * Pigeon Pack is GPL
 
 == Changelog ==
+= 1.0.8 =
+* Adding español language files, thanks to Andrew from [Web Hosting Hub](http://www.webhostinghub.com/)
+
 = 1.0.7 =
 * Adding i18n support
 

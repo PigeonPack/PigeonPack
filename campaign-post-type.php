@@ -494,6 +494,9 @@ if ( !function_exists( 'pigeonpack_campaign_merge_vars_meta_box' ) ) {
 				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's author name", 'pigeonpack' ); ?>"><?php _e( '{{POST_AUTHOR}}', 'pigeonpack' ); ?></span></li>
 				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's publish date", 'pigeonpack' ); ?>"><?php _e( '{{POST_DATE}}', 'pigeonpack' ); ?></span></li>
 				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's permalink", 'pigeonpack' ); ?>"><?php _e( '{{POST_URL}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's Featured Image, defaults to 'post-thumbnail' as the image size", 'pigeonpack' ); ?>"><?php _e( '{{POST_FEATURED_IMAGE}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's Featured Image, set the image size with the size argument", 'pigeonpack' ); ?>"><?php _e( '{{POST_FEATURED_IMAGE size="post-thumbnail"}}', 'pigeonpack' ); ?></span></li>
+				<li><span class="pigeonpack-tooltip" title="<?php _e( "The post's Featured Image, set the image size with the width and height arguments", 'pigeonpack' ); ?>"><?php _e( '{{POST_FEATURED_IMAGE width="50" height="50"}}', 'pigeonpack' ); ?></span></li>
 			
 			</ul>
 		

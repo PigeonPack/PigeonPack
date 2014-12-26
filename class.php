@@ -350,243 +350,298 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			// Display HTML form for the options below
 			?>
 			<div id="pigeonpack_administrator_options" class=wrap>
+	            
+	            <div class="icon32 icon32-pigeonpack_settings" id="icon-edit"><br></div>
+	            
+	            <h2><?php _e( 'Pigeon Pack Settings', 'pigeonpack' ); ?></h2>
+	
+	            <div style="width:70%;" class="postbox-container">
+		            <div class="metabox-holder">	
+			            <div class="meta-box-sortables ui-sortable">
+			            
+			                <form id="pigeonpack" method="post" action="" enctype="multipart/form-data" encoding="multipart/form-data">
+			                    
+								<!--
+			                    <div id="api-key" class="postbox">
+			                    
+			                        <div class="handlediv" title="Click to toggle"><br /></div>
+			                        
+			                        <h3 class="hndle"><span><?php _e( 'Pigeon Pack API Key', 'pigeonpack' ); ?></span></h3>
+			                        
+			                        <div class="inside">
+			                        
+			                        <table id="pigeonpack_api_key">
+			                        
+			                        	<tr>
+			                                <th><?php _e( 'API Key', 'pigeonpack' ); ?></th>
+			                                <td>
+			                                <input type="text" id="api" class="regular-text" name="api_key" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['api_key'] ) ); ?>" />
+			                                
+			                                <input type="button" class="button" name="verify_pigeonpack_api" id="verify" value="<?php _e( 'Verify Pigeon Pack API', 'pigeonpack' ) ?>" />
+			                                <?php wp_nonce_field( 'verify', 'pigeonpack_verify_wpnonce' ); ?>
+			                                </td>
+			                            </tr>
+			                            
+			                        </table>
+			                                                  
+			                        <p class="submit">
+			                            <input class="button-primary" type="submit" name="update_pigeonpack_settings" value="<?php _e( 'Save Settings', 'pigeonpack' ) ?>" />
+			                        </p>
+			                        
+			                        </div>
+			                        
+			                    </div>
+								-->
+			                    
+			                    <div id="modules" class="postbox">
+			                    
+			                        <div class="handlediv" title="Click to toggle"><br /></div>
+			                        
+			                        <h3 class="hndle"><span><?php _e( 'Pigeon Pack General Options', 'pigeonpack' ); ?></span></h3>
+			                        
+			                        <div class="inside">
+			                        
+			                        <table id="pigeonpack_administrator_options">
+			                        
+			                        	<tr>
+			                                <th><?php _e( 'From Name', 'pigeonpack' ); ?></th>
+			                                <td>
+			                                <input type="text" id="from_name" class="regular-text" name="from_name" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['from_name'] ) ); ?>" />
+			                                </td>
+			                            </tr>
+			                            
+			                        	<tr>
+			                                <th><?php _e( 'From Email', 'pigeonpack' ); ?></th>
+			                                <td>
+			                                <input type="text" id="from_email" class="regular-text" name="from_email" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['from_email'] ) ); ?>" />
+			                                </td>
+			                            </tr>
+			                        
+			                        	<tr>
+			                                <th><?php _e( 'CSS Style', 'pigeonpack' ); ?></th>
+			                                <td>
+											<select id='css_style' name='css_style'>
+												<option value='default' <?php selected( 'default', $pigeonpack_settings['css_style'] ); ?> ><?php _e( 'Default', 'pigeonpack' ); ?></option>
+												<option value='none' <?php selected( 'none', $pigeonpack_settings['css_style'] ); ?> ><?php _e( 'None', 'pigeonpack' ); ?></option>
+											</select>
+			                                </td>
+			                            </tr>
+			                            
+			                        </table>
+			                        
+			                        <?php wp_nonce_field( 'pigeonpack_general_options', 'pigeonpack_general_options_nonce' ); ?>
+			                                                  
+			                        <p class="submit">
+			                            <input class="button-primary" type="submit" name="update_pigeonpack_settings" value="<?php _e( 'Save Settings', 'pigeonpack' ) ?>" />
+			                        </p>
+			
+			                        </div>
+			                        
+			                    </div>
+			                    
+			                    <div id="modules" class="postbox">
+			                    
+			                        <div class="handlediv" title="Click to toggle"><br /></div>
+			                        
+			                        <h3 class="hndle"><span><?php _e( 'Pigeon Pack Required Footer Content', 'pigeonpack' ); ?></span></h3>
+			                        
+			                        <div class="inside">
+			                        
+			                        <p><?php _e( "Enter the contact information and physical mailing address for the owner of this list. It's required by law.", 'pigeonpack' ); ?></p>
+			                            
+			                        <table id="pigeonpack_administrator_options">
+			                        
+			                        	<tr>
+			                                <th><?php _e( 'Company/Organization', 'pigeonpack' ); ?></th>
+			                                <td>
+			                                <input type="text" id="company" name="company" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['company'] ) ); ?>" />
+			                                </td>
+			                            </tr>
+			                            
+			                        	<tr>
+			                                <th><?php _e( 'Address', 'pigeonpack' ); ?></th>
+			                                <td>
+			                    				<textarea id="address" class="large-text" name="address" cols="50" rows="3"><?php echo htmlspecialchars( stripslashes( $pigeonpack_settings['address'] ) ); ?></textarea>
+			                                </td>
+			                            </tr>
+			                            
+			                        	<tr>
+			                                <th><?php _e( 'Permission Reminder', 'pigeonpack' ); ?></th>
+			                                <td>
+			                    				<textarea id="reminder" class="large-text" name="reminder" cols="50" rows="3"><?php echo htmlspecialchars( stripslashes( $pigeonpack_settings['reminder'] ) ); ?></textarea>
+			                    <p class="description">
+			                    <?php _e( "Recipients forget signing up to lists all the time. To prevent false spam reports, let's briefly remind your recipients how they got on your list.", 'pigeonpack' ); ?>
+			                    </p>
+			                                </td>
+			                            </tr>
+			                            
+			                        </table>
+			                                                  
+			                        <p class="submit">
+			                            <input class="button-primary" type="submit" name="update_pigeonpack_settings" value="<?php _e( 'Save Settings', 'pigeonpack' ) ?>" />
+			                        </p>
+			
+			                        </div>
+			                        
+			                    </div>
+			                    
+			                    <div id="modules" class="postbox">
+			                    
+			                        <div class="handlediv" title="Click to toggle"><br /></div>
+			                        
+			                        <h3 class="hndle"><span><?php _e( 'SMTP Options', 'pigeonpack' ); ?></span></h3>
+			                        
+			                        <div class="inside">
+			                        
+			                        <table id="pigeonpack_smtp_settings">
+			                        
+			                        	<tr>
+			                                <th><?php _e( 'Use SMTP Server?', 'pigeonpack' ); ?></th>
+			                                <td>
+			                                <input type="radio" id="mail_checkbox" name="smtp_enable" value="mail" <?php checked( 'mail', $pigeonpack_settings['smtp_enable'] ); ?> /> <label for="mail_checkbox"><?php _e( 'Use built-in wp_mail() function to send emails.' , 'pigeonpack' ); ?></label>
+			                                <br />
+			                                <input type="radio" id="smtp_checkbox" name="smtp_enable" value="smtp" <?php checked( 'smtp', $pigeonpack_settings['smtp_enable'] ); ?> /> <label for="smtp_checkbox"><?php _e( 'Use SMTP server to send emails.' , 'pigeonpack' ); ?></label>
+			                                </td>
+			                            </tr>
+			                            
+			                            <?php
+										if ( 'mail' === $pigeonpack_settings['smtp_enable'] )
+											$hidden = 'style="display: none;"';
+										else
+											$hidden = '';
+										?>
+			                        
+			                        	<tr class="smtp_options" <?php echo $hidden; ?>>
+			                                <th><?php _e( 'SMTP Server', 'pigeonpack' ); ?></th>
+			                                <td>
+			                                <input type="text" id="smtp_server" class="regular-text" name="smtp_server" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['smtp_server'] ) ); ?>" />
+			                                </td>
+			                            </tr>
+			                            
+			                        	<tr class="smtp_options" <?php echo $hidden; ?>>
+			                                <th><?php _e( 'SMTP Port', 'pigeonpack' ); ?></th>
+			                                <td>
+			                                <input type="text" id="smtp_port" class="regular-text" name="smtp_port" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['smtp_port'] ) ); ?>" />
+			                                </td>
+			                            </tr>
+			                            
+			                        	<tr class="smtp_options" <?php echo $hidden; ?>>
+			                                <th><?php _e( 'Encryption', 'pigeonpack' ); ?></th>
+			                                <td>
+			                                <input type="radio" id="smtp_ssl_none" class="smtp_encryption" class="regular-text" name="smtp_encryption" value="none" <?php checked( 'none' === $pigeonpack_settings['smtp_encryption'] ); ?> /> <label for="smtp_ssl_none"><?php _e( 'No encryption', 'pigeonpack' ); ?></label> <br />
+			                                <input type="radio" id="smtp_ssl_ssl" class="smtp_encryption" class="regular-text" name="smtp_encryption" value="ssl" <?php checked( 'ssl' === $pigeonpack_settings['smtp_encryption'] ); ?> /> <label for="smtp_ssl_ssl"><?php _e( 'Use SSL encryption', 'pigeonpack' ); ?></label> <br />
+			                                <input type="radio" id="smtp_ssl_tls" class="smtp_encryption" class="regular-text" name="smtp_encryption" value="tls" <?php checked( 'tls' === $pigeonpack_settings['smtp_encryption'] ); ?> /> <label for="smtp_ssl_tls"><?php _e( 'Use TLS encryption', 'pigeonpack' ); ?></label> <br />
+			                                </td>
+			                            </tr>
+			                            
+			                        	<tr class="smtp_options" <?php echo $hidden; ?>>
+			                                <th><?php _e( 'Authentication', 'pigeonpack' ); ?></th>
+			                                <td>
+			                                <input type="radio" id="smtp_auth_none" class="smtp_authentication" class="regular-text" name="smtp_authentication" value="none" <?php checked( 'none' === $pigeonpack_settings['smtp_authentication'] ); ?> /> <label for="smtp_auth_none"><?php _e( 'No authentication', 'pigeonpack' ); ?></label> <br />
+			                                <input type="radio" id="smtp_auth_true" class="smtp_authentication" class="regular-text" name="smtp_authentication" value="none" <?php checked( 'true' === $pigeonpack_settings['smtp_authentication'] ); ?> /> <label for="smtp_auth_true"><?php _e( 'Yes, use SMTP authentication', 'pigeonpack' ); ?></label> <br />
+			                                </td>
+			                            </tr>
+			                            
+			                        	<tr class="smtp_options" <?php echo $hidden; ?>>
+			                                <th><?php _e( 'SMTP Username', 'pigeonpack' ); ?></th>
+			                                <td>
+			                                <input type="text" id="smtp_username" class="regular-text" name="smtp_username" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['smtp_username'] ) ); ?>" />
+			                                </td>
+			                            </tr>
+			                            
+			                        	<tr class="smtp_options" <?php echo $hidden; ?>>
+			                                <th><?php _e( 'SMTP Password', 'pigeonpack' ); ?></th>
+			                                <td>
+			                                <input type="text" id="smtp_password" class="regular-text" name="smtp_password" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['smtp_password'] ) ); ?>" />
+			                                </td>
+			                            </tr>
+			                            
+			                        	<tr>
+			                                <th><?php _e( 'Emails per cycle', 'pigeonpack' ); ?></th>
+			                                <td>
+			                                <input type="text" id="emails_per_cycle" class="small-text" name="emails_per_cycle" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['emails_per_cycle'] ) ); ?>" /> <?php _e( 'emails', 'pigeonpack' ); ?> - <?php _e( 'Verify these settings with your web host or SMTP provider.', 'pigeonpack' ); ?>
+			                                </td>
+			                            </tr>
+			                            
+			                        	<tr>
+			                                <th><?php _e( 'Email cycle', 'pigeonpack' ); ?></th>
+			                                <td>
+			                                <input type="text" id="email_cycle" class="small-text" name="email_cycle" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['email_cycle'] ) ); ?>" /> <?php _e( 'minutes', 'pigeonpack' ); ?>
+			                                </td>
+			                            </tr>
+			                            
+			                        </table>
+			                                                  
+			                        <p class="submit">
+			                            <input class="button-primary" type="submit" name="update_pigeonpack_settings" value="<?php _e( 'Save Settings', 'pigeonpack' ) ?>" />
+			                        </p>
+			                        
+			                        </div>
+			                        
+			                    </div>
+			                    
+			                    <?php do_action( 'pigeonpack_settings_page' ); ?>
+			                    
+			                </form>
+			                
+			            </div>
+		            </div>
+	            </div>
             
-            <div class="icon32 icon32-pigeonpack_settings" id="icon-edit"><br></div>
-            
-            <h2><?php _e( 'Pigeon Pack Settings', 'pigeonpack' ); ?></h2>
-
-            <div style="width:70%;" class="postbox-container">
-            <div class="metabox-holder">	
-            <div class="meta-box-sortables ui-sortable">
-            
-                <form id="pigeonpack" method="post" action="" enctype="multipart/form-data" encoding="multipart/form-data">
-                    
-					<!--
-                    <div id="api-key" class="postbox">
-                    
-                        <div class="handlediv" title="Click to toggle"><br /></div>
-                        
-                        <h3 class="hndle"><span><?php _e( 'Pigeon Pack API Key', 'pigeonpack' ); ?></span></h3>
-                        
-                        <div class="inside">
-                        
-                        <table id="pigeonpack_api_key">
-                        
-                        	<tr>
-                                <th><?php _e( 'API Key', 'pigeonpack' ); ?></th>
-                                <td>
-                                <input type="text" id="api" class="regular-text" name="api_key" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['api_key'] ) ); ?>" />
-                                
-                                <input type="button" class="button" name="verify_pigeonpack_api" id="verify" value="<?php _e( 'Verify Pigeon Pack API', 'pigeonpack' ) ?>" />
-                                <?php wp_nonce_field( 'verify', 'pigeonpack_verify_wpnonce' ); ?>
-                                </td>
-                            </tr>
-                            
-                        </table>
-                                                  
-                        <p class="submit">
-                            <input class="button-primary" type="submit" name="update_pigeonpack_settings" value="<?php _e( 'Save Settings', 'pigeonpack' ) ?>" />
-                        </p>
-                        
-                        </div>
-                        
-                    </div>
-					-->
-                    
-                    <div id="modules" class="postbox">
-                    
-                        <div class="handlediv" title="Click to toggle"><br /></div>
-                        
-                        <h3 class="hndle"><span><?php _e( 'Pigeon Pack General Options', 'pigeonpack' ); ?></span></h3>
-                        
-                        <div class="inside">
-                        
-                        <table id="pigeonpack_administrator_options">
-                        
-                        	<tr>
-                                <th><?php _e( 'From Name', 'pigeonpack' ); ?></th>
-                                <td>
-                                <input type="text" id="from_name" class="regular-text" name="from_name" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['from_name'] ) ); ?>" />
-                                </td>
-                            </tr>
-                            
-                        	<tr>
-                                <th><?php _e( 'From Email', 'pigeonpack' ); ?></th>
-                                <td>
-                                <input type="text" id="from_email" class="regular-text" name="from_email" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['from_email'] ) ); ?>" />
-                                </td>
-                            </tr>
-                        
-                        	<tr>
-                                <th><?php _e( 'CSS Style', 'pigeonpack' ); ?></th>
-                                <td>
-								<select id='css_style' name='css_style'>
-									<option value='default' <?php selected( 'default', $pigeonpack_settings['css_style'] ); ?> ><?php _e( 'Default', 'pigeonpack' ); ?></option>
-									<option value='none' <?php selected( 'none', $pigeonpack_settings['css_style'] ); ?> ><?php _e( 'None', 'pigeonpack' ); ?></option>
-								</select>
-                                </td>
-                            </tr>
-                            
-                        </table>
-                        
-                        <?php wp_nonce_field( 'pigeonpack_general_options', 'pigeonpack_general_options_nonce' ); ?>
-                                                  
-                        <p class="submit">
-                            <input class="button-primary" type="submit" name="update_pigeonpack_settings" value="<?php _e( 'Save Settings', 'pigeonpack' ) ?>" />
-                        </p>
-
-                        </div>
-                        
-                    </div>
-                    
-                    <div id="modules" class="postbox">
-                    
-                        <div class="handlediv" title="Click to toggle"><br /></div>
-                        
-                        <h3 class="hndle"><span><?php _e( 'Pigeon Pack Required Footer Content', 'pigeonpack' ); ?></span></h3>
-                        
-                        <div class="inside">
-                        
-                        <p><?php _e( "Enter the contact information and physical mailing address for the owner of this list. It's required by law.", 'pigeonpack' ); ?></p>
-                            
-                        <table id="pigeonpack_administrator_options">
-                        
-                        	<tr>
-                                <th><?php _e( 'Company/Organization', 'pigeonpack' ); ?></th>
-                                <td>
-                                <input type="text" id="company" name="company" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['company'] ) ); ?>" />
-                                </td>
-                            </tr>
-                            
-                        	<tr>
-                                <th><?php _e( 'Address', 'pigeonpack' ); ?></th>
-                                <td>
-                    				<textarea id="address" class="large-text" name="address" cols="50" rows="3"><?php echo htmlspecialchars( stripslashes( $pigeonpack_settings['address'] ) ); ?></textarea>
-                                </td>
-                            </tr>
-                            
-                        	<tr>
-                                <th><?php _e( 'Permission Reminder', 'pigeonpack' ); ?></th>
-                                <td>
-                    				<textarea id="reminder" class="large-text" name="reminder" cols="50" rows="3"><?php echo htmlspecialchars( stripslashes( $pigeonpack_settings['reminder'] ) ); ?></textarea>
-                    <p class="description">
-                    <?php _e( "Recipients forget signing up to lists all the time. To prevent false spam reports, let's briefly remind your recipients how they got on your list.", 'pigeonpack' ); ?>
-                    </p>
-                                </td>
-                            </tr>
-                            
-                        </table>
-                                                  
-                        <p class="submit">
-                            <input class="button-primary" type="submit" name="update_pigeonpack_settings" value="<?php _e( 'Save Settings', 'pigeonpack' ) ?>" />
-                        </p>
-
-                        </div>
-                        
-                    </div>
-                    
-                    <div id="modules" class="postbox">
-                    
-                        <div class="handlediv" title="Click to toggle"><br /></div>
-                        
-                        <h3 class="hndle"><span><?php _e( 'SMTP Options', 'pigeonpack' ); ?></span></h3>
-                        
-                        <div class="inside">
-                        
-                        <table id="pigeonpack_smtp_settings">
-                        
-                        	<tr>
-                                <th><?php _e( 'Use SMTP Server?', 'pigeonpack' ); ?></th>
-                                <td>
-                                <input type="radio" id="mail_checkbox" name="smtp_enable" value="mail" <?php checked( 'mail', $pigeonpack_settings['smtp_enable'] ); ?> /> <label for="mail_checkbox"><?php _e( 'Use built-in wp_mail() function to send emails.' , 'pigeonpack' ); ?></label>
-                                <br />
-                                <input type="radio" id="smtp_checkbox" name="smtp_enable" value="smtp" <?php checked( 'smtp', $pigeonpack_settings['smtp_enable'] ); ?> /> <label for="smtp_checkbox"><?php _e( 'Use SMTP server to send emails.' , 'pigeonpack' ); ?></label>
-                                </td>
-                            </tr>
-                            
-                            <?php
-							if ( 'mail' === $pigeonpack_settings['smtp_enable'] )
-								$hidden = 'style="display: none;"';
-							else
-								$hidden = '';
-							?>
-                        
-                        	<tr class="smtp_options" <?php echo $hidden; ?>>
-                                <th><?php _e( 'SMTP Server', 'pigeonpack' ); ?></th>
-                                <td>
-                                <input type="text" id="smtp_server" class="regular-text" name="smtp_server" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['smtp_server'] ) ); ?>" />
-                                </td>
-                            </tr>
-                            
-                        	<tr class="smtp_options" <?php echo $hidden; ?>>
-                                <th><?php _e( 'SMTP Port', 'pigeonpack' ); ?></th>
-                                <td>
-                                <input type="text" id="smtp_port" class="regular-text" name="smtp_port" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['smtp_port'] ) ); ?>" />
-                                </td>
-                            </tr>
-                            
-                        	<tr class="smtp_options" <?php echo $hidden; ?>>
-                                <th><?php _e( 'Encryption', 'pigeonpack' ); ?></th>
-                                <td>
-                                <input type="radio" id="smtp_ssl_none" class="smtp_encryption" class="regular-text" name="smtp_encryption" value="none" <?php checked( 'none' === $pigeonpack_settings['smtp_encryption'] ); ?> /> <label for="smtp_ssl_none"><?php _e( 'No encryption', 'pigeonpack' ); ?></label> <br />
-                                <input type="radio" id="smtp_ssl_ssl" class="smtp_encryption" class="regular-text" name="smtp_encryption" value="ssl" <?php checked( 'ssl' === $pigeonpack_settings['smtp_encryption'] ); ?> /> <label for="smtp_ssl_ssl"><?php _e( 'Use SSL encryption', 'pigeonpack' ); ?></label> <br />
-                                <input type="radio" id="smtp_ssl_tls" class="smtp_encryption" class="regular-text" name="smtp_encryption" value="tls" <?php checked( 'tls' === $pigeonpack_settings['smtp_encryption'] ); ?> /> <label for="smtp_ssl_tls"><?php _e( 'Use TLS encryption', 'pigeonpack' ); ?></label> <br />
-                                </td>
-                            </tr>
-                            
-                        	<tr class="smtp_options" <?php echo $hidden; ?>>
-                                <th><?php _e( 'Authentication', 'pigeonpack' ); ?></th>
-                                <td>
-                                <input type="radio" id="smtp_auth_none" class="smtp_authentication" class="regular-text" name="smtp_authentication" value="none" <?php checked( 'none' === $pigeonpack_settings['smtp_authentication'] ); ?> /> <label for="smtp_auth_none"><?php _e( 'No authentication', 'pigeonpack' ); ?></label> <br />
-                                <input type="radio" id="smtp_auth_true" class="smtp_authentication" class="regular-text" name="smtp_authentication" value="none" <?php checked( 'true' === $pigeonpack_settings['smtp_authentication'] ); ?> /> <label for="smtp_auth_true"><?php _e( 'Yes, use SMTP authentication', 'pigeonpack' ); ?></label> <br />
-                                </td>
-                            </tr>
-                            
-                        	<tr class="smtp_options" <?php echo $hidden; ?>>
-                                <th><?php _e( 'SMTP Username', 'pigeonpack' ); ?></th>
-                                <td>
-                                <input type="text" id="smtp_username" class="regular-text" name="smtp_username" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['smtp_username'] ) ); ?>" />
-                                </td>
-                            </tr>
-                            
-                        	<tr class="smtp_options" <?php echo $hidden; ?>>
-                                <th><?php _e( 'SMTP Password', 'pigeonpack' ); ?></th>
-                                <td>
-                                <input type="text" id="smtp_password" class="regular-text" name="smtp_password" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['smtp_password'] ) ); ?>" />
-                                </td>
-                            </tr>
-                            
-                        	<tr>
-                                <th><?php _e( 'Emails per cycle', 'pigeonpack' ); ?></th>
-                                <td>
-                                <input type="text" id="emails_per_cycle" class="small-text" name="emails_per_cycle" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['emails_per_cycle'] ) ); ?>" /> <?php _e( 'emails', 'pigeonpack' ); ?> - <?php _e( 'Verify these settings with your web host or SMTP provider.', 'pigeonpack' ); ?>
-                                </td>
-                            </tr>
-                            
-                        	<tr>
-                                <th><?php _e( 'Email cycle', 'pigeonpack' ); ?></th>
-                                <td>
-                                <input type="text" id="email_cycle" class="small-text" name="email_cycle" value="<?php echo htmlspecialchars( stripcslashes( $pigeonpack_settings['email_cycle'] ) ); ?>" /> <?php _e( 'minutes', 'pigeonpack' ); ?>
-                                </td>
-                            </tr>
-                            
-                        </table>
-                                                  
-                        <p class="submit">
-                            <input class="button-primary" type="submit" name="update_pigeonpack_settings" value="<?php _e( 'Save Settings', 'pigeonpack' ) ?>" />
-                        </p>
-                        
-                        </div>
-                        
-                    </div>
-                    
-                    <?php do_action( 'pigeonpack_settings_page' ); ?>
-                    
-                </form>
-                
-            </div>
-            </div>
-            </div>
+	            <div style="width:25%; float:right;" class="postbox-container">
+		            <div class="metabox-holder">	
+		            	<div class="meta-box-sortables ui-sortable">
+		                    <div id="modules" class="postbox">
+		                        <div class="handlediv" title="Click to toggle"><br /></div>
+		                        
+		                        <h3 class="hndle"><span><?php _e( 'Help Keep This Plugin Alive', 'pigeonpack' ); ?></span></h3>
+		                        
+		                        <div class="inside">
+									
+									<div class="other-leenkme-plugins">
+										<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+										<input type="hidden" name="cmd" value="_s-xclick">
+										<input type="hidden" name="hosted_button_id" value="726CN3C3XS7PE">
+										<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+										<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+										</form>
+									</div>
+									
+		                        </div>
+		                    </div>
+		                    
+		                    <div id="modules" class="postbox">
+		                        <div class="handlediv" title="Click to toggle"><br /></div>
+		                        
+		                        <h3 class="hndle"><span><?php _e( 'leenk.me', 'pigeonpack' ); ?></span></h3>
+		                        
+		                        <div class="inside">
+									
+									<div class="other-leenkme-plugins">
+										<a href="http://leenk.me"><img src="http://leenk.me/icon-128x128.png" /></a>
+										<p><a href="http://leenk.me"><?php _e( 'Publicize your WordPress content to your Twitter, Facebook, & LinkedIn accounts easily and automatically!', 'pigeonpack' ); ?></a></p>
+									</div>
+									
+		                        </div>
+		                    </div>
+		                    
+		                    <div id="modules" class="postbox">
+		                        <div class="handlediv" title="Click to toggle"><br /></div>
+		                        
+		                        <h3 class="hndle"><span><?php _e( 'Advanced Comment Control', 'pigeonpack' ); ?></span></h3>
+		                        
+		                        <div class="inside">
+									
+									<div class="other-leenkme-plugins">
+										<a href="https://github.com/lewayotte/advanced-comment-control"><img src="http://lewayotte.com/acc-icon-128x128.png" /></a>
+										<p><a href="https://github.com/lewayotte/advanced-comment-control"><?php _e( 'Easily control who can comment and when they can comment on any post type.', 'pigeonpack' ); ?></a></p>
+									</div>
+									
+		                        </div>
+		                    </div>
+		            	</div>
+		            </div>
+	            </div>
 			</div>
 			<?php
 			
@@ -603,33 +658,33 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			?>
 			<div id="pigeonpack_help_page" class=wrap>
             
-            <div class="icon32 icon32-pigeonpack_help" id="icon-edit"><br></div>
-    
-            <h2><?php _e( 'Pigeon Pack Help', 'pigeonpack' ); ?></h2>
-            
-            <div style="width:70%;" class="postbox-container">
-            <div class="metabox-holder">	
-            <div class="meta-box-sortables ui-sortable">
-                
-                <div id="pigeonpack-subcribe-form-shortcode" class="postbox">
-                
-                    <div class="handlediv" title="Click to toggle"><br /></div>
-    
-                    <h3 class="hndle"><span>[pigeonpack_subscribe_form] - Pigeon Pack <?php _e( 'Susbcribe Form', 'pigeonpack' ); ?></span></h3>
-                    
-                    <div class="inside">
-                                    
-                        <table class="form-table">
-                    
-                            <tr>
-                            
-                                <td>
-                                	
-                                    <p>Pigeon Pack <?php _e( 'Subscribe Form', 'pigeonpack' ); ?>: <code style="font-size: 1.2em; background: #ffffe0;">[pigeonpack_subscribe_form]</code></p>
-                                    
-                                    <p><?php _e( 'Displays a subscribe form on your website.', 'pigeonpack' ); ?></p>
-                                    
-                                    <pre class="pigeonpack-shortcode-examples">
+	            <div class="icon32 icon32-pigeonpack_help" id="icon-edit"><br></div>
+	    
+	            <h2><?php _e( 'Pigeon Pack Help', 'pigeonpack' ); ?></h2>
+	            
+	            <div style="width:70%;" class="postbox-container">
+		            <div class="metabox-holder">	
+			            <div class="meta-box-sortables ui-sortable">
+			                
+			                <div id="pigeonpack-subcribe-form-shortcode" class="postbox">
+			                
+			                    <div class="handlediv" title="Click to toggle"><br /></div>
+			    
+			                    <h3 class="hndle"><span>[pigeonpack_subscribe_form] - Pigeon Pack <?php _e( 'Susbcribe Form', 'pigeonpack' ); ?></span></h3>
+			                    
+			                    <div class="inside">
+			                                    
+			                        <table class="form-table">
+			                    
+			                            <tr>
+			                            
+			                                <td>
+			                                	
+			                                    <p>Pigeon Pack <?php _e( 'Subscribe Form', 'pigeonpack' ); ?>: <code style="font-size: 1.2em; background: #ffffe0;">[pigeonpack_subscribe_form]</code></p>
+			                                    
+			                                    <p><?php _e( 'Displays a subscribe form on your website.', 'pigeonpack' ); ?></p>
+			                                    
+			                                    <pre class="pigeonpack-shortcode-examples">
 <?php _e( 'Required Arguments', 'pigeonpack' ); ?>:
 'list_id' => <?php _e( 'Integer ID of Pigeon Pack List (a.k.a WordPress Post ID)', 'pigeonpack' ); ?>
                                                     
@@ -646,38 +701,38 @@ required_only => 'true', 'on', 'false', 'off' (<?php _e( "whether to only show t
 <?php _e( 'Examples', 'pigeonpack' ); ?>:
 [pigeonpack_subscribe_form list_id="456" title="Subscribe to Our Newsletter" desc="Get the latest updates from our website."]
 [pigeonpack_subscribe_form list_id="456" required_only="true"]
-
-                                    </pre>
-                                    
-                                </td>
-                                
-                            </tr>
-                            
-                        </table>
-                    
-                    </div>
-                    
-                </div>
-                
-                <div id="pigeonpack-user-optin-form-shortcode" class="postbox">
-                
-                    <div class="handlediv" title="Click to toggle"><br /></div>
-    
-                    <h3 class="hndle"><span>[pigeonpack_user_optin_form] - Pigeon Pack <?php _e( 'User Opt-In Form', 'pigeonpack' ); ?></span></h3>
-                    
-                    <div class="inside">
-                                    
-                        <table class="form-table">
-                    
-                            <tr>
-                            
-                                <td>
-                                	
-                                    <p>Pigeon Pack <?php _e( 'User Opt-In Form', 'pigeonpack' ); ?>: <code style="font-size: 1.2em; background: #ffffe0;">[pigeonpack_user_optin_form]</code></p>
-                                    
-                                    <p><?php _e( 'Displays a checkbox form on your website, for WordPress users to opt-in.', 'pigeonpack' ); ?></p>
-                                    
-                                    <pre class="pigeonpack-shortcode-examples">           
+			
+			                                    </pre>
+			                                    
+			                                </td>
+			                                
+			                            </tr>
+			                            
+			                        </table>
+			                    
+			                    </div>
+			                    
+			                </div>
+			                
+			                <div id="pigeonpack-user-optin-form-shortcode" class="postbox">
+			                
+			                    <div class="handlediv" title="Click to toggle"><br /></div>
+			    
+			                    <h3 class="hndle"><span>[pigeonpack_user_optin_form] - Pigeon Pack <?php _e( 'User Opt-In Form', 'pigeonpack' ); ?></span></h3>
+			                    
+			                    <div class="inside">
+			                                    
+			                        <table class="form-table">
+			                    
+			                            <tr>
+			                            
+			                                <td>
+			                                	
+			                                    <p>Pigeon Pack <?php _e( 'User Opt-In Form', 'pigeonpack' ); ?>: <code style="font-size: 1.2em; background: #ffffe0;">[pigeonpack_user_optin_form]</code></p>
+			                                    
+			                                    <p><?php _e( 'Displays a checkbox form on your website, for WordPress users to opt-in.', 'pigeonpack' ); ?></p>
+			                                    
+			                                    <pre class="pigeonpack-shortcode-examples">           
 <?php _e( 'Default Arguments', 'pigeonpack' ); ?>:
 'label' => '<?php _e( 'Yes, I want to receive email updates', 'pigeonpack' ); ?>'
 'desc' => '<?php _e( 'Unchecking this box will stop you from receiving emails based on your user profile with this site, this will not unsubscribe you from any other lists you subscribed to manually.', 'pigeonpack' ); ?>'
@@ -689,95 +744,151 @@ desc => '<?php _e( 'Text', 'pigeonpack' ); ?>'
 <?php _e( 'Examples', 'pigeonpack' ); ?>:
 [pigeonpack_user_optin_form]
 [pigeonpack_user_optin_form label="<?php _e( 'Sign me up for email updates', 'pigeonpack' ); ?>" desc=""]
-
-                                    </pre>
-                                    
-                                </td>
-                                
-                            </tr>
-                            
-                        </table>
-                    
-                    </div>
-                    
-                </div>
-                
-                <?php do_action( 'pigeonpack_help_page' ); ?>
-                
-                <div id="pigeonpack-mail-limits" class="postbox">
-                
-                    <div class="handlediv" title="Click to toggle"><br /></div>
-    
-                    <h3 class="hndle"><span><?php _e( 'Email Limits', 'pigeonpack' ); ?></span></h3>
-                    
-                    <div class="inside">
-                                    
-                    <p>
-                    <?php _e( 'Every web host and SMTP provider has limits on the numbers of messages that can be sent from their systems. Please check with your web host or SMTP provider to verify their email limit policy. This is important to ensure you setup the plugin properly to prevent your customers from missing emails.', 'pigeonpack' ); ?>
-                    </p>
-                    <p>
-                    <?php _e( 'For best results, we recommend using one of these Dedicated SMTP Providers:', 'pigeonpack' ); ?>
-                    <ul>
-                    	<li><a href="http://aws.amazon.com/ses/">Amazon Simple Email Service (SES)</a></li>
-                    	<li><a href="http://sendgrid.com/">SendGrid</a></li>
-                    	<li><a href="https://elasticemail.com">Elastic Email</a></li>
-                    </ul>
-                    </p>
-                    <p>
-                    <?php _e( 'Here are some web hosts and their default sending limits (as of June 2014):', 'pigeonpack' ); ?>
-                    <ul>
-                    	<li><a href="https://www.digitalocean.com/?refcode=3655e259ce29">Digital Ocean</a> - <?php _e( 'Unlimited (VPS*) - What the Pigeon Pack servers run on!', 'pigeonpack' ); ?></li>
-                    	<li><a href="http://www.dreamhost.com/r.cgi?1434131">Dreamhost</a> - <?php _e( '200 emails every 60 minutes (shared web servers) or Unlimited (VPS* or Dedicated servers)', 'pigeonpack' ); ?></li>
-                        <li><a href="http://www.bluehost.com/track/leenkme">Bluehost</a> - <?php _e( '500 emails every 60 minutes', 'pigeonpack' ); ?></li>
-                    	<li><a href="http://asmallorange.com/?a_aid=leenkme">A Small Orange</a> - <?php _e( '500 emails every 60 minutes (shared web servers) or Unlimited (VPS*)', 'pigeonpack' ); ?></li>
-                    	<li><a href="http://www.1and1.com/">1and1</a> - <?php _e( '300 emails every 5 minutes', 'pigeonpack' ); ?></li>
-                    </ul>    
-                    </p>                
-                    <p><?php _e( 'As a best practice, please set the number of emails to less than the maximum allowed.', 'pigeonpack' ); ?></p>
-                    <p><?php _e( '* VPS (Virtual Private Server) or dedicated server solutions require significant more skill to setup than your typical shared web host servers.', 'pigeonpack' ); ?></p>
-                    </div>
-                    
-                </div>
-                
-                <div id="can-spam" class="postbox">
-                
-                    <div class="handlediv" title="Click to toggle"><br /></div>
-                    
-                    <h3 class="hndle"><span><?php _e( 'SPAM Laws', 'pigeonpack' ); ?></span></h3>
-                    
-                    <div class="inside">
-                    
-                    <p>
-                    <?php printf( __( '%s enables you to own and operate your own email campaign manager. You have full control and ownership over your email lists, campaigns, autoresponders, and more. Due to this, you are also required to follow the SPAM laws, guidelines and recommendations for your country. The plugin is setup to meet compliance with current laws, however, you have the responsibility to know the laws and make sure you are using the plugin appropriately. For more information about the SPAM laws in your country, see the list below or google "SPAM LAWS" for your country.', 'pigeonpack' ), 'Pigeon Pack' ); ?>
-                    </p>
-                    
-                    <ol>
-                        
-                        <li><a href="http://www.business.ftc.gov/documents/bus61-can-spam-act-compliance-guide-business" target="_blank"><?php _e( 'United States - CAN-SPAM Act', 'pigeonpack' ); ?></a></li>
-                        <li><a href="http://www2.parl.gc.ca/HousePublications/Publication.aspx?Language=E&Parl=40&Ses=3&Mode=1&Pub=Bill&Doc=C-28_3" target="_blank"><?php _e( 'Canada - C-28', 'pigeonpack' ); ?></a></li>
-                        <li><?php _e( 'Australia', 'pigeonpack' ); ?> - <?php _e( 'Spam Act 2003, Act No. 129 of 2003 as amended.', 'pigeonpack' ); ?></li>
-                        <li><a href="http://ec.europa.eu/information_society/policy/ecomm/todays_framework/privacy_protection/spam/index_en.htm" target="_blank"><?php _e( 'EU - Article 13 of DIRECTIVE 2002/58/EC OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 12 July 2002', 'pigeonpack' ); ?></a></li>
-                        <li><a href="http://www.legislation.gov.uk/uksi?title=The%20Privacy%20and%20Electronic%20Communication" target="_blank"><?php _e( 'UK - The Privacy and Electronic Communications Regulations', 'pigeonpack' ); ?></a></li>
-                        <li><a href="http://www.rtr.at/en/tk/TKG2003" target="_blank"><?php _e( 'Austria - Telecommunications Act 2003', 'pigeonpack' ); ?></a></li>
-                        <li><a href="http://www.privacy.fgov.be/publications/spam_4-7-03_fr.pdf" target="_blank"><?php _e( 'Belgium - Etat des lieux en juillet 2003, July 4, 2003', 'pigeonpack' ); ?></a></li>
-                        <li><a href="http://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/index_en/index_en?opendocument" target="_blank"><?php _e( 'Cyprus - Section 06 of the Regulation of Electronic Communications and Postal Services Law of 2004', 'pigeonpack' ); ?></a></li>
-                        <li><?php _e( 'Czech Republic', 'pigeonpack' ); ?> - <?php _e( 'Act No. 480/2004 Coll., on Certain Information Society Services', 'pigeonpack' ); ?></li>
-                        <li><a href="https://www.riigiteataja.ee/akt/780289" target="_blank"><?php _e( 'Estonia - Information Society Service Act', 'pigeonpack' ); ?></a></li>
-                        <li><a href="http://www.cnil.fr/dossiers/conso-pub-spam/fiches-pratiques/article/la-prospection-commerciale-par-courrier-electronique/" target="_blank"><?php _e( 'France - CNIL Guidelines on email marketing.', 'pigeonpack' ); ?></a></li>
-                        <li><a href="http://www.iuscomp.org/gla/statutes/BDSG.htm" target="_blank"><?php _e( 'Germany - Art. 7 German Unfair Competition Law (Gesetz gegen Unlauteren Wettbewerb)', 'pigeonpack' ); ?></a></li>
-                        <li><a href="http://www.garanteprivacy.it/garante/document?ID=311066" target="_blank"><?php _e( 'Italy - Personal Data Protection Code (legislative decree no. 196/2003)', 'pigeonpack' ); ?></a></li>
-                        <li><?php _e( 'Netherlands', 'pigeonpack' ); ?> - <?php _e( 'Article 11.7 of the Dutch Telecommunications Act and Dutch Data Protection Act.', 'pigeonpack' ); ?></li>
-                        <li><?php _e( 'Sweden', 'pigeonpack' ); ?> - <?php _e( 'Swedish Code of Statutes, SFS 1995:450 & Swedish Code of Statutes, SFS 1998:204.', 'pigeonpack' ); ?></li>
-                    
-                    </ul>
-                    
-                    </div>
-                    
-                </div>
-                
-            </div>
-            </div>
-            </div>
+			
+			                                    </pre>
+			                                    
+			                                </td>
+			                                
+			                            </tr>
+			                            
+			                        </table>
+			                    
+			                    </div>
+			                    
+			                </div>
+			                
+			                <?php do_action( 'pigeonpack_help_page' ); ?>
+			                
+			                <div id="pigeonpack-mail-limits" class="postbox">
+			                
+			                    <div class="handlediv" title="Click to toggle"><br /></div>
+			    
+			                    <h3 class="hndle"><span><?php _e( 'Email Limits', 'pigeonpack' ); ?></span></h3>
+			                    
+			                    <div class="inside">
+			                                    
+			                    <p>
+			                    <?php _e( 'Every web host and SMTP provider has limits on the numbers of messages that can be sent from their systems. Please check with your web host or SMTP provider to verify their email limit policy. This is important to ensure you setup the plugin properly to prevent your customers from missing emails.', 'pigeonpack' ); ?>
+			                    </p>
+			                    <p>
+			                    <?php _e( 'For best results, we recommend using one of these Dedicated SMTP Providers:', 'pigeonpack' ); ?>
+			                    <ul>
+			                    	<li><a href="http://aws.amazon.com/ses/">Amazon Simple Email Service (SES)</a></li>
+			                    	<li><a href="http://sendgrid.com/">SendGrid</a></li>
+			                    	<li><a href="https://elasticemail.com">Elastic Email</a></li>
+			                    </ul>
+			                    </p>
+			                    <p>
+			                    <?php _e( 'Here are some web hosts and their default sending limits (as of June 2014):', 'pigeonpack' ); ?>
+			                    <ul>
+			                    	<li><a href="https://www.digitalocean.com/?refcode=3655e259ce29">Digital Ocean</a> - <?php _e( 'Unlimited (VPS*) - What the Pigeon Pack servers run on!', 'pigeonpack' ); ?></li>
+			                    	<li><a href="http://www.dreamhost.com/r.cgi?1434131">Dreamhost</a> - <?php _e( '200 emails every 60 minutes (shared web servers) or Unlimited (VPS* or Dedicated servers)', 'pigeonpack' ); ?></li>
+			                        <li><a href="http://www.bluehost.com/track/leenkme">Bluehost</a> - <?php _e( '500 emails every 60 minutes', 'pigeonpack' ); ?></li>
+			                    	<li><a href="http://asmallorange.com/?a_aid=leenkme">A Small Orange</a> - <?php _e( '500 emails every 60 minutes (shared web servers) or Unlimited (VPS*)', 'pigeonpack' ); ?></li>
+			                    	<li><a href="http://www.1and1.com/">1and1</a> - <?php _e( '300 emails every 5 minutes', 'pigeonpack' ); ?></li>
+			                    </ul>    
+			                    </p>                
+			                    <p><?php _e( 'As a best practice, please set the number of emails to less than the maximum allowed.', 'pigeonpack' ); ?></p>
+			                    <p><?php _e( '* VPS (Virtual Private Server) or dedicated server solutions require significant more skill to setup than your typical shared web host servers.', 'pigeonpack' ); ?></p>
+			                    </div>
+			                    
+			                </div>
+			                
+			                <div id="can-spam" class="postbox">
+			                
+			                    <div class="handlediv" title="Click to toggle"><br /></div>
+			                    
+			                    <h3 class="hndle"><span><?php _e( 'SPAM Laws', 'pigeonpack' ); ?></span></h3>
+			                    
+			                    <div class="inside">
+			                    
+			                    <p>
+			                    <?php printf( __( '%s enables you to own and operate your own email campaign manager. You have full control and ownership over your email lists, campaigns, autoresponders, and more. Due to this, you are also required to follow the SPAM laws, guidelines and recommendations for your country. The plugin is setup to meet compliance with current laws, however, you have the responsibility to know the laws and make sure you are using the plugin appropriately. For more information about the SPAM laws in your country, see the list below or google "SPAM LAWS" for your country.', 'pigeonpack' ), 'Pigeon Pack' ); ?>
+			                    </p>
+			                    
+			                    <ol>
+			                        
+			                        <li><a href="http://www.business.ftc.gov/documents/bus61-can-spam-act-compliance-guide-business" target="_blank"><?php _e( 'United States - CAN-SPAM Act', 'pigeonpack' ); ?></a></li>
+			                        <li><a href="http://www2.parl.gc.ca/HousePublications/Publication.aspx?Language=E&Parl=40&Ses=3&Mode=1&Pub=Bill&Doc=C-28_3" target="_blank"><?php _e( 'Canada - C-28', 'pigeonpack' ); ?></a></li>
+			                        <li><?php _e( 'Australia', 'pigeonpack' ); ?> - <?php _e( 'Spam Act 2003, Act No. 129 of 2003 as amended.', 'pigeonpack' ); ?></li>
+			                        <li><a href="http://ec.europa.eu/information_society/policy/ecomm/todays_framework/privacy_protection/spam/index_en.htm" target="_blank"><?php _e( 'EU - Article 13 of DIRECTIVE 2002/58/EC OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 12 July 2002', 'pigeonpack' ); ?></a></li>
+			                        <li><a href="http://www.legislation.gov.uk/uksi?title=The%20Privacy%20and%20Electronic%20Communication" target="_blank"><?php _e( 'UK - The Privacy and Electronic Communications Regulations', 'pigeonpack' ); ?></a></li>
+			                        <li><a href="http://www.rtr.at/en/tk/TKG2003" target="_blank"><?php _e( 'Austria - Telecommunications Act 2003', 'pigeonpack' ); ?></a></li>
+			                        <li><a href="http://www.privacy.fgov.be/publications/spam_4-7-03_fr.pdf" target="_blank"><?php _e( 'Belgium - Etat des lieux en juillet 2003, July 4, 2003', 'pigeonpack' ); ?></a></li>
+			                        <li><a href="http://www.dataprotection.gov.cy/dataprotection/dataprotection.nsf/index_en/index_en?opendocument" target="_blank"><?php _e( 'Cyprus - Section 06 of the Regulation of Electronic Communications and Postal Services Law of 2004', 'pigeonpack' ); ?></a></li>
+			                        <li><?php _e( 'Czech Republic', 'pigeonpack' ); ?> - <?php _e( 'Act No. 480/2004 Coll., on Certain Information Society Services', 'pigeonpack' ); ?></li>
+			                        <li><a href="https://www.riigiteataja.ee/akt/780289" target="_blank"><?php _e( 'Estonia - Information Society Service Act', 'pigeonpack' ); ?></a></li>
+			                        <li><a href="http://www.cnil.fr/dossiers/conso-pub-spam/fiches-pratiques/article/la-prospection-commerciale-par-courrier-electronique/" target="_blank"><?php _e( 'France - CNIL Guidelines on email marketing.', 'pigeonpack' ); ?></a></li>
+			                        <li><a href="http://www.iuscomp.org/gla/statutes/BDSG.htm" target="_blank"><?php _e( 'Germany - Art. 7 German Unfair Competition Law (Gesetz gegen Unlauteren Wettbewerb)', 'pigeonpack' ); ?></a></li>
+			                        <li><a href="http://www.garanteprivacy.it/garante/document?ID=311066" target="_blank"><?php _e( 'Italy - Personal Data Protection Code (legislative decree no. 196/2003)', 'pigeonpack' ); ?></a></li>
+			                        <li><?php _e( 'Netherlands', 'pigeonpack' ); ?> - <?php _e( 'Article 11.7 of the Dutch Telecommunications Act and Dutch Data Protection Act.', 'pigeonpack' ); ?></li>
+			                        <li><?php _e( 'Sweden', 'pigeonpack' ); ?> - <?php _e( 'Swedish Code of Statutes, SFS 1995:450 & Swedish Code of Statutes, SFS 1998:204.', 'pigeonpack' ); ?></li>
+			                    
+			                    </ul>
+			                    
+			                    </div>
+			                    
+			                </div>
+			                
+			            </div>
+		            </div>
+	            </div>
+	            
+	                        
+	            <div style="width:25%; float:right;" class="postbox-container">
+		            <div class="metabox-holder">	
+		            	<div class="meta-box-sortables ui-sortable">
+		                    <div id="modules" class="postbox">
+		                        <div class="handlediv" title="Click to toggle"><br /></div>
+		                        
+		                        <h3 class="hndle"><span><?php _e( 'Help Keep This Plugin Alive', 'pigeonpack' ); ?></span></h3>
+		                        
+		                        <div class="inside">
+									
+									<div class="other-leenkme-plugins">
+										<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+										<input type="hidden" name="cmd" value="_s-xclick">
+										<input type="hidden" name="hosted_button_id" value="726CN3C3XS7PE">
+										<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+										<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+										</form>
+									</div>
+									
+		                        </div>
+		                    </div>
+		                    
+		                    <div id="modules" class="postbox">
+		                        <div class="handlediv" title="Click to toggle"><br /></div>
+		                        
+		                        <h3 class="hndle"><span><?php _e( 'leenk.me', 'pigeonpack' ); ?></span></h3>
+		                        
+		                        <div class="inside">
+									
+									<div class="other-leenkme-plugins">
+										<a href="http://leenk.me"><img src="http://leenk.me/icon-128x128.png" /></a>
+										<p><a href="http://leenk.me"><?php _e( 'Publicize your WordPress content to your Twitter, Facebook, & LinkedIn accounts easily and automatically!', 'pigeonpack' ); ?></a></p>
+									</div>
+									
+		                        </div>
+		                    </div>
+		                    
+		                    <div id="modules" class="postbox">
+		                        <div class="handlediv" title="Click to toggle"><br /></div>
+		                        
+		                        <h3 class="hndle"><span><?php _e( 'Advanced Comment Control', 'pigeonpack' ); ?></span></h3>
+		                        
+		                        <div class="inside">
+									
+									<div class="other-leenkme-plugins">
+										<a href="https://github.com/lewayotte/advanced-comment-control"><img src="http://lewayotte.com/acc-icon-128x128.png" /></a>
+										<p><a href="https://github.com/lewayotte/advanced-comment-control"><?php _e( 'Easily control who can comment and when they can comment on any post type.', 'pigeonpack' ); ?></a></p>
+									</div>
+									
+		                        </div>
+		                    </div>
+		            	</div>
+		            </div>
+	            </div>
 			</div>
 			<?php
 			

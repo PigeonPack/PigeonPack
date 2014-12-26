@@ -30,3 +30,4 @@ th.required,td.required{color:#C00;font-weight:700;}
 input.error{border:1px solid #C00;}
 pre.pigeonpack-shortcode-examples { white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; display: block; width: 100%; overflow-x: auto; }
 #list_field_types,div#update_subscriber_button{display:none;}
+div.other-leenkme-plugins {text-align: center;}

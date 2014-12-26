@@ -644,10 +644,10 @@ if ( !function_exists( 'pigeonpack_unmerge_postdata' ) ) {
 		
 		if ( !empty( $posts ) ) {
 			
-			 if ( 1 <= count( $posts ) && preg_match( '/{{POST_LOOP_START}}(.*){{POST_LOOP_END}}/is', $message, $matches ) ) {
+			 if ( 1 <= count( $posts ) && preg_match( '/{{POST_LOOP_START}}(.*){{POST_LOOP_END}}/is', $message, $loop_matches ) ) {
 				//digest
 				
-				$digest_merge = $matches[1];	
+				$digest_merge = $loop_matches[1];	
 				
 				foreach( $posts as $post_id ) {
 					
@@ -692,8 +692,8 @@ if ( !function_exists( 'pigeonpack_unmerge_postdata' ) ) {
 					}
 					
 				}
-			
-				$merged_message = str_ireplace( $matches[0], implode( $digest_merged ), $merged_message );
+				
+				$merged_message = str_ireplace( $loop_matches[0], implode( $digest_merged ), $merged_message );
 				
 			} else {
 				//individual

@@ -238,25 +238,25 @@ if ( !class_exists( 'PigeonPack' ) ) {
 		function get_pigeonpack_settings() {
 			
 			$defaults = array( 
-								'api_key' 							=> '', 
-								'from_name'							=> get_option( 'blogname' ),
-								'from_email'						=> get_option( 'admin_email' ),
-								'email_format'						=> 'html',
-								'allow_user_format'					=> 'yes',
-								'css_style'							=> 'default',
-								'smtp_enable'						=> 'mail',
-								'smtp_server'						=> 'localhost',
-								'smtp_port'							=> '25',
-								'smtp_encryption'					=> 'none',
-								'smtp_authentication'				=> 'none',
-								'smtp_username'						=> '',
-								'smtp_password'						=> '',
-								'emails_per_cycle'					=> 100,
-								'email_cycle'						=> '1',
-								'company'							=> get_option( 'blogname' ),
-								'address'							=> '',
-								'reminder'							=> sprintf( __( 'You are receiving this email because you opted in at our website %s.', 'pigeonpack' ), site_url() ),
-							);
+				'api_key' 							=> '', 
+				'from_name'							=> get_option( 'blogname' ),
+				'from_email'						=> get_option( 'admin_email' ),
+				'email_format'						=> 'html',
+				'allow_user_format'					=> 'yes',
+				'css_style'							=> 'default',
+				'smtp_enable'						=> 'mail',
+				'smtp_server'						=> 'localhost',
+				'smtp_port'							=> '25',
+				'smtp_encryption'					=> 'none',
+				'smtp_authentication'				=> 'none',
+				'smtp_username'						=> '',
+				'smtp_password'						=> '',
+				'emails_per_cycle'					=> 100,
+				'email_cycle'						=> '1',
+				'company'							=> get_option( 'blogname' ),
+				'address'							=> '',
+				'reminder'							=> sprintf( __( 'You are receiving this email because you opted in at our website %s.', 'pigeonpack' ), site_url() ),
+			);
 			$defaults = apply_filters( 'pigeonpack_default_settings', $defaults );
 		
 			$pigeonpack_settings = get_option( 'pigeonpack' );
@@ -538,7 +538,7 @@ if ( !class_exists( 'PigeonPack' ) ) {
 			                                <th><?php _e( 'Authentication', 'pigeonpack' ); ?></th>
 			                                <td>
 			                                <input type="radio" id="smtp_auth_none" class="smtp_authentication" class="regular-text" name="smtp_authentication" value="none" <?php checked( 'none' === $pigeonpack_settings['smtp_authentication'] ); ?> /> <label for="smtp_auth_none"><?php _e( 'No authentication', 'pigeonpack' ); ?></label> <br />
-			                                <input type="radio" id="smtp_auth_true" class="smtp_authentication" class="regular-text" name="smtp_authentication" value="none" <?php checked( 'true' === $pigeonpack_settings['smtp_authentication'] ); ?> /> <label for="smtp_auth_true"><?php _e( 'Yes, use SMTP authentication', 'pigeonpack' ); ?></label> <br />
+			                                <input type="radio" id="smtp_auth_true" class="smtp_authentication" class="regular-text" name="smtp_authentication" value="true" <?php checked( 'true' === $pigeonpack_settings['smtp_authentication'] ); ?> /> <label for="smtp_auth_true"><?php _e( 'Yes, use SMTP authentication', 'pigeonpack' ); ?></label> <br />
 			                                </td>
 			                            </tr>
 			                            

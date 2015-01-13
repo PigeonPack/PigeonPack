@@ -243,7 +243,7 @@ if ( ! class_exists( 'PigeonPack_Shortcodes' ) ) {
 				// User Optin Form Submission
 				
 				$user = wp_get_current_user();
-				PigeonPack::pigeonpack_profile_update( $user->ID );
+				PigeonPack::profile_update( $user->ID );
 				return true;
 				
 			} else if ( isset( $_REQUEST['pigeonpack_subscribe'] ) ) {

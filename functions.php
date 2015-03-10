@@ -88,7 +88,7 @@ if ( !function_exists( 'pigeonpack_double_optin_mail' ) ) {
 		
 		$headers[] = 'From: ' . $double_optin_settings['from_name'] . ' <' . $double_optin_settings['from_email'] . '>';
 			
-		$subject = $double_optin_settings['subject'];
+		$subject = html_entity_decode( $double_optin_settings['subject'] );
 		$message = $double_optin_settings['message'];
 
 		list( $subject, $message, $footer ) = pigeonpack_unmerge_misc( $double_optin_settings['subject'], $double_optin_settings['message'], '', array( 'type' => 'list', 'id' => $list->ID ) );
@@ -899,7 +899,7 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 		$headers[] = 'From: ' . $from_name . ' <' . $from_email . '>';
 		$headers = apply_filters( 'pre_subscriber_loop_pigeonpack_headers', $headers );
 		
-		$subject = $campaign->post_title;
+		$subject = html_entity_decode( $campaign->post_title );
 		$message =  apply_filters( 'the_content', $campaign->post_content );
 		$footer = apply_filters( 'default_pigeonpack_mail_footer', '{{REMINDER}}{{REQUIRED_FOOTER_CONTENT}}{{UNSUBSCRIBE_URL}}' );
 					

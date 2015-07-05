@@ -2,8 +2,8 @@
 Contributors: layotte
 Tags: email, campaign, newsletter, email marketing, widget, email newsletter, email widget, newsletter widget, widget
 Requires at least: 3.4
-Tested up to: 4.2
-Stable tag: 1.0.12
+Tested up to: 4.3
+Stable tag: 1.1.0
 
 Free and easy email marketing, newsletters, and campaigns; built into your WordPress dashboard!
 
@@ -63,6 +63,9 @@ You must have:
 * Pigeon Pack is GPL
 
 == Changelog ==
+
+= 1.1.0 =
+* Updating WP_Widget for deprecated use in WP4.3
 
 = 1.0.12 =
 * Fixed issue with HTML entities not displaying properly in email subjects

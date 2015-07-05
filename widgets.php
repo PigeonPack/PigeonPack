@@ -39,7 +39,7 @@ if ( !class_exists( 'pigeonpack_form_widget' ) ) {
 		function pigeonpack_form_widget() {
 			
 			$widget_ops = array('classname' => 'pigeonpack_form_widget', 'description' => __( 'Pigeon Pack Subscriber Form', 'pigeonpack' ) );
-			$this->WP_Widget( 'pigeonpack', __( 'Pigeon Pack Subscriber Form', 'pigeonpack' ), $widget_ops );
+			parent::__construct( 'pigeonpack', __( 'Pigeon Pack Subscriber Form', 'pigeonpack' ), $widget_ops );
 		
 		}
 		

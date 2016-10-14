@@ -116,6 +116,25 @@ if ( !function_exists( 'manage_pigeonpack_campaign_posts_custom_column' ) ) {
 	
 }
 
+if ( !function_exists( 'pigeonpack_campaign_sortable_columns' ) ) {
+	
+	/**
+	 * Called by 'manage_edit_pigeonpack_campaign_sortable_columns' filter settings sortable custom columns
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param array $columns Current columns for pigeon pack campaign post type
+	 * @param array $columns
+	 */	
+	function manage_edit_pigeonpack_campaign_sortable_columns( $columns ) {
+	    $columns['campaign_type'] = 'campaign_type';	 
+	    return $columns;
+	}
+	add_filter( 'manage_edit-pigeonpack_campaign_sortable_columns', 'manage_edit_pigeonpack_campaign_sortable_columns' );
+	
+}
+
+
 if ( !function_exists( 'pigeonpack_human_readable_campaign_type' ) ) {
 		
 	/**

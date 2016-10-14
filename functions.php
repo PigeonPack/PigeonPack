@@ -880,11 +880,21 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 	function pigeonpack_mail( $campaign, $posts = array(), $offset = 0, $recipients_arr = array() ) {
 		
 		global $alt_body;
+		
 		$campaign = get_post( $campaign );
+		
+		if ( empty( $campaign ) ) {
+			//Campaign no longer exists
+			return;
+		}
+
+        // so we dont send multiple emails to the same person
+        $sent = array();
 	
 		//just incase the campaign was set to draft, stop processing here
-		if ( 'publish' !== $campaign->post_status )
+		if ( 'publish' !== $campaign->post_status ) {
 			return;
+		}
 	
 		$pigeonpack_settings = get_pigeonpack_settings();
 	
@@ -959,7 +969,13 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 										
 					$subscriber_headers = apply_filters( 'subscriber_loop_pigeonpack_headers', array_merge( $headers, array( $content_type ) ), $subscriber );
 			
-					wp_mail( $email, strip_tags( $merged_subject ), $body, $subscriber_headers );
+                    if ( !in_array( $email, $sent ) ) {
+	                    
+                        wp_mail( $email, strip_tags( $merged_subject ), $body, $subscriber_headers );
+                        $sent[] = $email;
+                        
+                    }
+					
 					
 				}
 				

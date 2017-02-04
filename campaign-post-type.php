@@ -135,6 +135,42 @@ if ( !function_exists( 'pigeonpack_campaign_sortable_columns' ) ) {
 }
 
 
+if ( !function_exists( 'pigeonpack_campaign_sortable_columns_posts_clauses' ) ) {
+	
+	function pigeonpack_campaign_sortable_columns_posts_clauses_request( $pieces, $query ) {
+	   global $wpdb;
+	   
+	   /**
+	    * We only want our code to run in the main WP query
+	    * AND if an orderby query variable is designated.
+	    */
+	   if ( $query->is_main_query() && ( $orderby = $query->get( 'orderby' ) ) ) {
+	
+	      // Get the order query variable - ASC or DESC
+	      $order = strtoupper( $query->get( 'order' ) );
+	
+	      // Make sure the order setting qualifies. If not, set default as ASC
+	      if ( ! in_array( $order, array( 'ASC', 'DESC' ) ) )
+	         $order = 'ASC';
+	
+	      switch( $orderby ) {
+		
+	         case 'campaign_type':
+	            $pieces['join'] .= " LEFT JOIN $wpdb->postmeta pigeonpack ON pigeonpack.post_id = {$wpdb->posts}.ID AND pigeonpack.meta_key = '_pigeonpack_campaign_type'";
+	            $pieces['orderby'] = " pigeonpack.meta_value $order, " . $pieces[ 'orderby' ];
+	         break;
+			
+	      }
+		
+	   }
+	
+	   return $pieces;
+	
+	}
+	add_filter( 'posts_clauses_request', 'pigeonpack_campaign_sortable_columns_posts_clauses_request', 1, 2 );
+
+}
+
 if ( !function_exists( 'pigeonpack_human_readable_campaign_type' ) ) {
 		
 	/**

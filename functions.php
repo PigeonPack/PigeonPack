@@ -453,7 +453,7 @@ if ( !function_exists( 'get_pigeonpack_subscriber_by_type' ) ) {
 			'limit'		=> 100,
 			'offset'	=> 0,
 		);
-					
+		
 		extract( wp_parse_args( $args, $defaults ) );
 	
 		if ( 'R' === substr( $list_type, 0, 1 ) ) {
@@ -500,7 +500,7 @@ if ( !function_exists( 'pigeonpack_pre_user_query' ) ) {
 	 *
 	 * @param object $query Current user query
 	 */
-	function pigeonpack_pre_user_query( &$query ) {
+	function pigeonpack_pre_user_query( $query ) {
 		
 		global $wpdb;
 	
@@ -905,7 +905,7 @@ if ( !function_exists( 'pigeonpack_mail' ) ) {
 		
 		if ( empty( $recipients_arr ) )
 			$recipients_arr = get_post_meta( $campaign->ID, '_pigeonpack_recipients', true );
-		
+			
 		$headers[] = 'From: ' . $from_name . ' <' . $from_email . '>';
 		$headers = apply_filters( 'pre_subscriber_loop_pigeonpack_headers', $headers );
 		

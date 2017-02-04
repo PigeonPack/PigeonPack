@@ -2,8 +2,8 @@
 Contributors: layotte
 Tags: email, campaign, newsletter, email marketing, widget, email newsletter, email widget, newsletter widget, widget
 Requires at least: 3.4
-Tested up to: 4.7
-Stable tag: 1.2.0
+Tested up to: 4.8
+Stable tag: 1.3.0
 
 Free and easy email marketing, newsletters, and campaigns; built into your WordPress dashboard!
 
@@ -63,6 +63,10 @@ You must have:
 * Pigeon Pack is GPL
 
 == Changelog ==
+
+= 1.3.0 =
+* Fixing column sort for campaign type column
+* Modifying pre_user_query function
 
 = 1.2.0 =
 * Adding column sortability on campaign type column
